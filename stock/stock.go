@@ -1,9 +1,9 @@
 package stock
 
 import (
-	// "fmt"
 	"database/sql"
 	"fmt"
+	"strings"
 	// should not be using sqlite3 driver packages directly
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -14,6 +14,7 @@ type SDB interface {
 	IsValidSymbol(string) (bool, error)
 	CurrentValue(string) (*Data, error)
 	GetHistory(string) ([]*Data, error)
+	Close()
 }
 
 type sqlDB struct {
@@ -46,15 +47,16 @@ type Data struct {
 }
 
 // sql prepared statements
-const getSymbolsStmt = `SELECT symbol FROM symbols WHERE isEnabled == 1`
-const isValidStmt = `SELECT symbol FROM symbols WHERE symbol = ?`
-const currentValueStmt = `SELECT close FROM stock_data WHERE symbol = ? order by date limit 1`
-const getHistoryStmt = `SELECT close FROM stock_data WHERE symbol == ?`
+const getSymbolsStmt = `SELECT * FROM symbols WHERE isEnabled == 1`
+const isValidStmt = `SELECT * FROM symbols WHERE symbol = ?`
+const currentValueStmt = `SELECT * FROM stock_data WHERE symbol = ? order by date limit 1`
+const getHistoryStmt = `SELECT * FROM stock_data WHERE symbol == ?`
 
 // NewSQLDB initializes and returns a SDB
 func NewSQLDB() (SDB, error) {
 
-	conn, err := sql.Open("sqlite3", "../stock/stocks.db")
+	db_string := "/Users/bernard/go/src/gitlab.cs.washington.edu/kimb0128/stock_app/stock/stocks.db"
+	conn, err := sql.Open("sqlite3", db_string)
 	if err != nil {
 		return nil, fmt.Errorf("sqlite3: could not get a connection: %v", err)
 	}
@@ -165,45 +167,43 @@ func (db *sqlDB) GetSymbols() ([]*Symbol, error) {
 
 // IsValidSymbol returns true if symbol is a valid symbol
 func (db *sqlDB) IsValidSymbol(symbol string) (bool, error) {
-	rows, err := db.isValid.Query()
+	symbol = strings.ToUpper(symbol)
+	row := db.isValid.QueryRow(symbol)
+
+	_, err := scanSymbol(row)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return false, fmt.Errorf("sqlite3: no stock with symbol: %s", symbol)
 		}
 		return false, fmt.Errorf("sqlite3: could not read row: %v", err)
 	}
-	defer rows.Close()
 
 	return true, nil
 }
 
 // GetCurrentValue returns the latest close value of symbol
 func (db *sqlDB) CurrentValue(symbol string) (*Data, error) {
-	var result *Data
-
+	symbol = strings.ToUpper(symbol)
 	if _, err := db.IsValidSymbol(symbol); err != nil {
 		return nil, err
 	}
 
-	row, err := db.currentValue.Query(symbol)
+	row := db.currentValue.QueryRow(symbol)
+
+	data, err := scanData(row)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("sqlite3: no stock with symbol: %s", symbol)
 		}
 		return nil, err
 	}
-	defer row.Close()
-	data, err := scanData(row)
-	if err != nil {
-		return nil, fmt.Errorf("sqlite3: could not read row: %v", err)
-	}
-	result = data
 
-	return result, nil
+	return data, nil
 }
 
 // GetHistory returns entire close value history for symbol
 func (db *sqlDB) GetHistory(symbol string) ([]*Data, error) {
+	symbol = strings.ToUpper(symbol)
 	var results []*Data
 
 	if _, err := db.IsValidSymbol(symbol); err != nil {

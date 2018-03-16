@@ -22,6 +22,4 @@ func main() {
 
 	fmt.Println("Hello, World")
 
-	// db, err := stock.NewSQLDB()
-
 }

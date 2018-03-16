@@ -151,19 +151,26 @@ def get_all_hist():
 
 def main():
     if len(sys.argv) < 2:
-        print ('usage: python3 stock.py [command]')
+        print ('usage: python3 DBManager.py [command]')
         print ('\tupdate_symbols')
         print ('\tupdate_data')
         print ('\tcreate_tables')
+        return
 
-    if sys.argv == 'update_symbols':
+    if sys.argv[1] == 'update_symbols':
         update_symbols()
 
-    if sys.argv == 'update_data':
+    elif sys.argv[1] == 'update_data':
         get_all_hist()
 
-    if sys.argv == 'create_tables':
+    elif sys.argv[1] == 'create_tables':
         create_tables()
+
+    else:
+        print ('usage: python3 DBManager.py [command]')
+        print ('\tupdate_symbols')
+        print ('\tupdate_data')
+        print ('\tcreate_tables')
 
 
 if __name__ == '__main__':
