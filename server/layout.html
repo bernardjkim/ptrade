@@ -1,17 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
+<meta charset="utf-8">
+<title>D3 Test</title>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+<style>
+
+<!-- div.bar { -->
+<!--   display: inline-block; -->
+<!--   width: 1px; -->
+<!--   height: 75px; -->
+<!--   background-color: teal; -->
+<!-- } -->
+
+<!-- .axis path, -->
+<!-- .axis line { -->
+<!--   stroke: teal; -->
+<!--   shape-rendering: crispEdges; -->
+<!-- } -->
+
+<!-- .axis text { -->
+<!--   font-family: optima, futura, sans-serif; -->
+<!--   font-weight: bold; -->
+<!--   font-size: 14px; -->
+<!--   fill: teal; -->
+<!-- } -->
+
+<!-- body { -->
+<!--   background-color: #1B4F72 -->
+<!-- } -->
+
+rect {
+  opacity: 0.0;
+  fill: orange;
+}
+
+<!-- rect:hover { -->
+<!--     fill: orange; -->
+<!--     opacity:1.0; -->
+<!-- } -->
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.area {
+  fill: #EEEEEE
+}
+
+</style>
+
 </head>
 <body>
 
-<h1>Page Title</h1>
+<h1>{{.Symbol}}</h1>
     
-<ul>
-  {{range .}}
-    <li class="open">Date: {{.Date}}, Open: {{.Open}}, Close: {{.Close}}</li>
-  {{end}}
-</ul>
+
+<!-- <ul> -->
+<!--   {{range .SD}} -->
+<!--     <li class="open">Date: {{.Date}}, Open: {{.Open}}, Close: {{.Close}}</li> -->
+<!--   {{end}} -->
+<!-- </ul> -->
+
+<script type="text/javascript">
+
+
+var dataset = {{.SD}}
+
+var w = dataset.length;
+var h = 300;
+var padding = 30;
+
+var parseTime = d3.timeParse("%Y-%m-%d");
+
+var test = 0;
+var rowConverter = function(d) {
+  return {
+    Date: parseTime(d.Date),
+    Open: parseInt(d.Open),
+    Close: parseFloat(d.Close),
+  }
+}
+
+
+dataset.forEach(function(d,i) {
+  dataset[i] = rowConverter(d);
+});
+
+
+var xScale = d3.scaleTime()
+  .domain([
+    d3.min(dataset, function(d) { return d.Date; }),
+    d3.max(dataset, function(d) { return d.Date; }),
+  ])
+  .range([0, w])
+  <!-- .range([padding, w-padding]) -->
+
+
+var yScale = d3.scaleLinear()
+  .domain([0, d3.max(dataset, function(d) { return d.Close })])
+  .range([h,0])
+  <!-- .range([h-padding,padding]) -->
+
+
+var svg = d3.select("body")
+  .append("svg")
+  .attr("width", w)
+  .attr("height", h);
+
+var line = d3.line()
+  .x(function(d) { return xScale(d.Date); })
+  .y(function(d) { return yScale(d.Close); });
+
+svg.append("path")
+  .datum(dataset)
+  .attr("class", "line")
+  .attr("d", line);
+
+var area = d3.area()
+  .x(function(d) { return xScale(d.Date); })
+  .y0(function(d) { return yScale.range()[0]; })
+  .y1(function(d) { return yScale(d.Close);});
+
+svg.append("path")
+  .datum(dataset)
+  .attr("class", "area")
+  .attr("d", area);
+
+svg.selectAll("rect")
+  .data(dataset)
+  .enter()
+  .append("rect")
+    .attr("x", function(d) {
+      return xScale(d.Date);
+    })
+    .attr("y", 0)
+    .attr("width", 1)
+    .attr("height", h)
+    .on("mouseover", function() {
+      d3.select(this)
+        .style("opacity", 1.0);
+    })
+    .on("mouseout", function() {
+      d3.select(this)
+        .style("opacity", 0.0);
+    })
+  <!-- .append("title") -->
+  <!--   .text(function(d) { -->
+  <!--     return "test"; -->
+  <!--   }) -->
+  <!--   .attr("fill", "blue"); -->
+
+<!-- var xAxis = d3.axisBottom(xScale); -->
+<!-- var yAxis = d3.axisLeft(yScale); -->
+
+<!-- svg.append("g") -->
+<!--   .attr("class", "axis") -->
+<!--   .attr("transform", "translate(0," + (h-padding) + ")") -->
+<!--   .call(xAxis); -->
+
+<!-- svg.append("g") -->
+<!--   .attr("class", "axis") -->
+<!--   .attr("transform", "translate(" + padding + ",0)") -->
+<!--   .call(yAxis); -->
+
+
+
+<!-- svg.selectAll("text") -->
+<!--   .data(dataset) -->
+<!--   .enter() -->
+<!--   .append("text") -->
+<!--   .text(function(d) { -->
+<!--     return d.Open; -->
+<!--   }) -->
+<!--   .attr("x", function(d,i) { -->
+<!--     return i*1; -->
+<!--   }) -->
+<!--   .attr("y", function(d) { -->
+<!--     return h - (d.Open); -->
+<!--   }) -->
+
+
+
+
+
+
+</script>
 
 </body>
 
