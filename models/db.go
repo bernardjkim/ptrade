@@ -1,4 +1,4 @@
-package stock
+package models
 
 import (
 	"database/sql"
@@ -55,8 +55,8 @@ const getHistoryStmt = `SELECT * FROM stock_data WHERE symbol == ?`
 // NewSQLDB initializes and returns a SDB
 func NewSQLDB() (SDB, error) {
 
-	db_string := "/Users/bernard/go/src/gitlab.cs.washington.edu/kimb0128/stock_app/stock/stocks.db"
-	conn, err := sql.Open("sqlite3", db_string)
+	dbString := "/Users/bernard/go/src/gitlab.cs.washington.edu/kimb0128/stock_app/models/stocks.db"
+	conn, err := sql.Open("sqlite3", dbString)
 	if err != nil {
 		return nil, fmt.Errorf("sqlite3: could not get a connection: %v", err)
 	}

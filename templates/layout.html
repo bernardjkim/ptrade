@@ -35,23 +35,23 @@
 <!-- } -->
 
 rect {
-  opacity: 0.0;
   fill: orange;
 }
 
-<!-- rect:hover { -->
-<!--     fill: orange; -->
-<!--     opacity:1.0; -->
-<!-- } -->
 
 .line {
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
+  shape-rendering: crispEdges;
 }
 
 .area {
   fill: #EEEEEE
+}
+
+.hidden {
+  opacity: 0.0;
 }
 
 </style>
@@ -59,27 +59,26 @@ rect {
 </head>
 <body>
 
-<h1>{{.Symbol}}</h1>
-    
-
-<!-- <ul> -->
-<!--   {{range .SD}} -->
-<!--     <li class="open">Date: {{.Date}}, Open: {{.Open}}, Close: {{.Close}}</li> -->
-<!--   {{end}} -->
-<!-- </ul> -->
+  <!-- <h1 id="title">{{.Symbol}} ${{.Current.Close}}</h1> -->
 
 <script type="text/javascript">
 
 
-var dataset = {{.SD}}
+var data = {{.SD}}
 
-var w = dataset.length;
+var dataset = [];
+
+data.forEach(function(d,i) {
+  if (i % 7 == 0) {
+    dataset.push(d);
+  }
+});
+var w = dataset.length*5;
 var h = 300;
 var padding = 30;
-
 var parseTime = d3.timeParse("%Y-%m-%d");
+var dateFormat = d3.timeFormat("%b %d %Y");
 
-var test = 0;
 var rowConverter = function(d) {
   return {
     Date: parseTime(d.Date),
@@ -100,19 +99,32 @@ var xScale = d3.scaleTime()
     d3.max(dataset, function(d) { return d.Date; }),
   ])
   .range([0, w])
-  <!-- .range([padding, w-padding]) -->
 
 
 var yScale = d3.scaleLinear()
   .domain([0, d3.max(dataset, function(d) { return d.Close })])
   .range([h,0])
-  <!-- .range([h-padding,padding]) -->
 
+var symbol = {{.Symbol}}
+var current = {{.Current}}
+
+var title = d3.select("body")
+  .append("h1")
+  .attr("id", "title")
+  .text(symbol + " $" + current.Close)
 
 var svg = d3.select("body")
   .append("svg")
   .attr("width", w)
-  .attr("height", h);
+  .attr("height", h)
+  .on("mouseleave", function() {
+    title.text(symbol + " $" + current.Close)
+    d3.select(".selected")
+      .classed("hidden", true)
+      .classed("selected", false)
+    d3.select("#tooltip")
+      .classed("hidden", true)
+  });
 
 var line = d3.line()
   .x(function(d) { return xScale(d.Date); })
@@ -128,68 +140,48 @@ var area = d3.area()
   .y0(function(d) { return yScale.range()[0]; })
   .y1(function(d) { return yScale(d.Close);});
 
+
 svg.append("path")
   .datum(dataset)
   .attr("class", "area")
   .attr("d", area);
 
+
+var tooltip = svg.append("text")
+  .attr("id", "tooltip")
+  .attr("text-anchor", "middle")
+  .attr("font-family", "sans-serif")
+  .attr("font-size", "11px")
+  .attr("font-weight", "bold")
+  .attr("fill", "black")
+  .classed("hidden", true)
+
+
 svg.selectAll("rect")
   .data(dataset)
   .enter()
   .append("rect")
-    .attr("x", function(d) {
-      return xScale(d.Date);
-    })
-    .attr("y", 0)
-    .attr("width", 1)
-    .attr("height", h)
-    .on("mouseover", function() {
-      d3.select(this)
-        .style("opacity", 1.0);
-    })
-    .on("mouseout", function() {
-      d3.select(this)
-        .style("opacity", 0.0);
-    })
-  <!-- .append("title") -->
-  <!--   .text(function(d) { -->
-  <!--     return "test"; -->
-  <!--   }) -->
-  <!--   .attr("fill", "blue"); -->
-
-<!-- var xAxis = d3.axisBottom(xScale); -->
-<!-- var yAxis = d3.axisLeft(yScale); -->
-
-<!-- svg.append("g") -->
-<!--   .attr("class", "axis") -->
-<!--   .attr("transform", "translate(0," + (h-padding) + ")") -->
-<!--   .call(xAxis); -->
-
-<!-- svg.append("g") -->
-<!--   .attr("class", "axis") -->
-<!--   .attr("transform", "translate(" + padding + ",0)") -->
-<!--   .call(yAxis); -->
-
-
-
-<!-- svg.selectAll("text") -->
-<!--   .data(dataset) -->
-<!--   .enter() -->
-<!--   .append("text") -->
-<!--   .text(function(d) { -->
-<!--     return d.Open; -->
-<!--   }) -->
-<!--   .attr("x", function(d,i) { -->
-<!--     return i*1; -->
-<!--   }) -->
-<!--   .attr("y", function(d) { -->
-<!--     return h - (d.Open); -->
-<!--   }) -->
-
-
-
-
-
+  .attr("x", function(d) {
+    return xScale(d.Date);
+  })
+  .attr("y", 0)
+  .attr("width", 1)
+  .attr("height", h)
+  .classed("hidden", true)
+  .on("mouseover", function(d) {
+    d3.select(".selected")
+      .classed("hidden", true)
+      .classed("selected", false)
+    d3.select(this)
+      .classed("hidden", false)
+      .classed("selected", true)
+    d3.select("#tooltip")
+      .attr("x", xScale(d.Date))
+      .attr("y", 10)
+      .classed("hidden", false)
+      .text(dateFormat(d.Date))
+    title.text(symbol + " $" + d.Close)
+  })
 
 </script>
 
