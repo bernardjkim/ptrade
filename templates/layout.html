@@ -30,86 +30,124 @@ rect {
     opacity: 0.0;
 }
 
-<!-- .svg-container { -->
-<!--     display: inline-block; -->
-<!--     position: relative; -->
-<!--     width: 100%; -->
-<!--     padding-bottom: 100%; /* aspect ratio */ -->
-<!--     vertical-align: top; -->
-<!--     overflow: hidden; -->
-<!--     background-color: yellow; -->
-<!-- } -->
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
 
-<!-- .svg-content-responsive { -->
-<!--     display: inline-block; -->
-<!--     position: absolute; -->
-<!--     top: 10px; -->
-<!--     left: 0; -->
-<!--     background-color: red; -->
-<!-- } -->
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background-color: red;
+}
 
+#chart {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
 </style>
 
 </head>
 <body>
 
+<div id="container">
+
+<!-- <svg id="chart1"></svg> -->
+<!-- <svg id="chart"></svg> -->
+</div>
 <script type="text/javascript">
 
+// reduce/parse data
+function getDataset(data) { 
 
-var rowConverter = function(d) {
-    var parseTime = d3.timeParse("%Y-%m-%d");
-    return {
-        Date: parseTime(d.Date),
-        Open: parseInt(d.Open),
-        Close: parseFloat(d.Close),
+    var dataset = [];
+    
+    var rowConverter = function(d) {
+        var parseTime = d3.timeParse("%Y-%m-%d");
+        return {
+            Date: parseTime(d.Date),
+            Open: parseInt(d.Open),
+            Close: parseFloat(d.Close),
+        }
     }
+
+    <!-- store every 7th data to reduce number of data points -->
+    data.forEach(function(d,i) {
+        if (i % 7 == 0) {
+            dataset.push(d);
+        }
+    });
+
+    <!-- parse data -->
+    dataset.forEach(function(d,i) {
+        dataset[i] = rowConverter(d);
+    });
+    return dataset;
 }
+
+function getXScale(dataset, minW, maxW) {
+    var xScale = d3.scaleTime()
+        .domain([
+            d3.min(dataset, function(d) { return d.Date; }),
+            d3.max(dataset, function(d) { return d.Date; }),
+        ])
+        .range([minW, maxW]);
+    return xScale;
+}
+
+function getYScale(dataset, minH, maxH) {
+    var yScale = d3.scaleLinear()
+        //TODO: should there be min y other than 0?
+        .domain([0, d3.max(dataset, function(d) { return d.Close })])
+        .range([maxH,minH]);
+    return yScale;
+}
+
+
 
 var data = {{.SD}}
 var symbol = {{.Symbol}}
 var current = {{.Current}}
 
-var dataset = [];
-<!-- store every 7th data to reduce number of data points -->
-data.forEach(function(d,i) {
-    if (i % 7 == 0) {
-        dataset.push(d);
-    }
-});
+var dataset = getDataset(data);
 
-<!-- parse data -->
-dataset.forEach(function(d,i) {
-    dataset[i] = rowConverter(d);
-});
-
-
-var w = 800;
-var h = 300;
-var padding = 30;
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+width = parseInt(d3.select("div#container").style("width")) - margin.left - margin.right,
+height = parseInt(d3.select("div#container").style("height")) - margin.top - margin.bottom;
 var dateFormat = d3.timeFormat("%b %d %Y");
+var xScale = getXScale(dataset, 0, width);
+var yScale = getYScale(dataset, 0, height);
 
+<!-- var container = d3.select("div#container") -->
+<!--     .attr("width", width + margin.left + margin.right) -->
+<!--     .attr("height", height + margin.top + margin.bottom) -->
 
-var xScale = d3.scaleTime()
-    .domain([
-        d3.min(dataset, function(d) { return d.Date; }),
-        d3.max(dataset, function(d) { return d.Date; }),
-    ])
-    .range([0, w])
-
-var yScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, function(d) { return d.Close })])
-    .range([h,0])
-
-
-var title = d3.select("body")
+var title = d3.select("div#container")
     .append("h1")
     .attr("id", "title")
     .text(symbol + " $" + current.Close)
 
-var svg = d3.select("body")
+
+var svg = d3.select("div#container")
     .append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("id", "chart")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .on("mouseleave", function() {
         title.text(symbol + " $" + current.Close)
         d3.select(".selected")
@@ -118,6 +156,7 @@ var svg = d3.select("body")
         d3.select("#tooltip")
             .classed("hidden", true)
     });
+
 
 
 <!-- line matching data points -->
@@ -161,7 +200,7 @@ svg.selectAll("rect")
     })
     .attr("y", 0)
     .attr("width", 1)
-    .attr("height", h)
+    .attr("height", height)
     .classed("hidden", true)
     .on("mouseover", function(d) {
         d3.select(".selected")
@@ -177,6 +216,33 @@ svg.selectAll("rect")
             .text(dateFormat(d.Date))
         title.text(symbol + " $" + d.Close)
     });
+
+function resize() {
+    var width = parseInt(d3.select("#chart").style("width")) - margin.left - margin.right,
+    height = parseInt(d3.select("#chart").style("height")) - margin.top - margin.bottom;
+
+    // maintain aspect ratio
+
+
+    // min width/height
+    width = Math.max(700, width);
+    height = Math.max(400, height);
+
+    // Update the range of the scale with new width/height
+    xScale.range([0, width]);
+    yScale.range([height, 0]);
+
+    // Force D3 to recalculate and update the line
+    d3.select(".line")
+        .attr("d", function(d) { return line(d); });
+    d3.select(".area")
+        .attr("d", function(d) { return area(d); });
+};
+
+d3.select(window).on('resize', resize);
+resize();
+    
+
 
 </script>
 

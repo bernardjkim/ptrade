@@ -6,3 +6,4 @@ Home Page
 
 Chart
 - responsive chart, resize when window size changes
+- maintain aspect ratio of chart
