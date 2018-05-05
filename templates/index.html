@@ -1,20 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <meta charset="utf-8">
-    <title>HOME</title>
-    <script>
+<meta charset="utf-8">
+<title>HOME</title>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 
 
-    </script>
-  </head>
-  <body>
-    <h1>HOME</h1>
-    <form action="/view" method="POST">
-      <input type="text" name="symbol">
-    </form>
-  </body>
+<style>
+    
+body {
+    background-color: #E3F2FD
+}
+
+#form-div {
+    width: 200px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+input {
+  height: 35px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #BBDEFB;
+  outline: none;
+  border: 0;
+  border-radius: 3px;
+  padding: 0 3px;
+  color: #fff;
+}
+
+<!-- .svg-container { -->
+<!--     display: inline-block; -->
+<!--     position: relative; -->
+<!--     width: 100%; -->
+<!--     padding-bottom: 100%; /* aspect ratio */ -->
+<!--     vertical-align: top; -->
+<!--     overflow: hidden; -->
+<!--     background-color: yellow; -->
+<!-- } -->
+<!-- .svg-content-responsive { -->
+<!--     display: inline-block; -->
+<!--     position: absolute; -->
+<!--     top: 10px; -->
+<!--     left: 0; -->
+<!--     background-color: red; -->
+<!-- } -->
+
+</style>
+
+
+</head>
+
+<body>
+    <div id="form-div">
+        <form action="/view" method="POST">
+            <input type="text" name="symbol">
+        </form>
+    </div>
+
+<script type="text/javascript">
+
+<!-- d3.select("body") -->
+<!--    .append("div") -->
+<!--    .classed("svg-container", true) //container class to make it responsive -->
+<!--    .append("svg") -->
+<!--    //responsive SVG needs these 2 attributes and no width and height attr -->
+<!--    .attr("preserveAspectRatio", "xMinYMin meet") -->
+<!--    .attr("viewBox", "0 0 600 400") -->
+<!--    //class to make it responsive -->
+<!--    .classed("svg-content-responsive", true); --> 
+
+
+
+</script>
+
+
+
+
+
+</body>
+
 </html>
 

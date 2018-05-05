@@ -3,185 +3,180 @@
 
 <head>
 
-<meta charset="utf-8">
-<title>D3 Test</title>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+    <meta charset="utf-8">
+    <title>D3 Test</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 
 
 <style>
 
-<!-- div.bar { -->
-<!--   display: inline-block; -->
-<!--   width: 1px; -->
-<!--   height: 75px; -->
-<!--   background-color: teal; -->
-<!-- } -->
-
-<!-- .axis path, -->
-<!-- .axis line { -->
-<!--   stroke: teal; -->
-<!--   shape-rendering: crispEdges; -->
-<!-- } -->
-
-<!-- .axis text { -->
-<!--   font-family: optima, futura, sans-serif; -->
-<!--   font-weight: bold; -->
-<!--   font-size: 14px; -->
-<!--   fill: teal; -->
-<!-- } -->
-
-<!-- body { -->
-<!--   background-color: #1B4F72 -->
-<!-- } -->
-
 rect {
-  fill: orange;
+    fill: orange;
 }
 
 
 .line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+    shape-rendering: crispEdges;
 }
 
 .area {
-  fill: #EEEEEE
+    fill: #EEEEEE
 }
 
 .hidden {
-  opacity: 0.0;
+    opacity: 0.0;
 }
+
+<!-- .svg-container { -->
+<!--     display: inline-block; -->
+<!--     position: relative; -->
+<!--     width: 100%; -->
+<!--     padding-bottom: 100%; /* aspect ratio */ -->
+<!--     vertical-align: top; -->
+<!--     overflow: hidden; -->
+<!--     background-color: yellow; -->
+<!-- } -->
+
+<!-- .svg-content-responsive { -->
+<!--     display: inline-block; -->
+<!--     position: absolute; -->
+<!--     top: 10px; -->
+<!--     left: 0; -->
+<!--     background-color: red; -->
+<!-- } -->
 
 </style>
 
 </head>
 <body>
 
-  <!-- <h1 id="title">{{.Symbol}} ${{.Current.Close}}</h1> -->
-
 <script type="text/javascript">
 
 
-var data = {{.SD}}
-
-var dataset = [];
-
-data.forEach(function(d,i) {
-  if (i % 7 == 0) {
-    dataset.push(d);
-  }
-});
-var w = dataset.length*5;
-var h = 300;
-var padding = 30;
-var parseTime = d3.timeParse("%Y-%m-%d");
-var dateFormat = d3.timeFormat("%b %d %Y");
-
 var rowConverter = function(d) {
-  return {
-    Date: parseTime(d.Date),
-    Open: parseInt(d.Open),
-    Close: parseFloat(d.Close),
-  }
+    var parseTime = d3.timeParse("%Y-%m-%d");
+    return {
+        Date: parseTime(d.Date),
+        Open: parseInt(d.Open),
+        Close: parseFloat(d.Close),
+    }
 }
 
-
-dataset.forEach(function(d,i) {
-  dataset[i] = rowConverter(d);
-});
-
-
-var xScale = d3.scaleTime()
-  .domain([
-    d3.min(dataset, function(d) { return d.Date; }),
-    d3.max(dataset, function(d) { return d.Date; }),
-  ])
-  .range([0, w])
-
-
-var yScale = d3.scaleLinear()
-  .domain([0, d3.max(dataset, function(d) { return d.Close })])
-  .range([h,0])
-
+var data = {{.SD}}
 var symbol = {{.Symbol}}
 var current = {{.Current}}
 
+var dataset = [];
+<!-- store every 7th data to reduce number of data points -->
+data.forEach(function(d,i) {
+    if (i % 7 == 0) {
+        dataset.push(d);
+    }
+});
+
+<!-- parse data -->
+dataset.forEach(function(d,i) {
+    dataset[i] = rowConverter(d);
+});
+
+
+var w = 800;
+var h = 300;
+var padding = 30;
+var dateFormat = d3.timeFormat("%b %d %Y");
+
+
+var xScale = d3.scaleTime()
+    .domain([
+        d3.min(dataset, function(d) { return d.Date; }),
+        d3.max(dataset, function(d) { return d.Date; }),
+    ])
+    .range([0, w])
+
+var yScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset, function(d) { return d.Close })])
+    .range([h,0])
+
+
 var title = d3.select("body")
-  .append("h1")
-  .attr("id", "title")
-  .text(symbol + " $" + current.Close)
+    .append("h1")
+    .attr("id", "title")
+    .text(symbol + " $" + current.Close)
 
 var svg = d3.select("body")
-  .append("svg")
-  .attr("width", w)
-  .attr("height", h)
-  .on("mouseleave", function() {
-    title.text(symbol + " $" + current.Close)
-    d3.select(".selected")
-      .classed("hidden", true)
-      .classed("selected", false)
-    d3.select("#tooltip")
-      .classed("hidden", true)
-  });
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h)
+    .on("mouseleave", function() {
+        title.text(symbol + " $" + current.Close)
+        d3.select(".selected")
+            .classed("hidden", true)
+            .classed("selected", false)
+        d3.select("#tooltip")
+            .classed("hidden", true)
+    });
 
+
+<!-- line matching data points -->
 var line = d3.line()
-  .x(function(d) { return xScale(d.Date); })
-  .y(function(d) { return yScale(d.Close); });
+    .x(function(d) { return xScale(d.Date); })
+    .y(function(d) { return yScale(d.Close); });
 
-svg.append("path")
-  .datum(dataset)
-  .attr("class", "line")
-  .attr("d", line);
-
+<!-- area under line -->
 var area = d3.area()
-  .x(function(d) { return xScale(d.Date); })
-  .y0(function(d) { return yScale.range()[0]; })
-  .y1(function(d) { return yScale(d.Close);});
+    .x(function(d) { return xScale(d.Date); })
+    .y0(function(d) { return yScale.range()[0]; })
+    .y1(function(d) { return yScale(d.Close);});
 
+<!-- tooltip indicating date -->
+var tooltip = svg.append("text")
+    .attr("id", "tooltip")
+    .attr("text-anchor", "middle")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "11px")
+    .attr("font-weight", "bold")
+    .attr("fill", "black")
+    .classed("hidden", true)
 
 svg.append("path")
-  .datum(dataset)
-  .attr("class", "area")
-  .attr("d", area);
+    .datum(dataset)
+    .attr("class", "line")
+    .attr("d", line);
 
+svg.append("path")
+    .datum(dataset)
+    .attr("class", "area")
+    .attr("d", area);
 
-var tooltip = svg.append("text")
-  .attr("id", "tooltip")
-  .attr("text-anchor", "middle")
-  .attr("font-family", "sans-serif")
-  .attr("font-size", "11px")
-  .attr("font-weight", "bold")
-  .attr("fill", "black")
-  .classed("hidden", true)
-
-
+<!-- bar indicating current data point -->
 svg.selectAll("rect")
-  .data(dataset)
-  .enter()
-  .append("rect")
-  .attr("x", function(d) {
-    return xScale(d.Date);
-  })
-  .attr("y", 0)
-  .attr("width", 1)
-  .attr("height", h)
-  .classed("hidden", true)
-  .on("mouseover", function(d) {
-    d3.select(".selected")
-      .classed("hidden", true)
-      .classed("selected", false)
-    d3.select(this)
-      .classed("hidden", false)
-      .classed("selected", true)
-    d3.select("#tooltip")
-      .attr("x", xScale(d.Date))
-      .attr("y", 10)
-      .classed("hidden", false)
-      .text(dateFormat(d.Date))
-    title.text(symbol + " $" + d.Close)
-  })
+    .data(dataset)
+    .enter()
+    .append("rect")
+    .attr("x", function(d) {
+        return xScale(d.Date);
+    })
+    .attr("y", 0)
+    .attr("width", 1)
+    .attr("height", h)
+    .classed("hidden", true)
+    .on("mouseover", function(d) {
+        d3.select(".selected")
+            .classed("hidden", true)
+            .classed("selected", false)
+        d3.select(this)
+            .classed("hidden", false)
+            .classed("selected", true)
+        d3.select("#tooltip")
+            .attr("x", xScale(d.Date))
+            .attr("y", 10)
+            .classed("hidden", false)
+            .text(dateFormat(d.Date))
+        title.text(symbol + " $" + d.Close)
+    });
 
 </script>
 

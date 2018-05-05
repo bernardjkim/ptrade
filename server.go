@@ -33,31 +33,39 @@ type RequestHandler struct {
 func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
-	fmt.Println("method:", r.Method)
+	fmt.Println("method: ", r.Method)
 	fmt.Println("symbol: ", r.FormValue("symbol"))
 
 	if r.Method == "POST" {
 		// Requested Symbol
 		symbol := strings.ToUpper(r.FormValue("symbol"))
 		data, err := h.db.GetHistory(symbol)
+
 		if err != nil {
-			// Redirect to error page
+
+			// TODO: Redirect to error page
 			// tmpl := template.Must(template.ParseFiles("server/error.html"))
-			log.Fatal(err)
+			fmt.Println(err)
+			tmpl := utils.LoadTemplates("./templates/index.html")
+			utils.ExecuteTemplate(w, tmpl, nil)
+		} else {
+
+			// Parse data
+			var sd []Data
+			for _, d := range data {
+				sd = append(sd, Data{Date: d.Date, Open: d.Open, Close: d.Close})
+			}
+
+			// Data to be used for template
+			s := Stock{Symbol: symbol, Current: sd[len(sd)-1], SD: sd}
+
+			// Load & Execute template
+			tmpl := utils.LoadTemplates("./templates/layout.html")
+			utils.ExecuteTemplate(w, tmpl, s)
 		}
-
-		// Parse data
-		var sd []Data
-		for _, d := range data {
-			sd = append(sd, Data{Date: d.Date, Open: d.Open, Close: d.Close})
-		}
-
-		// Data to be used for template
-		s := Stock{Symbol: symbol, Current: sd[len(sd)-1], SD: sd}
-
-		// Load & Execute template
-		tmpl := utils.LoadTemplates("./templates/layout.html")
-		utils.ExecuteTemplate(w, tmpl, s)
+	} else {
+		tmpl := utils.LoadTemplates("./templates/index.html")
+		utils.ExecuteTemplate(w, tmpl, nil)
 	}
 
 }
