@@ -10,7 +10,16 @@
 
 <style>
 
-rect {
+
+
+body {
+    background-color: #E3F2FD;
+    width: 100%;
+    height: 100%;
+    <!-- position: absolute; -->
+}
+
+.chart-bar {
     fill: orange;
 }
 
@@ -30,44 +39,77 @@ rect {
     opacity: 0.0;
 }
 
-.svg-container {
-    display: inline-block;
-    position: relative;
+#tooltip {
+
+    text-anchor: middle;
+    font-family: sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    fill: black;
+}
+
+#graph-chart {
     width: 100%;
+    height: 100%;
+    background-color: #BBDEFB;
+}
+
+#text-chart {
+    
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#graph-container {
+    float: left;
+    width: 75%;
+    height: 100%;
     padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
+}
+
+#graph-chart{
+    background-color: #BBDEFB;
+}
+
+#text-container {
+    float: left;
+    width: 25%;
+    height: 100%;
+}
+
+
+
+#chart-container {
+    width: 100%;
+    height: 100%;
+    min-width: 960px;
+    min-height: 540px;
+    padding-bottom: 75%; /* aspect ratio */
+    <!-- vertical-align: top; -->
     overflow: hidden;
-}
-
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
-    background-color: red;
-}
-
-#chart {
-    width: 100%;
-    height: 100%;
     position: absolute;
 }
 
-#container {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-}
 </style>
 
 </head>
+
 <body>
 
-<div id="container">
+<div id="chart-container" class="container">
+    <div id="graph-container" class="container">
 
-<!-- <svg id="chart1"></svg> -->
-<!-- <svg id="chart"></svg> -->
+        <svg id="graph-chart"></svg>
+    </div>
+
+    <div id="text-container" class="container">
+
+        <div id="text-chart"></svg>
+    </div>
 </div>
+
+
 <script type="text/javascript">
 
 // reduce/parse data
@@ -118,36 +160,43 @@ function getYScale(dataset, minH, maxH) {
 
 
 
+function resize() {
+
+
+    var width = parseInt(d3.select("#graph-container").style("width"));
+    var height = parseInt(d3.select("#graph-container").style("height"));
+
+    // Update the range of the scale with new width/height
+    xScale.range([0, width]);
+    yScale.range([height, 0]);
+
+    // Force D3 to recalculate and update the line
+    d3.select(".line")
+        .attr("d", function(d) { return line(d); });
+    d3.select(".area")
+        .attr("d", function(d) { return area(d); });
+    d3.selectAll(".chart-bar")
+        .attr("x", function(d) { return xScale(d.Date); }); 
+};
+
+
 var data = {{.SD}}
 var symbol = {{.Symbol}}
 var current = {{.Current}}
 
 var dataset = getDataset(data);
 
-var margin = {top: 20, right: 80, bottom: 30, left: 50},
-width = parseInt(d3.select("div#container").style("width")) - margin.left - margin.right,
-height = parseInt(d3.select("div#container").style("height")) - margin.top - margin.bottom;
+var margin = {top: 20, right: 40, bottom: 30, left: 10};
+var width = parseInt(d3.select("div#graph-container").style("width"));
+var height = parseInt(d3.select("div#graph-container").style("height"));
 var dateFormat = d3.timeFormat("%b %d %Y");
 var xScale = getXScale(dataset, 0, width);
 var yScale = getYScale(dataset, 0, height);
 
-<!-- var container = d3.select("div#container") -->
-<!--     .attr("width", width + margin.left + margin.right) -->
-<!--     .attr("height", height + margin.top + margin.bottom) -->
 
-var title = d3.select("div#container")
-    .append("h1")
-    .attr("id", "title")
-    .text(symbol + " $" + current.Close)
-
-
-var svg = d3.select("div#container")
-    .append("svg")
-    .attr("id", "chart")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+var graph_chart = d3.select("#graph-chart")
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    <!-- .attr("transform", "translate(" + margin.left + "," + margin.top + ")") -->
     .on("mouseleave", function() {
         title.text(symbol + " $" + current.Close)
         d3.select(".selected")
@@ -156,7 +205,6 @@ var svg = d3.select("div#container")
         d3.select("#tooltip")
             .classed("hidden", true)
     });
-
 
 
 <!-- line matching data points -->
@@ -170,31 +218,29 @@ var area = d3.area()
     .y0(function(d) { return yScale.range()[0]; })
     .y1(function(d) { return yScale(d.Close);});
 
-<!-- tooltip indicating date -->
-var tooltip = svg.append("text")
-    .attr("id", "tooltip")
-    .attr("text-anchor", "middle")
-    .attr("font-family", "sans-serif")
-    .attr("font-size", "11px")
-    .attr("font-weight", "bold")
-    .attr("fill", "black")
-    .classed("hidden", true)
+var chart_bar = (function(d) {return xScale(d.Date); });
 
-svg.append("path")
+<!-- tooltip indicating date -->
+var tooltip = graph_chart.append("text")
+    .attr("id", "tooltip")
+    .classed("hidden", true);
+
+graph_chart.append("path")
     .datum(dataset)
     .attr("class", "line")
     .attr("d", line);
 
-svg.append("path")
+graph_chart.append("path")
     .datum(dataset)
     .attr("class", "area")
     .attr("d", area);
 
 <!-- bar indicating current data point -->
-svg.selectAll("rect")
+graph_chart.selectAll("rect")
     .data(dataset)
     .enter()
     .append("rect")
+    .attr("class", "chart-bar")
     .attr("x", function(d) {
         return xScale(d.Date);
     })
@@ -217,27 +263,14 @@ svg.selectAll("rect")
         title.text(symbol + " $" + d.Close)
     });
 
-function resize() {
-    var width = parseInt(d3.select("#chart").style("width")) - margin.left - margin.right,
-    height = parseInt(d3.select("#chart").style("height")) - margin.top - margin.bottom;
 
-    // maintain aspect ratio
+// text chart
+var title = d3.select("div#text-container")
+    .append("h1")
+    .attr("id", "title")
+    .text(symbol + " $" + current.Close)
 
 
-    // min width/height
-    width = Math.max(700, width);
-    height = Math.max(400, height);
-
-    // Update the range of the scale with new width/height
-    xScale.range([0, width]);
-    yScale.range([height, 0]);
-
-    // Force D3 to recalculate and update the line
-    d3.select(".line")
-        .attr("d", function(d) { return line(d); });
-    d3.select(".area")
-        .attr("d", function(d) { return area(d); });
-};
 
 d3.select(window).on('resize', resize);
 resize();
