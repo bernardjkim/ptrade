@@ -13,10 +13,79 @@
 
 
 body {
-    background-color: #E3F2FD;
+    background-color: #212121;
+}
+
+
+/* 
+ * contains graph-container and text-container
+ */
+#chart-container {
     width: 100%;
     height: 100%;
-    <!-- position: absolute; -->
+    min-width: 960px;
+    min-height: 540px;
+    max-width: 960px;
+    max-height: 540px;
+    overflow: hidden;
+    position: relative;
+    margin: 0px auto;
+}
+
+
+/* Search container */
+
+#search-container {
+
+    width: 100%;
+    height: 10%;
+    margin: 0px auto;
+    overflow: hidden;
+    position: absolute;
+    text-align:center;
+}
+
+form {
+    height: 70%;
+    padding: 5px;
+    <!-- margin: auto auto; -->
+}
+
+input {
+    height: 100%;
+    width: 20%;
+    margin: 0 auto;
+    font-family: arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #424242;
+    outline: none;
+    border: 0;
+    border-radius: 3px;
+    padding: 0 3px;
+    color: #fff;
+}
+
+
+/* Left Side */
+
+/* 
+ * contains graph-chart
+ */
+#graph-container {
+    width: 75%;
+    height: 90%;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+
+#graph-chart {
+    background-color: #424242;
+    width: 100%;
+    height: 100%;
 }
 
 .chart-bar {
@@ -27,12 +96,17 @@ body {
 .line {
     fill: none;
     stroke: steelblue;
-    stroke-width: 1.5px;
-    shape-rendering: crispEdges;
+    stroke-width: 1px;
+    <!-- shape-rendering: crispEdges; -->
 }
 
 .area {
-    fill: #EEEEEE
+    fill: #424242;
+}
+
+#title {
+    color: #BDBDBD;
+    font-size: 28px;
 }
 
 .hidden {
@@ -48,47 +122,27 @@ body {
     fill: black;
 }
 
-#graph-chart {
-    width: 100%;
-    height: 100%;
-    background-color: #BBDEFB;
+
+/* Right Side */
+
+
+/* 
+ * contains graph-chart
+ */
+#text-container {
+    background-color: #424242;
+    width: 24%;
+    height: 90%;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    text-align: center;
 }
 
 #text-chart {
-    
     width: 100%;
     height: 100%;
-    position: absolute;
-}
-
-#graph-container {
-    float: left;
-    width: 75%;
-    height: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-}
-
-#graph-chart{
-    background-color: #BBDEFB;
-}
-
-#text-container {
-    float: left;
-    width: 25%;
-    height: 100%;
-}
-
-
-
-#chart-container {
-    width: 100%;
-    height: 100%;
-    min-width: 960px;
-    min-height: 540px;
-    padding-bottom: 75%; /* aspect ratio */
-    <!-- vertical-align: top; -->
-    overflow: hidden;
-    position: absolute;
+    position:absolute;
 }
 
 </style>
@@ -98,6 +152,13 @@ body {
 <body>
 
 <div id="chart-container" class="container">
+
+    <div id="search-container" class="container">
+        <form action="/view" method="POST">
+            <input type="text" name="symbol">
+        </form>
+    </div>
+
     <div id="graph-container" class="container">
 
         <svg id="graph-chart"></svg>
@@ -107,6 +168,7 @@ body {
 
         <div id="text-chart"></svg>
     </div>
+
 </div>
 
 
@@ -141,6 +203,7 @@ function getDataset(data) {
 }
 
 function getXScale(dataset, minW, maxW) {
+    var padding = 20;
     var xScale = d3.scaleTime()
         .domain([
             d3.min(dataset, function(d) { return d.Date; }),
@@ -151,9 +214,12 @@ function getXScale(dataset, minW, maxW) {
 }
 
 function getYScale(dataset, minH, maxH) {
+    var padding = 20;
     var yScale = d3.scaleLinear()
-        //TODO: should there be min y other than 0?
-        .domain([0, d3.max(dataset, function(d) { return d.Close })])
+        .domain([
+            d3.min(dataset, function(d) { return d.Close })-padding,
+            d3.max(dataset, function(d) { return d.Close })+padding,
+        ])
         .range([maxH,minH]);
     return yScale;
 }
@@ -161,8 +227,6 @@ function getYScale(dataset, minH, maxH) {
 
 
 function resize() {
-
-
     var width = parseInt(d3.select("#graph-container").style("width"));
     var height = parseInt(d3.select("#graph-container").style("height"));
 
@@ -230,10 +294,11 @@ graph_chart.append("path")
     .attr("class", "line")
     .attr("d", line);
 
-graph_chart.append("path")
-    .datum(dataset)
-    .attr("class", "area")
-    .attr("d", area);
+//area upder line
+<!-- graph_chart.append("path") -->
+<!--     .datum(dataset) -->
+<!--     .attr("class", "area") -->
+<!--     .attr("d", area); -->
 
 <!-- bar indicating current data point -->
 graph_chart.selectAll("rect")

@@ -46,7 +46,7 @@ func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			// TODO: Redirect to error page
 			// tmpl := template.Must(template.ParseFiles("server/error.html"))
 			fmt.Println(err)
-			tmpl := utils.LoadTemplates("./templates/index.html")
+			tmpl := utils.LoadTemplates("./templates/layout.html")
 			utils.ExecuteTemplate(w, tmpl, nil)
 		} else {
 
@@ -64,7 +64,7 @@ func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			utils.ExecuteTemplate(w, tmpl, s)
 		}
 	} else {
-		tmpl := utils.LoadTemplates("./templates/index.html")
+		tmpl := utils.LoadTemplates("./templates/layout.html")
 		utils.ExecuteTemplate(w, tmpl, nil)
 	}
 
@@ -89,8 +89,8 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Register handler
-	mux.HandleFunc("/", homeHandler)
-	mux.Handle("/view", &RequestHandler{db: db})
+	// mux.HandleFunc("/", homeHandler)
+	mux.Handle("/", &RequestHandler{db: db})
 	http.ListenAndServe(":8080", mux)
 
 }
