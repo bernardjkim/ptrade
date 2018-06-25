@@ -9,49 +9,27 @@
 
 
 <style>
+
+#top {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#top1 {
+    flex: 1 3 50px;
+    display: flex;
+    justify-content: center;
+}
     
-body {
-    background-color: #E3F2FD
+#top2 {
+    flex: 3 0 500px;
+    display: flex;
+    justify-content: center;
 }
 
-#form-div {
-    width: 200px;
-    height: 100px;
-    margin: 0 auto;
-}
 
-input {
-  height: 35px;
-  margin: 0 auto;
-  width: 100%;
-  font-family: arial, sans-serif;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  background-color: #BBDEFB;
-  outline: none;
-  border: 0;
-  border-radius: 3px;
-  padding: 0 3px;
-  color: #fff;
-}
 
-<!-- .svg-container { -->
-<!--     display: inline-block; -->
-<!--     position: relative; -->
-<!--     width: 100%; -->
-<!--     padding-bottom: 100%; /* aspect ratio */ -->
-<!--     vertical-align: top; -->
-<!--     overflow: hidden; -->
-<!--     background-color: yellow; -->
-<!-- } -->
-<!-- .svg-content-responsive { -->
-<!--     display: inline-block; -->
-<!--     position: absolute; -->
-<!--     top: 10px; -->
-<!--     left: 0; -->
-<!--     background-color: red; -->
-<!-- } -->
 
 </style>
 
@@ -59,31 +37,27 @@ input {
 </head>
 
 <body>
-    <div id="form-div">
-        <form action="/view" method="POST">
-            <input type="text" name="symbol">
-        </form>
+    <div id="top" class="flex-container">
+
+        <div id="top1" class="flex-container">
+            <form action="/view" method="POST">
+                <input type="text" name="symbol">
+            </form>
+        </div>
+
+        <div id="top2">
+
+            <div id="left">1</div>
+            <div id="right">2</div>
+        
+        </div>
+
     </div>
 
 <script type="text/javascript">
 
-<!-- d3.select("body") -->
-<!--    .append("div") -->
-<!--    .classed("svg-container", true) //container class to make it responsive -->
-<!--    .append("svg") -->
-<!--    //responsive SVG needs these 2 attributes and no width and height attr -->
-<!--    .attr("preserveAspectRatio", "xMinYMin meet") -->
-<!--    .attr("viewBox", "0 0 600 400") -->
-<!--    //class to make it responsive -->
-<!--    .classed("svg-content-responsive", true); --> 
-
-
 
 </script>
-
-
-
-
 
 </body>
 

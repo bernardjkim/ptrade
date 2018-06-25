@@ -24,8 +24,8 @@ func TestGetSymbols(t *testing.T) {
 	db.Close()
 }
 
-// func TestIsValid(t *testing.T) {
-func ExampleIsValid() {
+func TestIsValid(t *testing.T) {
+	//func ExampleIsValid() {
 
 	db, err := NewSQLDB()
 	if err != nil {
