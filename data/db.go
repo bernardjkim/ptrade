@@ -3,6 +3,7 @@ package data
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"strings"
 	// should not be using sqlite3 driver packages directly
 	_ "github.com/mattn/go-sqlite3"
@@ -14,16 +15,20 @@ type SDB interface {
 	IsValidSymbol(string) (bool, error)
 	CurrentValue(string) (*Data, error)
 	GetHistory(string) ([]*Data, error)
+	GetAccount(string) (*Account, error)
+	RegisterAccount(string, string)
 	Close()
 }
 
 type sqlDB struct {
 	conn *sql.DB
 
-	getSymbols   *sql.Stmt
-	isValid      *sql.Stmt
-	currentValue *sql.Stmt
-	getHistory   *sql.Stmt
+	getSymbols      *sql.Stmt
+	isValid         *sql.Stmt
+	currentValue    *sql.Stmt
+	getHistory      *sql.Stmt
+	getAccount      *sql.Stmt
+	registerAccount *sql.Stmt
 }
 
 var _ SDB = &sqlDB{}
@@ -46,11 +51,20 @@ type Data struct {
 	Close  float64
 }
 
+type Account struct {
+	Email string
+	Hash  string
+}
+
 // sql prepared statements
 const getSymbolsStmt = `SELECT * FROM symbols WHERE isEnabled == 1`
 const isValidStmt = `SELECT * FROM symbols WHERE symbol = ?`
+
 const currentValueStmt = `SELECT * FROM stock_data WHERE symbol = ? order by date limit 1`
 const getHistoryStmt = `SELECT * FROM stock_data WHERE symbol == ?`
+
+const getAccountStmt = `SELECT * FROM account_data WHERE email == ?`
+const registerAccountStmt = `INSERT INTO account_data VALUES (?,?)`
 
 // NewSQLDB initializes and returns a SDB
 func NewSQLDB() (SDB, error) {
@@ -83,6 +97,14 @@ func NewSQLDB() (SDB, error) {
 
 	if db.getHistory, err = conn.Prepare(getHistoryStmt); err != nil {
 		return nil, fmt.Errorf("sqlite3: prepare getHistory: %v", err)
+	}
+
+	if db.getAccount, err = conn.Prepare(getAccountStmt); err != nil {
+		return nil, fmt.Errorf("sqlite3: prepare getAccount: %v", err)
+	}
+
+	if db.registerAccount, err = conn.Prepare(registerAccountStmt); err != nil {
+		return nil, fmt.Errorf("sqlite3: prepare registerAccount: %v", err)
 	}
 
 	return db, nil
@@ -139,6 +161,23 @@ func scanData(s rowScanner) (*Data, error) {
 		Date:   date,
 		Open:   open,
 		Close:  close,
+	}
+
+	return result, nil
+}
+
+func scanAccount(s rowScanner) (*Account, error) {
+	var (
+		email string
+		hash  string
+	)
+	if err := s.Scan(&email, &hash); err != nil {
+		return nil, err
+	}
+
+	result := &Account{
+		Email: email,
+		Hash:  hash,
 	}
 
 	return result, nil
@@ -225,4 +264,30 @@ func (db *sqlDB) GetHistory(symbol string) ([]*Data, error) {
 	}
 
 	return results, nil
+}
+
+func (db *sqlDB) GetAccount(email string) (*Account, error) {
+
+	row := db.getAccount.QueryRow(email)
+
+	res, err := scanAccount(row)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("sqlite3: invalid email: %v", email)
+		}
+		return nil, fmt.Errorf("sqlite3: could not read row: %v", err)
+	}
+
+	return res, nil
+
+}
+
+func (db *sqlDB) RegisterAccount(email string, hash string) {
+
+	_, err := db.registerAccount.Exec(email, hash)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

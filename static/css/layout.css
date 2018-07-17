@@ -12,8 +12,22 @@ body {
 #top-div {
     flex: 0 0 50px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+}
+
+#logo-div {
+}
+
+#logo {
+    color: white;
+}
+
+#login-div {
+}
+
+#login {
+    color: white;
 }
 
 #search-div {
