@@ -1,0 +1,10 @@
+{
+	"db_user": "test",
+	"db_password": "test",
+	"db_name": "test",
+	"pkg_name": "db",
+	"tag_label": "xorm",
+	"xorm":true,
+	"only_base_tables":true,
+	"ignore_nullables":true
+}

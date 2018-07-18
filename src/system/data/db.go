@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	// should not be using sqlite3 driver packages directly
 	_ "github.com/mattn/go-sqlite3"
@@ -69,7 +70,7 @@ const registerAccountStmt = `INSERT INTO account_data VALUES (?,?)`
 // NewSQLDB initializes and returns a SDB
 func NewSQLDB() (SDB, error) {
 
-	dbString := "/Users/bernard/go/src/gitlab.cs.washington.edu/kimb0128/stock_app/data/stocks.db"
+	dbString := os.Getenv("GOPATH") + "/src/projects/stock_app/data/stocks.db"
 	conn, err := sql.Open("sqlite3", dbString)
 	if err != nil {
 		return nil, fmt.Errorf("sqlite3: could not get a connection: %v", err)

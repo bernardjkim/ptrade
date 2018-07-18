@@ -1,17 +1,23 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
+	"os"
 	"strings"
 
+	"projects/stock_app/src/system/app"
+	"projects/stock_app/src/system/auth"
+	"projects/stock_app/src/system/data"
+	"projects/stock_app/src/system/templates"
+
 	"github.com/gorilla/sessions"
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
-	"gitlab.cs.washington.edu/kimb0128/stock_app/auth"
-	"gitlab.cs.washington.edu/kimb0128/stock_app/data"
-	"gitlab.cs.washington.edu/kimb0128/stock_app/utils"
+
+	DB "projects/stock_app/src/system/db"
 )
 
 // Data asdf
@@ -44,9 +50,9 @@ func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Check if user is authenticated
 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		tmpl = utils.LoadTemplates("./tmpl/layout1.html")
+		tmpl = templates.LoadTemplates("./tmpl/layout1.html")
 	} else {
-		tmpl = utils.LoadTemplates("./tmpl/layout2.html")
+		tmpl = templates.LoadTemplates("./tmpl/layout2.html")
 
 	}
 
@@ -61,23 +67,23 @@ func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s = Stock{Symbol: symbol, Current: sd[len(sd)-1], SD: sd}
 	}
 
-	utils.ExecuteTemplate(w, tmpl, s)
+	templates.ExecuteTemplate(w, tmpl, s)
 
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := utils.LoadTemplates("./tmpl/index.html")
-	utils.ExecuteTemplate(w, tmpl, nil)
+	tmpl := templates.LoadTemplates("./tmpl/index.html")
+	templates.ExecuteTemplate(w, tmpl, nil)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := utils.LoadTemplates("./tmpl/login.html")
-	utils.ExecuteTemplate(w, tmpl, nil)
+	tmpl := templates.LoadTemplates("./tmpl/login.html")
+	templates.ExecuteTemplate(w, tmpl, nil)
 }
 
 func registrationHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := utils.LoadTemplates("./tmpl/registration.html")
-	utils.ExecuteTemplate(w, tmpl, nil)
+	tmpl := templates.LoadTemplates("./tmpl/registration.html")
+	templates.ExecuteTemplate(w, tmpl, nil)
 }
 
 func (h *RequestHandler) authHandler(w http.ResponseWriter, r *http.Request) {
@@ -97,7 +103,7 @@ func (h *RequestHandler) authHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	// m := Message{Auth: false}
-	tmpl := utils.LoadTemplates("./tmpl/login.html")
+	tmpl := templates.LoadTemplates("./tmpl/login.html")
 
 	acc, err := h.db.GetAccount(email)
 	if err != nil {
@@ -122,7 +128,7 @@ func (h *RequestHandler) authHandler(w http.ResponseWriter, r *http.Request) {
 	login(w, r)
 	fmt.Println("authentication successful")
 	w.WriteHeader(http.StatusOK)
-	utils.ExecuteTemplate(w, tmpl, nil)
+	templates.ExecuteTemplate(w, tmpl, nil)
 
 }
 
@@ -138,7 +144,7 @@ func (h *RequestHandler) registerHandler(w http.ResponseWriter, r *http.Request)
 	if acc, _ := h.db.GetAccount(email); acc != nil {
 
 		fmt.Println("email is already in use")
-		tmpl = utils.LoadTemplates("./tmpl/registration.html")
+		tmpl = templates.LoadTemplates("./tmpl/registration.html")
 
 	} else {
 
@@ -146,10 +152,10 @@ func (h *RequestHandler) registerHandler(w http.ResponseWriter, r *http.Request)
 		h.db.RegisterAccount(email, hash)
 		fmt.Println("registration successful")
 
-		tmpl = utils.LoadTemplates("./tmpl/layout.html")
+		tmpl = templates.LoadTemplates("./tmpl/layout.html")
 	}
 
-	utils.ExecuteTemplate(w, tmpl, nil)
+	templates.ExecuteTemplate(w, tmpl, nil)
 }
 
 var (
@@ -189,38 +195,93 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 }
 
+var (
+	port       string
+	dbhost     string
+	dbport     string
+	dbuser     string
+	dbpass     string
+	dboptions  string
+	dbdatabase string
+)
+
+func init() {
+	flag.StringVar(&port, "port", "8080", "Accepting the port that the server should listen on")
+	flag.StringVar(&dbhost, "dbhost", "127.0.0.1", "Set the port for the application")
+	flag.StringVar(&dbport, "dbport", "3306", "Set the port for the application")
+	flag.StringVar(&dbuser, "dbuser", "root", "Set the port for the application")
+	flag.StringVar(&dbpass, "dbpass", "pass", "Set the port for the application")
+	flag.StringVar(&dboptions, "dboptions", "parseTime=true", "Set the port for the application")
+	flag.StringVar(&dbdatabase, "dbdatabase", "fusion", "Set the port for the application")
+
+	flag.Parse()
+
+	if err := godotenv.Load("config.ini"); err != nil {
+		panic(err)
+	}
+	if host := os.Getenv("DB_HOST"); len(host) > 0 {
+		dbhost = host
+	}
+	if database := os.Getenv("DB_DATABASE"); len(database) > 0 {
+		dbdatabase = database
+	}
+	if user := os.Getenv("DB_USER"); len(user) > 0 {
+		dbuser = user
+	}
+	if password := os.Getenv("DB_PASSWORD"); len(password) > 0 {
+		dbpass = password
+	}
+	if port := os.Getenv("DB_PORT"); len(port) > 0 {
+		dbport = port
+	}
+
+	envPort := os.Getenv("PORT")
+	if len(envPort) > 0 {
+		port = envPort
+	}
+}
+
 func main() {
 
-	mux := http.NewServeMux()
-
-	// set session store options
-	store.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   300, // 5 min cookies
-		HttpOnly: true,
-	}
-
-	// Open database connection
-	db, err := data.NewSQLDB()
+	db, err := DB.Connect(dbhost, dbport, dbuser, dbpass, dbdatabase, dboptions)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	reqHandler := &RequestHandler{db: db}
+	s := app.NewServer()
+	s.Init(port, db)
+	s.Start()
 
-	// // Register handler
-	mux.Handle("/", reqHandler)
+	// mux := http.NewServeMux()
 
-	mux.HandleFunc("/login", loginHandler)
-	mux.HandleFunc("/auth", reqHandler.authHandler)
-	// mux.HandleFunc("/registration", registrationHandler)
-	// mux.HandleFunc("/register", reqHandler.registerHandler)
+	// // set session store options
+	// store.Options = &sessions.Options{
+	// 	Path:     "/",
+	// 	MaxAge:   300, // 5 min cookies
+	// 	HttpOnly: true,
+	// }
 
-	mux.HandleFunc("/secret", secret)
-	// mux.HandleFunc("/login", login)
-	mux.HandleFunc("/logout", logout)
+	// // Open database connection
+	// db, err := data.NewSQLDB()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.ListenAndServe(":8080", mux)
+	// reqHandler := &RequestHandler{db: db}
+
+	// // // Register handler
+	// mux.Handle("/", reqHandler)
+
+	// mux.HandleFunc("/login", loginHandler)
+	// mux.HandleFunc("/auth", reqHandler.authHandler)
+	// // mux.HandleFunc("/registration", registrationHandler)
+	// // mux.HandleFunc("/register", reqHandler.registerHandler)
+
+	// mux.HandleFunc("/secret", secret)
+	// // mux.HandleFunc("/login", login)
+	// mux.HandleFunc("/logout", logout)
+
+	// mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	// http.ListenAndServe(":8080", mux)
 
 }

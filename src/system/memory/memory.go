@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"gitlab.cs.washington.edu/kimb0128/stock_app/session"
+	"projects/stock_app/session"
 )
 
 var pder = &Provider{list: list.New()}
