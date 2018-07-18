@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"projects/stock_app/pkg/types/routes"
-	StatusHandler "projects/stock_app/src/controllers/v1/status"
+	"projects/stock_app/server/pkg/types/routes"
+	StatusHandler "projects/stock_app/server/src/controllers/v1/status"
 
 	"github.com/go-xorm/xorm"
 )

@@ -3,10 +3,10 @@ package router
 import (
 	"net/http"
 
-	"projects/stock_app/pkg/types/routes"
+	"projects/stock_app/server/pkg/types/routes"
 
-	AuthHandler "projects/stock_app/src/controllers/auth"
-	HomeHandler "projects/stock_app/src/controllers/home"
+	AuthHandler "projects/stock_app/server/src/controllers/auth"
+	HomeHandler "projects/stock_app/server/src/controllers/home"
 
 	"github.com/go-xorm/xorm"
 )

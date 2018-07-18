@@ -1,7 +1,7 @@
 package users
 
 import (
-	"projects/stock_app/pkg/db"
+	"projects/stock_app/server/pkg/db"
 )
 
 type Users []User

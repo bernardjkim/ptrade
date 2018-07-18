@@ -1,7 +1,7 @@
 package session
 
 import (
-	Users "projects/stock_app/pkg/types/users"
+	Users "projects/stock_app/server/pkg/types/users"
 
 	"github.com/go-xorm/xorm"
 )

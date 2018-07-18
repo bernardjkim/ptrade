@@ -1,8 +1,8 @@
 package router
 
 import (
-	"projects/stock_app/pkg/types/routes"
-	V1SubRoutes "projects/stock_app/src/controllers/v1/router"
+	"projects/stock_app/server/pkg/types/routes"
+	V1SubRoutes "projects/stock_app/server/src/controllers/v1/router"
 
 	"github.com/go-xorm/xorm"
 	"github.com/gorilla/mux"

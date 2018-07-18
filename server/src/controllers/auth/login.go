@@ -1,10 +1,10 @@
 package session
 
 import (
-	Users "projects/stock_app/pkg/types/users"
-	ORM "projects/stock_app/src/system/db"
-	"projects/stock_app/src/system/jwt"
-	Passwords "projects/stock_app/src/system/passwords"
+	Users "projects/stock_app/server/pkg/types/users"
+	ORM "projects/stock_app/server/src/system/db"
+	"projects/stock_app/server/src/system/jwt"
+	Passwords "projects/stock_app/server/src/system/passwords"
 
 	"encoding/json"
 	"log"

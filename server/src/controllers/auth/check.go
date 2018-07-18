@@ -1,7 +1,7 @@
 package session
 
 import (
-	"projects/stock_app/src/system/jwt"
+	"projects/stock_app/server/src/system/jwt"
 
 	"encoding/json"
 	"log"

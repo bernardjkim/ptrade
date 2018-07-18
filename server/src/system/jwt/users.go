@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-xorm/xorm"
 
-	Users "projects/stock_app/pkg/types/users"
-	ORM "projects/stock_app/src/system/db"
+	Users "projects/stock_app/server/pkg/types/users"
+	ORM "projects/stock_app/server/src/system/db"
 )
 
 func GetUserFromToken(db *xorm.Engine, tokenVal string) (user Users.User, err error) {

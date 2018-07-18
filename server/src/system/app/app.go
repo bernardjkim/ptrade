@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"projects/stock_app/src/system/router"
+	"projects/stock_app/server/src/system/router"
 
 	"github.com/go-xorm/xorm"
 	"github.com/gorilla/handlers"

@@ -8,16 +8,15 @@ import (
 	"os"
 	"strings"
 
-	"projects/stock_app/src/system/app"
-	"projects/stock_app/src/system/auth"
-	"projects/stock_app/src/system/data"
-	"projects/stock_app/src/system/templates"
+	"projects/stock_app/server/src/system/app"
+	"projects/stock_app/server/src/system/auth"
+	"projects/stock_app/server/src/system/data"
+	DB "projects/stock_app/server/src/system/db"
+	"projects/stock_app/server/src/system/templates"
 
 	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
-
-	DB "projects/stock_app/src/system/db"
 )
 
 // Data asdf
