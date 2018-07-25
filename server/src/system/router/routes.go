@@ -25,5 +25,6 @@ func GetRoutes(db *xorm.Engine) routes.Routes {
 		routes.Route{"Home", "GET", "/", HomeHandler.Index},
 		routes.Route{"AuthStore", "POST", "/auth/login", AuthHandler.Login},
 		routes.Route{"AuthCheck", "GET", "/auth/check", AuthHandler.Check},
+		routes.Route{"AuthSignout", "GET", "/auth/signout", AuthHandler.Signout},
 	}
 }

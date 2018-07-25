@@ -2,31 +2,32 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import qs from 'qs';
 import Cookies from 'universal-cookie';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 const cookies = new Cookies();
 
 class SignInForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { returnHome: false, };
+        this.state = { isAuthenticated: false, };
     }
 
     componentWillMount() {
         if (cookies.get("api.example.com")) {
-            this.setState({ returnHome: true, });
+            this.onSignIn();
         }
     }
 
-    returnHome() {
-        this.setState({ returnHome: true, });
+    onSignIn() {
+        this.setState({ isAuthenticated: true, });
     }
+
     render() {
-        if (this.state.returnHome) {
-            return ( <Redirect to="/" />);
+        if (this.state.isAuthenticated) {
+            return (<Redirect to="/" />);
         } else {
             return (
-                <FormComponent returnHome={() => this.returnHome()} />
+                <FormComponent onSignIn={() => this.onSignIn()} />
             )
         }
     }
@@ -36,17 +37,17 @@ class FormComponent extends Component {
     handleSubmit(e) {
         let email = this.refs.email.value;
         let password = this.refs.password.value;
-        let returnHome = this.props.returnHome;
-        let loginRequest = {
+        let onSignIn = this.props.onSignIn;
+        let signinRequest = {
             method: 'POST',
             url: 'http://localhost:8080/auth/login',
             data: qs.stringify({ email, password }),
         };
 
-        Axios(loginRequest)
+        Axios(signinRequest)
             .then(function (response) {
-                cookies.set("api.example.com", response.data["token"], { maxAge: 3600, });
-                returnHome();
+                cookies.set("api.example.com", response.data["token"], { maxAge: 300, });
+                onSignIn();
             })
             .catch(function (error) {
                 console.log(error);
@@ -58,12 +59,21 @@ class FormComponent extends Component {
     render() {
         return (
             <div>
-                <button onClick={() => this.props.returnHome()}> Go Home </button>
+
+                <button>
+                    <Link to="/"> Go Home </Link>
+                </button>
+
                 <form onSubmit={(e) => this.handleSubmit(e)}>
                     <input type="text" ref="email" name="email" />
                     <input type="password" ref="password" name="password" />
                     <button type="submit">Sign In</button>
                 </form>
+
+                <button>
+                    <Link to="/register"> Sign Up </Link>
+                </button>
+
             </div>
         );
     }

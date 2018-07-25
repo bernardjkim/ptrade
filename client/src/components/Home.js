@@ -16,8 +16,25 @@ class Home extends Component {
         }
     }
 
+    // signout() {
+    //     let signoutRequest = {
+    //         method: 'GET',
+    //         url: 'http://localhost:8080/auth/signout',
+    //         headers: { "X-App-Token": cookies.get("api.example.com") },
+    //     };
+
+    //     Axios(signoutRequest)
+    //         .then(function (response) {
+    //             console.log("signout");
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
+
+    // }
+
     onSignOut() {
-        this.setState({ isAuthenticated: false});
+        this.setState({ isAuthenticated: false });
         cookies.remove("api.example.com");
     }
 

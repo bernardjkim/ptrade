@@ -32,7 +32,6 @@ class Test extends Component {
     }
 
     componentWillMount() {
-        console.log("check auth");
         isAuthenticated((auth) => {
             this.setState({ isAuthenticated: auth, });
         })

@@ -1,5 +1,5 @@
 import {
-    Home, SignInForm, 
+    Home, SignInForm, Register 
 } from '../components';
 
 const routes = [
@@ -11,6 +11,11 @@ const routes = [
     {
         'path': '/login',
         'component': SignInForm,
+        'exact': false
+    },
+    {
+        'path': '/register',
+        'component': Register,
         'exact': false
     },
 ]
