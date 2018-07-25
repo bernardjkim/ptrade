@@ -1,6 +1,7 @@
 package session
 
 import (
+	"fmt"
 	"projects/stock_app/server/src/system/jwt"
 
 	"encoding/json"
@@ -10,6 +11,7 @@ import (
 
 func Check(w http.ResponseWriter, r *http.Request) {
 	tokenVal := r.Header.Get("X-App-Token")
+	fmt.Println(tokenVal)
 	if len(tokenVal) < 1 {
 		log.Println("Ignoring request. No token present.")
 		http.Error(w, "Token required for check.", http.StatusUnauthorized)

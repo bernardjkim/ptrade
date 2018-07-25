@@ -1,6 +1,7 @@
 package session
 
 import (
+	"fmt"
 	Users "projects/stock_app/server/pkg/types/users"
 	ORM "projects/stock_app/server/src/system/db"
 	"projects/stock_app/server/src/system/jwt"
@@ -16,6 +17,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	email := r.FormValue("email")
 	password := r.FormValue("password")
+	fmt.Println("email: ", email)
+	fmt.Println("password: ", password)
+	fmt.Println(r)
 
 	if len(email) < 1 || len(password) < 1 {
 		http.Error(w, "Email and password are required.", http.StatusUnauthorized)
@@ -42,7 +46,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Name:       "api.example.com",
 		Value:      token,
 		Path:       "/",
-		RawExpires: "0",
+		RawExpires: "3600",
 	})
 
 	packet, err := json.Marshal(login)
