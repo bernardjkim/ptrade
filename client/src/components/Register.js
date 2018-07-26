@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Cookie from 'universal-cookie';
 import qs from 'qs';
 import Axios from 'axios';
-import { Redirect, Link } from 'react-router-dom';
-import { ControlLabel, Form, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { Redirect, } from 'react-router-dom';
+import { Form, FormGroup, } from 'react-bootstrap';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 
 import InputComponent from './InputComponent';
@@ -11,30 +11,16 @@ import InputComponent from './InputComponent';
 const cookies = new Cookie();
 
 class Register extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { isAuthenticated: false, };
-    }
-
-    componentWillMount() {
-        if (cookies.get("api.example.com")) {
-            this.onSignUp();
-        }
-    }
-
-    onSignUp() {
-        this.setState({ isAuthenticated: true, });
-    }
 
     render() {
-        if (this.state.isAuthenticated) {
+        if (this.props.isAuthenticated) {
             return (<Redirect to="/" />);
         } else {
             return (
                 <Grid>
                     <Row>
                         <Col mdOffset={4} md={4}>
-                            <FormComponent onSignUp={() => this.onSignUp} />
+                            <FormComponent authenticate={this.props.authenticate} />
                         </Col>
                     </Row>
                 </Grid>
@@ -48,6 +34,9 @@ class FormComponent extends Component {
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSignIn = this.handleSignIn.bind(this);
+
         this.state = {
             firstName: '',
             lastName: '',
@@ -56,11 +45,11 @@ class FormComponent extends Component {
         };
     }
     handleSubmit(e) {
-        let firstName = this.refs.firstName.value;
-        let lastName = this.refs.lastName.value;
-        let email = this.refs.email.value;
-        let password = this.refs.password.value;
-        let onSignUp = this.props.onSignUp;
+        let firstName = this.state.firstName;
+        let lastName = this.state.lastName;
+        let email = this.state.email;
+        let password = this.state.password;
+        let handleSignIn = this.handleSignIn;
         let signUpRequest = {
             method: 'POST',
             url: 'http://localhost:8080/auth/signup',
@@ -70,14 +59,37 @@ class FormComponent extends Component {
         Axios(signUpRequest)
             .then(function (response) {
                 console.log("registration successful");
-                onSignUp();
+                handleSignIn();
+                // TODO: notify that registration was success and redirect
             })
             .catch(function (error) {
-                console.log("registration successful");
+                console.log("failed to register");
                 console.log(error);
             });
 
         e.preventDefault();
+    }
+
+    handleSignIn() {
+        let email = this.state.email;
+        let password = this.state.password;
+        let authenticate = this.props.authenticate;
+
+        let signinRequest = {
+            method: 'POST',
+            url: 'http://localhost:8080/auth/login',
+            data: qs.stringify({ email, password }),
+        };
+
+        Axios(signinRequest)
+            .then(function (response) {
+                cookies.set("api.example.com", response.data["token"], { maxAge: 300, });
+                authenticate();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     }
 
     handleChange(e) {
@@ -97,7 +109,7 @@ class FormComponent extends Component {
                 this.setState({ email: e.target.value, })
                 return;
             case passwordId:
-                this.setState({ passwordName: e.target.value, })
+                this.setState({ password: e.target.value, })
                 return;
             default:
                 return;
@@ -118,7 +130,7 @@ class FormComponent extends Component {
                 />
                 <InputComponent
                     controlId="formLastName"
-                    label="First Name"
+                    label="Last Name"
                     type="text"
                     value={this.state.lastName}
                     placeholder={"Enter Last Name"}

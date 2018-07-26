@@ -1,23 +1,44 @@
 import React, { Component } from 'react';
 import routes from './routes';
-import { BrowserRouter, Route, Redirect, Switch, } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, } from 'react-router-dom';
+import Navigation from '../components/Navigation';
 
 class Router extends Component {
+
     render() {
-        const routeComponents = routes.map(({ path, component, exact }, key) =>
-            <Route
-                path={path}
-                component={component}
-                exact={exact}
-                key={key}
-            />
-        );
+        const routeComponents = routes.map(({ path, component, exact }, key) => {
+            const CustomTag = component;
+
+            return (
+                <Route
+                    path={path}
+                    render={(props) =>
+                        <CustomTag {...props}
+                            isAuthenticated={this.props.isAuthenticated}
+                            authenticate={this.props.authenticate}
+                            firstName={this.props.firstName}
+                            email={this.props.email}
+                        />
+                    }
+                    exact={exact}
+                    key={key}
+                />
+            );
+        });
 
         return (
             <BrowserRouter>
-                <Switch>
-                    {routeComponents}
-                </Switch>
+                <div>
+                    <Navigation
+                        isAuthenticated={this.props.isAuthenticated}
+                        authenticate={this.props.authenticate}
+                        firstName={this.props.firstName}
+                        email={this.props.email}
+                    />
+                    <Switch>
+                        {routeComponents}
+                    </Switch>
+                </div>
             </BrowserRouter>
         );
     }

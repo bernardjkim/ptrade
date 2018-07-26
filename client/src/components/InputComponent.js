@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { ControlLabel, Form, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 
 class InputComponent extends Component {
 
