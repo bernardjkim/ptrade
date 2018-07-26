@@ -1,63 +1,85 @@
 import React, { Component } from 'react';
-import uuid from 'uuid';
-import Projects from './components/Projects';
-import AddProject from './components/AddProject';
-import './App.css';
+import Axios from 'axios';
+import Cookies from 'universal-cookie';
+import { connect } from 'react-redux';
 
+import Router from './system/Router';
+import './App.css';
+import * as account from './actions/accountActions';
+
+const cookies = new Cookies();
+
+function isAuthenticated(cb) {
+
+  Axios({
+    method: "GET",
+    url: "http://localhost:8080/auth/check",
+    headers: { "X-App-Token": cookies.get("api.example.com") },
+  })
+    .then((response) => {
+      setTimeout(cb(response), 100);
+    })
+    .catch((error) => {
+      console.log(error);
+      setTimeout(cb(undefined), 100);
+    });
+}
+
+
+@connect((store) => {
+  return {
+    account: store.account.account,
+  }
+})
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.authenticate = this.authenticate.bind(this);
+
     this.state = {
-      projects: []
-    }
+      isAuthenticated: undefined,
+      firstName: '',
+      email: '',
+    };
   }
 
   componentWillMount() {
-    this.setState({
-      projects: [
-        {
-          id: uuid.v4(),
-          title: 'Business Website',
-          category: 'Web Design',
-        },
-        {
-          id: uuid.v4(),
-          title: 'Social App',
-          category: 'Mobile Development',
-        },
-        {
-          id: uuid.v4(),
-          title: 'Ecommerce Shopping Cart',
-          category: 'Web Development',
-        },
-      ]
+    this.authenticate();
+  }
+
+  authenticate() {
+    isAuthenticated((response) => {
+      if (response === undefined) {
+        this.setState({ isAuthenticated: false, });
+      } else {
+        this.setState({
+          firstName: response.data.user.First,
+          email: response.data.user.Email,
+          isAuthenticated: true,
+        });
+      }
     });
   }
 
-  handleAddProject(project) {
-    let projects = this.state.projects;
-    projects.push(project);
-    this.setState({ projects: projects })
-
-  }
-
-  handleDeleteProject(id) {
-    let projects = this.state.projects;
-    projects = projects.filter(project => project.id !== id);
-    this.setState({projects: projects});
-  }
-
   render() {
-    return (
-      <div className="App">
-        MyApp
+    if (this.state.isAuthenticated === undefined) {
+      return (
+        <div></div>
+      )
 
-        <AddProject
-          addProject={(newProject) => this.handleAddProject(newProject)}
-        />
-        <Projects
-          deleteProject={(id) => this.handleDeleteProject(id)}
-          projects={this.state.projects}
+    }
+    return (
+      <div>
+        <div>
+          <button onClick={account.fetchAccount}>TEST</button>
+
+        </div>
+        <Router
+          isAuthenticated={this.state.isAuthenticated}
+          authenticate={this.authenticate}
+          firstName={this.state.firstName}
+          email={this.state.email}
         />
       </div>
     );
