@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import Cookie from 'universal-cookie';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-const cookies = new Cookie();
+import * as account from '../actions/accountActions';
+
+
+const mapStateToProps = state => ({
+    account: state.account,
+});
 
 class Navigation extends Component {
     constructor(props) {
@@ -13,8 +18,7 @@ class Navigation extends Component {
     }
 
     handleSignOut() {
-        cookies.remove("api.example.com");
-        this.props.authenticate();
+        this.props.dispatch(account.signOut());
     }
 
     render() {
@@ -26,26 +30,31 @@ class Navigation extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav pullRight>
-
-                    {this.props.isAuthenticated ?
-                        (
-
-                            <NavDropdown eventKey={2} title={this.props.firstName} id="dropdown-menu">
-                                <MenuItem eventKey={2.1} onClick={this.handleSignOut}>Sign Out</MenuItem>
-                            </NavDropdown>
-
-                        ) : (
-                            <LinkContainer to="/login">
-                                <NavItem eventKey={1}>Sign In</NavItem>
-                            </LinkContainer>
-
-                        )
-                    }
-
+                    <RightMenu 
+                    isAuthenticated={this.props.account.isAuthenticated} 
+                    firstName={this.props.account.firstName} 
+                    handleSignOut={this.handleSignOut}
+                    />
                 </Nav>
             </Navbar>
         );
     }
 }
 
-export default Navigation;
+function RightMenu(props) {
+    if (props.isAuthenticated) {
+        return (
+            <NavDropdown eventKey={2} title={props.firstName} id="dropdown-menu">
+                <MenuItem eventKey={2.1} onClick={props.handleSignOut}>Sign Out</MenuItem>
+            </NavDropdown>
+        )
+    } else {
+        return (
+            <LinkContainer to="/login">
+                <NavItem eventKey={1}>Sign In</NavItem>
+            </LinkContainer>
+        )
+    }
+}
+
+export default connect(mapStateToProps)(Navigation);

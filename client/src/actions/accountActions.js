@@ -1,41 +1,77 @@
 import axios from 'axios';
-import Cookies from 'universal-cookie';
+import qs from 'qs';
 
-const cookies = new Cookies();
+import * as auth from '../system/auth';
 
-export function setFirstName(firstName) {
-    return {
-        type: 'SET_FIRST_NAME',
-        payload: firstName,
-    }
-}
-
-export function setLastName(lastName) {
-    return {
-        type: 'SET_LAST_NAME',
-        payload: lastName,
-    }
-}
-
-export function fetchAccount() {
+export function check() {
     const authRequest = {
         method: 'GET',
         url: 'http://localhost:8080/auth/check',
-        headers: { 'X-App-Token': cookies.get('api.example.com') },
+        headers: { 'X-App-Token': auth.getCookie('api.example.com') },
     }
 
     return function (dispatch) {
         dispatch({
-            type: 'FETCH_ACCOUNT',
+            type: 'ACCOUNT_CHECK',
             payload: axios(authRequest),
-        });
-
+        })
+            .catch(error => {
+                console.log(error);
+            });
     }
-    // axios(authRequest)
-    //     .then((response) => {
-    //         dispatch({ type: 'FETCH_ACCOUNT_FULFILLED', response.data})
-    //     })
-    //     .catch((error) => {
-    //         dispatch({ type: 'FETCH_ACCOUNT_REJECTED', error })
-    //     });
+}
+
+export function create(user) {
+    const { first, last, email, password } = user;
+    const authRequest = {
+        method: 'POST',
+        url: 'http://localhost:8080/auth/signup',
+        data: qs.stringify({
+            firstName: first,
+            lastName: last,
+            email: email,
+            password: password,
+        }),
+    }
+
+    return function (dispatch) {
+        dispatch({
+            type: 'ACCOUNT_CREATE',
+            payload: axios(authRequest),
+        })
+            .then((response) => {
+                dispatch(signIn({ email, password }));
+
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+}
+
+export function signIn(user) {
+    const authRequest = {
+        method: 'POST',
+        url: 'http://localhost:8080/auth/login',
+        data: qs.stringify({ email: user.email, password: user.password }),
+    }
+
+    return function (dispatch) {
+        dispatch({
+            type: 'ACCOUNT_SIGNIN',
+            payload: axios(authRequest),
+        })
+        .then((response) => {
+            dispatch(check());
+        })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+}
+
+export function signOut() {
+    return {
+        type: 'ACCOUNT_SIGNOUT',
+    }
 }

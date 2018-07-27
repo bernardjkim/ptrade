@@ -1,5 +1,33 @@
 import React, { Component } from 'react';
-import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { Button, ControlLabel, Form, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+
+
+class FormComponent extends Component {
+    render() {
+        const inputComponents = Object.keys(this.props.inputList).map((item, key) => {
+            const { label, type, value } = this.props.inputList[item];
+            return (
+                <InputComponent
+                    key={key}
+                    controlId={item}
+                    label={label}
+                    type={type}
+                    value={value}
+                    handleChange={this.props.handleChange}
+                />
+            );
+        })
+
+        return (
+            <Form horizontal onSubmit={this.props.handleSubmit}>
+                {inputComponents}
+                <FormGroup>
+                    <Button type="submit">{this.props.submitLabel}</Button>
+                </FormGroup>
+            </Form>
+        );
+    }
+}
 
 class InputComponent extends Component {
 
@@ -33,4 +61,4 @@ class InputComponent extends Component {
     }
 }
 
-export default InputComponent;
+export default FormComponent;

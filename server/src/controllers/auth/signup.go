@@ -1,7 +1,6 @@
 package session
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	Users "projects/stock_app/server/pkg/types/users"
@@ -12,12 +11,12 @@ import (
 // TODO: which status code should be returned
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	fmt.Println("Sign Up")
 
 	firstName := r.FormValue("firstName")
 	lastName := r.FormValue("lastName")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
+	// fmt.Println(r)
 
 	if len(email) < 1 || len(password) < 1 {
 		http.Error(w, "Email and password are required.", http.StatusBadRequest)
