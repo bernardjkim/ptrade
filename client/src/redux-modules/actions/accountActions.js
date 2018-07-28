@@ -1,7 +1,9 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import * as auth from '../system/auth';
+import * as auth from '../../system/auth';
+import { account } from './types';
+
 
 export function check() {
     const authRequest = {
@@ -12,7 +14,7 @@ export function check() {
 
     return function (dispatch) {
         dispatch({
-            type: 'ACCOUNT_CHECK',
+            type: account.CHECK,
             payload: axios(authRequest),
         })
             .catch(error => {
@@ -36,7 +38,7 @@ export function create(user) {
 
     return function (dispatch) {
         dispatch({
-            type: 'ACCOUNT_CREATE',
+            type: account.CREATE,
             payload: axios(authRequest),
         })
             .then((response) => {
@@ -58,7 +60,7 @@ export function signIn(user) {
 
     return function (dispatch) {
         dispatch({
-            type: 'ACCOUNT_SIGNIN',
+            type: account.SIGNIN,
             payload: axios(authRequest),
         })
         .then((response) => {
@@ -72,6 +74,6 @@ export function signIn(user) {
 
 export function signOut() {
     return {
-        type: 'ACCOUNT_SIGNOUT',
+        type: account.SIGNOUT,
     }
 }

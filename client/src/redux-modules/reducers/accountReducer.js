@@ -1,4 +1,5 @@
-import * as auth from '../system/auth';
+import * as auth from '../../system/auth';
+import { account } from '../actions/types';
 
 const initialState = {
     firstName: '',
@@ -7,15 +8,16 @@ const initialState = {
     fetching: false,
     isAuthenticated: undefined,
 }
-export default function reducer(state = {...initialState}, action) {
+export default function reducer(state = { ...initialState }, action) {
     switch (action.type) {
 
-        case 'ACCOUNT_CHECK_PENDING': {
+        //// CHECK 
+
+        case account.CHECK_PENDING: {
             return { ...state, fetching: true };
         }
-
-        case 'ACCOUNT_CHECK_FULFILLED': {
-            const {First, Last, Email} = action.payload.data.user;
+        case account.CHECK_FULFILLED: {
+            const { First, Last, Email } = action.payload.data.user;
 
             return {
                 ...state,
@@ -26,8 +28,7 @@ export default function reducer(state = {...initialState}, action) {
                 isAuthenticated: true,
             };
         }
-
-        case 'ACCOUNT_CHECK_REJECTED': {
+        case account.CHECK_REJECTED: {
             return {
                 ...state,
                 fetching: false,
@@ -35,25 +36,31 @@ export default function reducer(state = {...initialState}, action) {
             };
         }
 
-        case 'ACCOUNT_SIGNIN_PENDING': {
+        //// SIGN IN
+
+        case account.SIGNIN_PENDING: {
             return { ...state, fetching: true };
         }
-
-        case 'ACCOUNT_SIGNIN_FULFILLED': {
-            auth.setCookie('api.example.com',action.payload.data.token)
+        case account.SIGNIN_FULFILLED: {
+            auth.setCookie('api.example.com', action.payload.data.token)
+            return { ...state, fetching: false };
+        }
+        case account.SIGNIN_REJECTED: {
             return { ...state, fetching: false };
         }
 
-        case 'ACCOUNT_SIGNIN_REJECTED': {
-            return { ...state, fetching: false };
+        //// SIGN OUT
+
+        case account.SIGNOUT: {
+            auth.removeCookie('api.example.com');
+            return { ...initialState, isAuthenticated: false };
         }
+
+        //// DEFAULT
+
         default: {
             return { ...state };
         }
 
-        case 'ACCOUNT_SIGNOUT': {
-            auth.removeCookie('api.example.com');
-            return { ...initialState, isAuthenticated: false};
-        }
     }
 }

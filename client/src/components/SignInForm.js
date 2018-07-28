@@ -3,7 +3,7 @@ import { Redirect, Link} from 'react-router-dom';
 import { Grid, Row, Col, Button, } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import * as account from '../actions/accountActions';
+import * as account from '../redux-modules/actions/accountActions';
 
 import FormComponent from './FormComponent';
 

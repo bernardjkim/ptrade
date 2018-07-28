@@ -4,7 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import * as account from '../actions/accountActions';
+import * as account from '../redux-modules/actions/accountActions';
 
 
 const mapStateToProps = state => ({
@@ -15,6 +15,10 @@ class Navigation extends Component {
     constructor(props) {
         super(props);
         this.handleSignOut = this.handleSignOut.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.dispatch(account.check());
     }
 
     handleSignOut() {
@@ -30,10 +34,10 @@ class Navigation extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav pullRight>
-                    <RightMenu 
-                    isAuthenticated={this.props.account.isAuthenticated} 
-                    firstName={this.props.account.firstName} 
-                    handleSignOut={this.handleSignOut}
+                    <RightMenu
+                        isAuthenticated={this.props.account.isAuthenticated}
+                        firstName={this.props.account.firstName}
+                        handleSignOut={this.handleSignOut}
                     />
                 </Nav>
             </Navbar>

@@ -7,7 +7,7 @@ import App from './App';
 import store from './store';
 
 const root = document.getElementById('root');
-ReactDOM.render(<Provider store={store}>
-    <App />
-</Provider>, root);
+const provider = <Provider store={store}><App/></Provider>;
+
+ReactDOM.render(provider, root);
 registerServiceWorker();
