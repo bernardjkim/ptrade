@@ -1,87 +1,88 @@
-import React, { Component } from 'react';
-import { Redirect, } from 'react-router-dom';
-import { Grid, Row, Col, } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {Redirect, Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import * as account from '../redux-modules/actions/accountActions';
 
 import FormComponent from './FormComponent';
 
-const mapStateToProps = state => ({
-    account: state.account,
-});
+const mapStateToProps = state => ({account: state.account});
 
 class Register extends Component {
     constructor(props) {
         super(props);
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSignUp = this.handleSignUp.bind(this);
+        this.handleChange = this
+            .handleChange
+            .bind(this);
+        this.handleSignUp = this
+            .handleSignUp
+            .bind(this);
 
         this.state = {
             inputList: {
                 first: {
                     label: 'First Name',
                     type: 'text',
-                    value: '',
+                    value: ''
                 },
                 last: {
                     label: 'Last Name',
                     type: 'text',
-                    value: '',
+                    value: ''
                 },
                 email: {
                     label: 'Email',
                     type: 'text',
-                    value: '',
+                    value: ''
                 },
                 password: {
                     label: 'Password',
                     type: 'password',
-                    value: '',
-                },
-            },
+                    value: ''
+                }
+            }
         };
     }
 
     handleChange(e) {
-        let inputList = { ...this.state.inputList };
+        let inputList = {
+            ...this.state.inputList
+        };
         inputList[e.target.id]['value'] = e.target.value;
 
-        this.setState({ inputList: inputList })
+        this.setState({inputList: inputList})
     }
 
     handleSignUp(e) {
-        const { first, last, email, password } = this.state.inputList;
-        this.props.dispatch(account.create({
-            first: first.value,
-            last: last.value,
-            email: email.value,
-            password: password.value,
-        }));
+        const {first, last, email, password} = this.state.inputList;
+        this
+            .props
+            .dispatch(account.create({first: first.value, last: last.value, email: email.value, password: password.value}));
         e.preventDefault();
     }
 
     render() {
         if (this.props.account.isAuthenticated) {
-            return (<Redirect to="/" />);
+            return (<Redirect to="/"/>);
         } else {
             return (
-                <Grid>
-                    <Row>
-                        <Col mdOffset={4} md={4}>
-                            <FormComponent
-                                inputList={this.state.inputList}
-                                handleSubmit={this.handleSignUp}
-                                handleChange={this.handleChange}
-                                submitLabel='Sign Up'
-                            />
-                        </Col>
-                    </Row>
-                </Grid>
+                <div className="centered-horizontally-verically w-100 mw-330px">
+                    <FormComponent
+                        inputList={this.state.inputList}
+                        handleSubmit={this.handleSignUp}
+                        handleChange={this.handleChange}
+                        submitLabel='Sign Up'/>
+                </div>
             )
         }
     }
 }
 
+const RegisterLink = () => <div id="new-user" className="text-center">
+    New user?<Link to='/register'> Create a new account.</Link>
+</div>
+
 export default connect(mapStateToProps)(Register);
+
+export {RegisterLink};
