@@ -17,14 +17,14 @@ export default function reducer(state = { ...initialState }, action) {
             return { ...state, fetching: true };
         }
         case account.CHECK_FULFILLED: {
-            const { First, Last, Email } = action.payload.data.user;
+            const { first, last, email } = action.payload.data.user;
 
             return {
                 ...state,
                 fetching: false,
-                firstName: First,
-                lastName: Last,
-                email: Email,
+                firstName: first,
+                lastName: last,
+                email: email,
                 isAuthenticated: true,
             };
         }

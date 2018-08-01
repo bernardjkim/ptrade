@@ -2,197 +2,190 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"html/template"
-	"net/http"
 	"os"
-	"strings"
-
 	"projects/stock_app/server/src/system/app"
-	"projects/stock_app/server/src/system/auth"
-	"projects/stock_app/server/src/system/data"
-	DB "projects/stock_app/server/src/system/db"
-	"projects/stock_app/server/src/system/templates"
+	// "projects/stock_app/server/src/system/auth"
 
-	"github.com/gorilla/sessions"
+	DB "projects/stock_app/server/src/system/db"
+
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// Data asdf
-type Data struct {
-	Date  string
-	Open  float64
-	Close float64
-}
+// // Data asdf
+// type Data struct {
+// 	Date  string
+// 	Open  float64
+// 	Close float64
+// }
 
-// Stock asdf
-type Stock struct {
-	Symbol  string
-	Current Data
-	SD      []Data
-}
+// // Stock asdf
+// type Stock struct {
+// 	Symbol  string
+// 	Current Data
+// 	SD      []Data
+// }
 
-// RequestHandler asdf
-type RequestHandler struct {
-	db data.SDB
-}
+// // RequestHandler asdf
+// type RequestHandler struct {
+// 	db data.SDB
+// }
 
-func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// func (h *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	r.ParseForm()
+// 	r.ParseForm()
 
-	session, _ := store.Get(r, "cookie-name")
-	symbol := strings.ToUpper(r.FormValue("symbol"))
+// 	session, _ := store.Get(r, "cookie-name")
+// 	symbol := strings.ToUpper(r.FormValue("symbol"))
 
-	var tmpl *template.Template
+// 	var tmpl *template.Template
 
-	// Check if user is authenticated
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		tmpl = templates.LoadTemplates("./tmpl/layout1.html")
-	} else {
-		tmpl = templates.LoadTemplates("./tmpl/layout2.html")
+// 	// Check if user is authenticated
+// 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+// 		tmpl = templates.LoadTemplates("./tmpl/layout1.html")
+// 	} else {
+// 		tmpl = templates.LoadTemplates("./tmpl/layout2.html")
 
-	}
+// 	}
 
-	s := Stock{}
-	if data, err := h.db.GetHistory(symbol); err == nil {
-		var sd []Data
-		for _, d := range data {
-			sd = append(sd, Data{Date: d.Date, Open: d.Open, Close: d.Close})
-		}
+// 	s := Stock{}
+// 	if data, err := h.db.GetHistory(symbol); err == nil {
+// 		var sd []Data
+// 		for _, d := range data {
+// 			sd = append(sd, Data{Date: d.Date, Open: d.Open, Close: d.Close})
+// 		}
 
-		// Data to be used for template
-		s = Stock{Symbol: symbol, Current: sd[len(sd)-1], SD: sd}
-	}
+// 		// Data to be used for template
+// 		s = Stock{Symbol: symbol, Current: sd[len(sd)-1], SD: sd}
+// 	}
 
-	templates.ExecuteTemplate(w, tmpl, s)
+// 	templates.ExecuteTemplate(w, tmpl, s)
 
-}
+// }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := templates.LoadTemplates("./tmpl/index.html")
-	templates.ExecuteTemplate(w, tmpl, nil)
-}
+// func homeHandler(w http.ResponseWriter, r *http.Request) {
+// 	tmpl := templates.LoadTemplates("./tmpl/index.html")
+// 	templates.ExecuteTemplate(w, tmpl, nil)
+// }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := templates.LoadTemplates("./tmpl/login.html")
-	templates.ExecuteTemplate(w, tmpl, nil)
-}
+// func loginHandler(w http.ResponseWriter, r *http.Request) {
+// 	tmpl := templates.LoadTemplates("./tmpl/login.html")
+// 	templates.ExecuteTemplate(w, tmpl, nil)
+// }
 
-func registrationHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := templates.LoadTemplates("./tmpl/registration.html")
-	templates.ExecuteTemplate(w, tmpl, nil)
-}
+// func registrationHandler(w http.ResponseWriter, r *http.Request) {
+// 	tmpl := templates.LoadTemplates("./tmpl/registration.html")
+// 	templates.ExecuteTemplate(w, tmpl, nil)
+// }
 
-func (h *RequestHandler) authHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO stay on same page if auth failed
-	r.ParseForm()
+// func (h *RequestHandler) authHandler(w http.ResponseWriter, r *http.Request) {
+// 	// TODO stay on same page if auth failed
+// 	r.ParseForm()
 
-	email := r.FormValue("Email")
-	password := r.FormValue("Password")
+// 	email := r.FormValue("Email")
+// 	password := r.FormValue("Password")
 
-	fmt.Println("email: ", email)
-	fmt.Println("pass: ", password)
+// 	fmt.Println("email: ", email)
+// 	fmt.Println("pass: ", password)
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	// type Message struct {
-	// 	Auth bool
-	// }
+// 	// type Message struct {
+// 	// 	Auth bool
+// 	// }
 
-	// m := Message{Auth: false}
-	tmpl := templates.LoadTemplates("./tmpl/login.html")
+// 	// m := Message{Auth: false}
+// 	tmpl := templates.LoadTemplates("./tmpl/login.html")
 
-	acc, err := h.db.GetAccount(email)
-	if err != nil {
-		fmt.Println("authentication failed")
-		w.WriteHeader(http.StatusUnauthorized)
-		// w.Write()
-		// b, _ := json.Marshal(m)
-		// w.Write(b)
-		return
-	}
+// 	acc, err := h.db.GetAccount(email)
+// 	if err != nil {
+// 		fmt.Println("authentication failed")
+// 		w.WriteHeader(http.StatusUnauthorized)
+// 		// w.Write()
+// 		// b, _ := json.Marshal(m)
+// 		// w.Write(b)
+// 		return
+// 	}
 
-	if match := auth.CheckPasswordHash(password, acc.Hash); !match {
-		fmt.Println("authentication failed")
-		w.WriteHeader(http.StatusUnauthorized)
-		// w.Write()
-		// b, _ := json.Marshal(m)
-		// w.Write(b)
-		return
-	}
+// 	if match := auth.CheckPasswordHash(password, acc.Hash); !match {
+// 		fmt.Println("authentication failed")
+// 		w.WriteHeader(http.StatusUnauthorized)
+// 		// w.Write()
+// 		// b, _ := json.Marshal(m)
+// 		// w.Write(b)
+// 		return
+// 	}
 
-	// start new session
-	login(w, r)
-	fmt.Println("authentication successful")
-	w.WriteHeader(http.StatusOK)
-	templates.ExecuteTemplate(w, tmpl, nil)
+// 	// start new session
+// 	login(w, r)
+// 	fmt.Println("authentication successful")
+// 	w.WriteHeader(http.StatusOK)
+// 	templates.ExecuteTemplate(w, tmpl, nil)
 
-}
+// }
 
-func (h *RequestHandler) registerHandler(w http.ResponseWriter, r *http.Request) {
+// func (h *RequestHandler) registerHandler(w http.ResponseWriter, r *http.Request) {
 
-	r.ParseForm()
+// 	r.ParseForm()
 
-	email := r.FormValue("Email")
-	password := r.FormValue("Password")
+// 	email := r.FormValue("Email")
+// 	password := r.FormValue("Password")
 
-	var tmpl *template.Template
+// 	var tmpl *template.Template
 
-	if acc, _ := h.db.GetAccount(email); acc != nil {
+// 	if acc, _ := h.db.GetAccount(email); acc != nil {
 
-		fmt.Println("email is already in use")
-		tmpl = templates.LoadTemplates("./tmpl/registration.html")
+// 		fmt.Println("email is already in use")
+// 		tmpl = templates.LoadTemplates("./tmpl/registration.html")
 
-	} else {
+// 	} else {
 
-		hash, _ := auth.HashValue(password)
-		h.db.RegisterAccount(email, hash)
-		fmt.Println("registration successful")
+// 		hash, _ := auth.HashValue(password)
+// 		h.db.RegisterAccount(email, hash)
+// 		fmt.Println("registration successful")
 
-		tmpl = templates.LoadTemplates("./tmpl/layout.html")
-	}
+// 		tmpl = templates.LoadTemplates("./tmpl/layout.html")
+// 	}
 
-	templates.ExecuteTemplate(w, tmpl, nil)
-}
+// 	templates.ExecuteTemplate(w, tmpl, nil)
+// }
 
-var (
-	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	key   = []byte("super-secret-key")
-	store = sessions.NewCookieStore(key)
-)
+// var (
+// 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
+// 	key   = []byte("super-secret-key")
+// 	store = sessions.NewCookieStore(key)
+// )
 
-func secret(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "cookie-name")
+// func secret(w http.ResponseWriter, r *http.Request) {
+// 	session, _ := store.Get(r, "cookie-name")
 
-	// Check if user is authenticated
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
-	}
+// 	// Check if user is authenticated
+// 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+// 		http.Error(w, "Forbidden", http.StatusForbidden)
+// 		return
+// 	}
 
-	fmt.Fprintln(w, "The cake is a lie!")
-}
+// 	fmt.Fprintln(w, "The cake is a lie!")
+// }
 
-// start new session
-func login(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "cookie-name")
-	email := r.FormValue("Email")
+// // start new session
+// func login(w http.ResponseWriter, r *http.Request) {
+// 	session, _ := store.Get(r, "cookie-name")
+// 	email := r.FormValue("Email")
 
-	// Set user as authenticated
-	session.Values["authenticated"] = true
-	session.Values["email"] = email
-	session.Save(r, w)
-}
+// 	// Set user as authenticated
+// 	session.Values["authenticated"] = true
+// 	session.Values["email"] = email
+// 	session.Save(r, w)
+// }
 
-func logout(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "cookie-name")
+// func logout(w http.ResponseWriter, r *http.Request) {
+// 	session, _ := store.Get(r, "cookie-name")
 
-	// Revoke users authentication
-	session.Values["authenticated"] = false
-	session.Save(r, w)
-}
+// 	// Revoke users authentication
+// 	session.Values["authenticated"] = false
+// 	session.Save(r, w)
+// }
 
 var (
 	port       string

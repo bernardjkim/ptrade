@@ -7,6 +7,7 @@ import (
 
 	AuthHandler "projects/stock_app/server/src/controllers/auth"
 	HomeHandler "projects/stock_app/server/src/controllers/home"
+	StockHandler "projects/stock_app/server/src/controllers/stock"
 
 	"github.com/go-xorm/xorm"
 )
@@ -20,11 +21,13 @@ func Middleware(next http.Handler) http.Handler {
 func GetRoutes(db *xorm.Engine) routes.Routes {
 	AuthHandler.Init(db)
 	HomeHandler.Init(db)
+	StockHandler.Init(db)
 
 	return routes.Routes{
 		routes.Route{"Home", "GET", "/", HomeHandler.Index},
 		routes.Route{"AuthStore", "POST", "/auth/login", AuthHandler.Login},
 		routes.Route{"AuthCheck", "GET", "/auth/check", AuthHandler.Check},
 		routes.Route{"AuthSignout", "POST", "/auth/signup", AuthHandler.SignUp},
+		routes.Route{"StockGetHistory", "POST", "/stock/gethistory", StockHandler.GetHistory},
 	}
 }

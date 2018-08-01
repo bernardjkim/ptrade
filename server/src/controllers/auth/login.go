@@ -17,9 +17,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	fmt.Println("email: ", email)
-	fmt.Println("password: ", password)
-	fmt.Println(r)
+	// fmt.Println("email: ", email)
+	// fmt.Println("password: ", password)
+	// fmt.Println(r)
 
 	if len(email) < 1 || len(password) < 1 {
 		http.Error(w, "Email and password are required.", http.StatusUnauthorized)
@@ -33,6 +33,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Credentials do not match.", http.StatusUnauthorized)
 		return
 	}
+	fmt.Println(user)
 
 	if !Passwords.IsValid(user.Password, password) {
 		http.Error(w, "Credentials do not match.", http.StatusUnauthorized)

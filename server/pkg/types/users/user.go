@@ -6,8 +6,8 @@ import (
 
 type Users []User
 
-type User db.Users
+type User db.UserTable
 
 func (u *User) TableName() string {
-	return "users"
+	return "user_table"
 }
