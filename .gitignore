@@ -1,0 +1,9 @@
+.*
+
+// server
+**/keys/
+**/vendor/
+
+
+// client
+**/node_modules/
