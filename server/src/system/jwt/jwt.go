@@ -3,16 +3,18 @@ package jwt
 import (
 	"crypto/rsa"
 	"errors"
-	"io/ioutil"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/joho/godotenv"
 )
 
 const (
-	privKeyPath  = "./keys/app.rsa"     // openssl genrsa -out app.rsa keysize
-	pubKeyPath   = "./keys/app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
+	// privKeyPath  = "./keys/app.rsa"     // openssl genrsa -out app.rsa keysize
+	// pubKeyPath   = "./keys/app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
 	HOURS_IN_DAY = 24
 	DAYS_IN_WEEK = 7
 )
@@ -25,18 +27,24 @@ var (
 
 // Parse private & public keys
 func init() {
-	signBytes, err := ioutil.ReadFile(privKeyPath)
-	if err != nil {
-		panic(err)
+	var (
+		signBytes   []byte
+		verifyBytes []byte
+		err         error
+	)
+
+	// Load env variables
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("unable to load .env file")
 	}
+
+	signBytes = []byte(os.Getenv("PRIVATE_KEY"))
 	signKey, err = jwt.ParseRSAPrivateKeyFromPEM(signBytes)
 	if err != nil {
 		panic(err)
 	}
-	verifyBytes, err := ioutil.ReadFile(pubKeyPath)
-	if err != nil {
-		panic(err)
-	}
+
+	verifyBytes = []byte(os.Getenv("PUBLIC_KEY"))
 	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
 	if err != nil {
 		panic(err)

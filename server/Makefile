@@ -31,5 +31,6 @@ install_jwt:
 	go get -u github.com/dgrijalva/jwt-go
 
 create_keys:
-	ssh-keygen -t rsa -b $(RA512) -f keys/app.rsa
+	mkdir -p keys
+	yes | ssh-keygen -t rsa -b 4096 -f keys/app.rsa -N ''
 	openssl rsa -in keys/app.rsa -pubout -outform PEM -out keys/app.rsa.pub

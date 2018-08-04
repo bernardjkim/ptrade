@@ -2,7 +2,8 @@
 
 // server
 **/keys/
-**/vendor/
+**/vendor/*/
+config.ini
 
 
 // client
