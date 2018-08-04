@@ -17,6 +17,7 @@ import {
     NavLink
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as account from 'redux-modules/actions/accountActions';
 import * as stock from 'redux-modules/actions/stockActions';
 
@@ -91,7 +92,7 @@ class Navigation extends Component {
 
 function Brand() {
     return (
-        <NavbarBrand href="/" className="d-flex align-items-center mr-auto">
+        <NavbarBrand tag={Link} to="/" className="d-flex align-items-center mr-auto">
             HOME
         </NavbarBrand>
     )
@@ -132,30 +133,28 @@ function AccountMenu(props) {
 
     if (props.isAuthenticated) {
         return (
-            <NavItem>
-                <UncontrolledDropdown nav inNavbar>
-                    <DropdownToggle nav caret>
-                        {props.name}
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                        <DropdownItem>
-                            Profile
+            <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                    {props.name}
+                </DropdownToggle>
+                <DropdownMenu right>
+                    <DropdownItem>
+                        Profile
                         </DropdownItem>
-                        <DropdownItem>
-                            Settings
+                    <DropdownItem>
+                        Settings
                         </DropdownItem>
-                        <DropdownItem divider />
-                        <DropdownItem onClick={props.handleSignOut}>
-                            Sign Out
+                    <DropdownItem divider />
+                    <DropdownItem onClick={props.handleSignOut}>
+                        Sign Out
                         </DropdownItem>
-                    </DropdownMenu>
-                </UncontrolledDropdown>
-            </NavItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
         )
     } else {
         return (
             <NavItem>
-                <NavLink href="/login">
+                <NavLink tag={Link} to="/login">
                     Sign In
                 </NavLink>
             </NavItem>
