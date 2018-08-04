@@ -4,14 +4,13 @@ import React, {Component} from 'react';
 import {
     Form,
     FormGroup,
-    Label,
     Input,
-    FormFeedback,
-    FormText,
     Button
 } from 'reactstrap';
-import {RegisterLink} from '../components/Register';
-import {SignInLink} from '../components/SignInForm';
+import {SignUpLink} from 'components/SignUpPage';
+import {SignInLink} from 'components/SignInPage';
+
+import * as account from 'redux-modules/actions/accountActions'
 
 class FormComponent extends Component {
     render() {
@@ -25,20 +24,54 @@ class FormComponent extends Component {
 }
 
 class SignInForm extends Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSignIn = this.handleSignIn.bind(this);
+        this.state = {
+            values: {
+                email: '',
+                password: ''
+            }
+        };
+    }
+
+    handleChange(e) {
+        const values = this.state.values;
+        values[e.target.id] = e.target.value;
+        this.setState({values: values})
+    }
+
+    handleSignIn(e) {
+        const {email, password} = this.state.values;
+        this
+            .props
+            .dispatch(account.signIn({email, password}));
+        e.preventDefault();
+    }
+
     render() {
         return (
             <div>
-                <Form onSubmit={this.props.handleSubmit}>
+                <Form onSubmit={this.handleSignIn}>
                     <h1>Login</h1>
                     <FormGroup>
-                        <Input placeholder="Email"/>
+                        <Input 
+                            id="email"
+                            type="text"
+                            placeholder="Email" 
+                            onChange={this.handleChange}/>
                     </FormGroup>
                     <FormGroup>
-                        <Input placeholder="Password"/>
+                        <Input 
+                            id="password"
+                            type="password" 
+                            placeholder="Password" 
+                            onChange={this.handleChange}/>
                     </FormGroup>
                     <Button className="w-100">Sign In</Button>
                 </Form>
-                <RegisterLink/>
+                <SignUpLink/>
             </div>
         );
     }

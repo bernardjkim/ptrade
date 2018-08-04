@@ -1,14 +1,16 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import * as auth from '../../system/auth';
-import { account } from './types';
+import * as auth from 'system/auth';
+import { account } from 'redux-modules/actions/types';
 
+
+const apiURL = 'https://bjstock.herokuapp.com';
 
 export function check() {
     const authRequest = {
         method: 'GET',
-        url: 'http://localhost:8080/auth/check',
+        url: apiURL + '/auth/check',
         headers: { 'X-App-Token': auth.getCookie('api.example.com') },
     }
 
@@ -23,11 +25,11 @@ export function check() {
     }
 }
 
-export function create(user) {
+export function signUp(user) {
     const { first, last, email, password } = user;
     const authRequest = {
         method: 'POST',
-        url: 'http://localhost:8080/auth/signup',
+        url: apiURL + '/auth/signup',
         data: qs.stringify({
             firstName: first,
             lastName: last,
@@ -54,7 +56,7 @@ export function create(user) {
 export function signIn(user) {
     const authRequest = {
         method: 'POST',
-        url: 'http://localhost:8080/auth/login',
+        url: apiURL + '/auth/login',
         data: qs.stringify({ email: user.email, password: user.password }),
     }
 

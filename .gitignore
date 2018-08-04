@@ -1,9 +1,9 @@
-.*
-
 // server
+server/.*
 **/keys/
 **/vendor/*/
 config.ini
+
 
 
 // client

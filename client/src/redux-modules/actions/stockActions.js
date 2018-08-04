@@ -1,12 +1,14 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import { stock } from './types';
+import { stock } from 'redux-modules/actions/types';
+
+const apiURL = 'https://bjstock.herokuapp.com';
 
 export function getHistory(symbol) {
     const request = {
-        method: 'Post',
-        url: 'http://localhost:8080/stock/gethistory',
+        method: 'POST',
+        url: apiURL + '/stock/gethistory',
         data: qs.stringify({ symbol: symbol }),
     }
 

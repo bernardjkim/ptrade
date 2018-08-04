@@ -1,4 +1,4 @@
-import { stock } from '../actions/types';
+import { stock } from 'redux-modules/actions/types';
 
 const initialState = {
     symbol: '',

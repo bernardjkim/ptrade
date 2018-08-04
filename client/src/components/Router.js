@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import routes from '../system/routes';
 import { BrowserRouter, Route, Switch, } from 'react-router-dom';
-import Navigation from './Navigation';
+import routes from 'system/routes';
+import Navigation from 'components/Navigation';
 
 class Router extends Component {
 

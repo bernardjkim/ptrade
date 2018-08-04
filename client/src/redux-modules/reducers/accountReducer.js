@@ -1,5 +1,5 @@
-import * as auth from '../../system/auth';
-import { account } from '../actions/types';
+import * as auth from 'system/auth';
+import { account } from 'redux-modules/actions/types';
 
 const initialState = {
     firstName: '',

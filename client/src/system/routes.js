@@ -1,6 +1,6 @@
 import {
-    Home, SignInForm, Register 
-} from '../components';
+    Home, SignInPage, SignUpPage 
+} from 'components';
 
 const routes = [
     {
@@ -10,12 +10,12 @@ const routes = [
     },
     {
         'path': '/login',
-        'component': SignInForm,
+        'component': SignInPage,
         'exact': false
     },
     {
         'path': '/register',
-        'component': Register,
+        'component':SignUpPage,
         'exact': false
     },
 ]
