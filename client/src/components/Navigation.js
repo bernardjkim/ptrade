@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Button,
     Input,
@@ -16,8 +16,8 @@ import {
     DropdownMenu,
     NavLink
 } from 'reactstrap';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as account from 'redux-modules/actions/accountActions';
 import * as stock from 'redux-modules/actions/stockActions';
 
@@ -72,31 +72,28 @@ class Navigation extends Component {
         return (
             <Navbar color="light" light expand="md">
                 <div className="container">
-                    <Brand/>
-                    <NavbarToggler onClick={this.toggle}/>
+                    <Brand />
+                    <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="d-flex justify-content-between w-100" navbar>
-                            <Search handleSubmit={this.handleSubmit}/>
-                            <AccountMenu 
+                            <Search handleSubmit={this.handleSubmit} />
+                            <AccountMenu
                                 isAuthenticated={this.props.isAuthenticated}
                                 name={this.props.name}
-                                handleSignOut={this.handleSignOut}/>
+                                handleSignOut={this.handleSignOut} />
                         </Nav>
                     </Collapse>
                 </div>
-                
+
             </Navbar>
         );
     }
 }
 
 function Brand() {
-    // TODO: handle the nested link elements
     return (
-        <NavbarBrand className="d-flex align-items-center mr-auto">
-            <Link to="/">
-                HOME
-            </Link>
+        <NavbarBrand tag={Link} to="/" className="d-flex align-items-center mr-auto">
+            HOME
         </NavbarBrand>
     )
 }
@@ -110,7 +107,7 @@ class Search extends Component {
     }
 
     handleChange(e) {
-        this.setState({value: e.target.value});
+        this.setState({ value: e.target.value });
     }
 
     handleSubmit() {
@@ -122,7 +119,7 @@ class Search extends Component {
         return (
             <NavItem className="d-flex align-items-center">
                 <InputGroup>
-                    <Input type='text' placeholder='Search' onChange={this.handleChange}/>
+                    <Input type='text' placeholder='Search' onChange={this.handleChange} />
                     <InputGroupAddon addonType="append">
                         <Button type="submit" onClick={this.handleSubmit}>Search</Button>
                     </InputGroupAddon>
@@ -136,34 +133,29 @@ function AccountMenu(props) {
 
     if (props.isAuthenticated) {
         return (
-            <NavItem>
-                <UncontrolledDropdown nav inNavbar>
-                    <DropdownToggle nav caret>
-                        {props.name}
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                        <DropdownItem>
-                            Profile
+            <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                    {props.name}
+                </DropdownToggle>
+                <DropdownMenu right>
+                    <DropdownItem>
+                        Profile
                         </DropdownItem>
-                        <DropdownItem>
-                            Settings
+                    <DropdownItem>
+                        Settings
                         </DropdownItem>
-                        <DropdownItem divider/>
-                        <DropdownItem onClick={props.handleSignOut}>
-                            Sign Out
+                    <DropdownItem divider />
+                    <DropdownItem onClick={props.handleSignOut}>
+                        Sign Out
                         </DropdownItem>
-                    </DropdownMenu>
-                </UncontrolledDropdown>
-            </NavItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
         )
     } else {
-        // TODO: handle the nested link elements
-        return(
+        return (
             <NavItem>
-                <NavLink href="#">
-                    <Link to ="/login">
-                        Sign In
-                    </Link>
+                <NavLink tag={Link} to="/login">
+                    Sign In
                 </NavLink>
             </NavItem>
         )
