@@ -75,7 +75,7 @@ class Navigation extends Component {
                     <Brand />
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="d-flex justify-content-between w-100" navbar>
+                        <Nav className="d-flex justify-content-between w-100 m-auto" navbar>
                             <Search handleSubmit={this.handleSubmit} />
                             <AccountMenu
                                 isAuthenticated={this.props.isAuthenticated}
