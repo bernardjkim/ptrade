@@ -5,7 +5,8 @@ import {
     Form,
     FormGroup,
     Input,
-    Button
+    Button,
+    FormFeedback
 } from 'reactstrap';
 import { SignInLink } from 'components/SignInPage';
 import * as account from 'redux-modules/actions/accountActions';
@@ -19,6 +20,9 @@ const mapStateToProps = state => ({
 class SignUpPage extends Component {
     constructor(props) {
         super(props);
+        this.validateFirstName = this.validateFirstName.bind(this);
+        this.validateLastName = this.validateLastName.bind(this);
+        this.validateEmail = this.validateEmail.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
@@ -27,8 +31,38 @@ class SignUpPage extends Component {
                 last: '',
                 email: '',
                 password: ''
-            }
+            },
+            isValidFirst: true,
+            isValidLast: true,
+            isValidEmail: true,
         };
+    }
+
+    validateFirstName(e) {
+        const { first } = this.state.values;
+        if (first === "") {
+            this.setState({ isValidFirst: false })
+        } else {
+            this.setState({ isValidFirst: true })
+        }
+    }
+
+    validateLastName(e) {
+        const { last } = this.state.values;
+        if (last === "") {
+            this.setState({ isValidLast: false })
+        } else {
+            this.setState({ isValidLast: true })
+        }
+    }
+
+    validateEmail(e) {
+        const { email } = this.state.values;
+        if (email === "") {
+            this.setState({ isValidEmail: false })
+        } else {
+            this.setState({ isValidEmail: true })
+        }
     }
 
     handleChange(e) {
@@ -38,13 +72,14 @@ class SignUpPage extends Component {
     }
 
     handleSubmit(e) {
+        e.preventDefault();
         const { first, last, email, password } = this.state.values;
         this
             .props
-            .dispatch(account.signUp({ first: capitalize(first.trim()), last: capitalize(last.trim()), email: email.trim(), password }));
-        e.preventDefault();
+            .dispatch(account.signUp({ first: capitalize(first.trim()), last: capitalize(last.trim()), email: email.trim(), password }));        
     }
     render() {
+        const { isValidFirst, isValidLast, isValidEmail } = this.state;
         // Waiting for user to be authenticated
         if (this.props.fetchingAccount) {
             return <div></div>
@@ -64,21 +99,30 @@ class SignUpPage extends Component {
                             id="first"
                             type="text"
                             placeholder="First Name"
-                            onChange={this.handleChange} />
+                            onChange={this.handleChange}
+                            onBlur={this.validateFirstName}
+                            invalid={!isValidFirst} />
+                            <FormFeedback invalid={"true"}>First name is required</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Input
                             id="last"
                             type="text"
                             placeholder="Last Name"
-                            onChange={this.handleChange} />
+                            onChange={this.handleChange} 
+                            onBlur={this.validateLastName}
+                            invalid={!isValidLast}/>
+                            <FormFeedback invalid={"true"}>Last name is required</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Input
                             id="email"
                             type="text"
                             placeholder="Email"
-                            onChange={this.handleChange} />
+                            onChange={this.handleChange}
+                            onBlur={this.validateEmail}
+                            invalid={!isValidEmail} />
+                            <FormFeedback invalid={"true"}>Email is required</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Input
