@@ -100,6 +100,8 @@ class PriceChart extends Component {
         }
 
         let data = this.parseData(this.props.data);
+
+        let price = this.state.index ? data[this.state.index].value : data[data.length-1].value;
         let coordinates = this.getCoordinates(data, this.state.dims.width, this.state.dims.height)
 
         return (
@@ -121,10 +123,24 @@ class PriceChart extends Component {
                         }
                     />
                 </svg>
+                <Info
+                    symbol={this.props.symbol}
+                    price={price}
+                />
             </div>
         )
     }
 }
+
+function Info({ symbol, price }) {
+    if (!symbol) {
+        return null;
+    }
+    return (
+        <h3>{symbol} ${price}</h3>
+    )
+}
+
 
 function Line({ coordinates }) {
     // TODO: prevent rerender when updating tooltip only
