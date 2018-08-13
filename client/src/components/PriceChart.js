@@ -52,12 +52,15 @@ class PriceChart extends Component {
     }
 
     parseData(data) {
-        // reduce dataset, get every 7th element
+        // convert time to date
+        let parseTime = d3.timeParse('%H:%M')
+
+        // TODO: handle outliers. for now just removing from set
         let parsedData = data
-            .map((d, i) => {
-                return (i % 7 !== 0) ? null : {
-                    date: new Date(d.date),
-                    value: d.close
+            .map((d) => {
+                return (d.average < 0) ? null : {
+                    date: parseTime(d.minute),
+                    value: d.average
                 }
             })
             .filter((d) => {
@@ -101,7 +104,7 @@ class PriceChart extends Component {
 
         let data = this.parseData(this.props.data);
 
-        let price = this.state.index ? data[this.state.index].value : data[data.length-1].value;
+        let price = this.state.index ? data[this.state.index].value : data[data.length - 1].value;
         let coordinates = this.getCoordinates(data, this.state.dims.width, this.state.dims.height)
 
         return (

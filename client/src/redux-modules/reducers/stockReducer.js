@@ -17,8 +17,8 @@ export default function reducer(state = { ...initialState }, action) {
             return {
                 ...state,
                 fetching: false,
-                symbol: action.payload.data.stockdata[0].symbol,
-                data: action.payload.data.stockdata,
+                symbol: action.meta.symbol,
+                data: action.payload.data,
             };
         }
         case stock.GET_HISTORY_REJECTED: {
