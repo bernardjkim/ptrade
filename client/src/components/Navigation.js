@@ -24,6 +24,7 @@ import * as stock from 'redux-modules/actions/stockActions';
 const mapStateToProps = state => ({
     isAuthenticated: state.account.isAuthenticated,
     name: state.account.firstName,
+    symbol: state.stock.symbol,
 });
 
 class Navigation extends Component {
@@ -56,10 +57,10 @@ class Navigation extends Component {
             .dispatch(account.signOut());
     }
 
-    handleSubmit(value) {
-        this
-            .props
-            .dispatch(stock.getHistory(value));
+    handleSubmit(symbol) {
+        if (this.props.symbol !== symbol) {
+            this.props.dispatch(stock.getHistory(symbol));
+        }
     }
 
     toggle() {
