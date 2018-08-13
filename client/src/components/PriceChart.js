@@ -52,7 +52,6 @@ class PriceChart extends Component {
     }
 
     parseData(data) {
-<<<<<<< HEAD
         // convert time to date
         let parseTime = d3.timeParse('%H:%M')
 
@@ -62,14 +61,6 @@ class PriceChart extends Component {
                 return (d.average < 0) ? null : {
                     date: parseTime(d.minute),
                     value: d.average
-=======
-        // reduce dataset, get every 7th element
-        let parsedData = data
-            .map((d, i) => {
-                return (i % 7 !== 0) ? null : {
-                    date: new Date(d.date),
-                    value: d.close
->>>>>>> master
                 }
             })
             .filter((d) => {
@@ -112,11 +103,8 @@ class PriceChart extends Component {
         }
 
         let data = this.parseData(this.props.data);
-<<<<<<< HEAD
 
         let price = this.state.index ? data[this.state.index].value : data[data.length - 1].value;
-=======
->>>>>>> master
         let coordinates = this.getCoordinates(data, this.state.dims.width, this.state.dims.height)
 
         return (
@@ -138,19 +126,15 @@ class PriceChart extends Component {
                         }
                     />
                 </svg>
-<<<<<<< HEAD
                 <Info
                     symbol={this.props.symbol}
                     price={price}
                 />
-=======
->>>>>>> master
             </div>
         )
     }
 }
 
-<<<<<<< HEAD
 function Info({ symbol, price }) {
     if (!symbol) {
         return null;
@@ -161,8 +145,6 @@ function Info({ symbol, price }) {
 }
 
 
-=======
->>>>>>> master
 function Line({ coordinates }) {
     // TODO: prevent rerender when updating tooltip only
     // console.log('render line')
