@@ -59,7 +59,7 @@ class Navigation extends Component {
 
     handleSubmit(symbol) {
         if (this.props.symbol !== symbol) {
-            this.props.dispatch(stock.getHistory(symbol));
+            this.props.dispatch(stock.getOneDay(symbol));
         }
     }
 
