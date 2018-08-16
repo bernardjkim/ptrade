@@ -22,6 +22,9 @@ class LineGraph extends Component {
 
     render() {
         let coordinates = this.getCoordinates(this.props.data, this.props.dims.width, this.props.dims.height)
+        if (this.props.data.length < 1) {
+            return null;
+        }
         return (
             <svg width={this.props.dims.width} height={this.props.dims.height}>
                 <Line coordinates={coordinates} />
@@ -48,26 +51,6 @@ function Line({ coordinates }) {
     }
 
     return (<path style={lineStyle} className='line' d={line(coordinates)} />)
-}
-
-function Overlay(props) {
-    // TODO: prevent rerender when tooltip is updated
-    // console.log('render overlay')
-    let width = props.dims.width / props.coordinates.length;
-    const overlay = props.coordinates.map((p, key) => {
-        return (
-            <rect
-                key={key}
-                opacity={0} // {fill:none} / {display:none} dont seem to trigger mouse events??
-                width={width}
-                height={props.dims.height}
-                x={p.x}
-                onMouseOut={() => props.handleMouseOut(key)}
-                onMouseOver={() => props.handleMouseOver(key)}
-            />
-        );
-    });
-    return overlay;
 }
 
 class Tooltip extends Component {
@@ -134,12 +117,32 @@ class Tooltip extends Component {
                     handleMouseOver={this.handleMouseOver}
                 />
                 {/* TODO: price is not rerendered when new symbol is chosen */}
-                <text x="20" y="20" font-family="sans-serif" font-size="20px" fill="red">${this.state.price}</text>
+                <text x="20" y="20" fill="red">${this.state.price}</text>
                 {/* TODO: correctly handle conditional rendering */}
                 {this.renderMarker()}
             </React.Fragment>
         )
     }
+}
+
+function Overlay(props) {
+    // TODO: prevent rerender when tooltip is updated
+    // console.log('render overlay')
+    let width = props.dims.width / props.coordinates.length;
+    const overlay = props.coordinates.map((p, key) => {
+        return (
+            <rect
+                key={key}
+                opacity={0} // {fill:none} / {display:none} dont seem to trigger mouse events??
+                width={width}
+                height={props.dims.height}
+                x={p.x}
+                onMouseOut={() => props.handleMouseOut(key)}
+                onMouseOver={() => props.handleMouseOver(key)}
+            />
+        );
+    });
+    return overlay;
 }
 
 export default LineGraph;
