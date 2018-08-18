@@ -18,17 +18,19 @@ build_db:
 	mv db_structs.go pkg/db/
 
 install:
-	make install_routes
 	make install_db
+	make install_encryption
+	make install_jwt
+	make install_routes
 
-install_encryption:
-	go get -u golang.org/x/crypto/bcrypt
-install_routes:
-	go get -u github.com/gorilla/mux
 install_db:
 	go get -u github.com/go-xorm/xorm
+install_encryption:
+	go get -u golang.org/x/crypto/bcrypt
 install_jwt:
 	go get -u github.com/dgrijalva/jwt-go
+install_routes:
+	go get -u github.com/gorilla/mux
 
 create_keys:
 	mkdir -p keys

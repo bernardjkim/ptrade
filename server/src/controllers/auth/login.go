@@ -1,8 +1,6 @@
 package session
 
 import (
-	"fmt"
-
 	Users "github.com/bkim0128/stock/server/pkg/types/users"
 	ORM "github.com/bkim0128/stock/server/src/system/db"
 	"github.com/bkim0128/stock/server/src/system/jwt"
@@ -34,7 +32,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Credentials do not match.", http.StatusUnauthorized)
 		return
 	}
-	fmt.Println(user)
 
 	if !Passwords.IsValid(user.Password, password) {
 		http.Error(w, "Credentials do not match.", http.StatusUnauthorized)
