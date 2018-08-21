@@ -14,7 +14,8 @@ import {
     DropdownToggle,
     DropdownItem,
     DropdownMenu,
-    NavLink
+    NavLink,
+    Form
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -111,20 +112,23 @@ class Search extends Component {
         this.setState({ value: e.target.value });
     }
 
-    handleSubmit() {
+    handleSubmit(e) {
         // Handle submit in parent component
+        e.preventDefault();
         this.props.handleSubmit(this.state.value)
     }
 
     render() {
         return (
             <NavItem className="d-flex align-items-center">
-                <InputGroup>
-                    <Input type='text' placeholder='Search' onChange={this.handleChange} />
-                    <InputGroupAddon addonType="append">
-                        <Button type="submit" onClick={this.handleSubmit}>Search</Button>
-                    </InputGroupAddon>
-                </InputGroup>
+                <Form onSubmit={this.handleSubmit}>
+                    <InputGroup>
+                        <Input type='text' placeholder='Search' onChange={this.handleChange} />
+                        <InputGroupAddon addonType="append">
+                            <Button type="submit">Search</Button>
+                        </InputGroupAddon>
+                    </InputGroup>
+                </Form>
             </NavItem>
         )
     }
