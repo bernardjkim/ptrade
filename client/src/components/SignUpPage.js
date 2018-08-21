@@ -20,9 +20,10 @@ const mapStateToProps = state => ({
 class SignUpPage extends Component {
     constructor(props) {
         super(props);
-        this.validateFirstName = this.validateFirstName.bind(this);
-        this.validateLastName = this.validateLastName.bind(this);
+        this.validateFirst = this.validateFirst.bind(this);
+        this.validateLast = this.validateLast.bind(this);
         this.validateEmail = this.validateEmail.bind(this);
+        this.validatePassword = this.validatePassword.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
@@ -32,37 +33,43 @@ class SignUpPage extends Component {
                 email: '',
                 password: ''
             },
-            isValidFirst: true,
-            isValidLast: true,
-            isValidEmail: true,
+            isValidFirst: null,
+            isValidLast: null,
+            isValidEmail: null,
+            isValidPassword: null,
         };
     }
 
-    validateFirstName(e) {
+    validateFirst(e) {
         const { first } = this.state.values;
-        if (first === "") {
-            this.setState({ isValidFirst: false })
-        } else {
-            this.setState({ isValidFirst: true })
-        }
+        this.setState({
+            isValidFirst: !this.isEmpty(first)
+        })
     }
 
-    validateLastName(e) {
+    validateLast(e) {
         const { last } = this.state.values;
-        if (last === "") {
-            this.setState({ isValidLast: false })
-        } else {
-            this.setState({ isValidLast: true })
-        }
+        this.setState({
+            isValidLast: !this.isEmpty(last),
+        })
     }
 
     validateEmail(e) {
         const { email } = this.state.values;
-        if (email === "") {
-            this.setState({ isValidEmail: false })
-        } else {
-            this.setState({ isValidEmail: true })
-        }
+        this.setState({
+            isValidEmail: !this.isEmpty(email)
+        })
+    }
+
+    validatePassword(e) {
+        const { password } = this.state.values;
+        this.setState({
+            isValidPassword: !this.isEmpty(password)
+        })
+    }
+
+    isEmpty(value) {
+        return value === "";
     }
 
     handleChange(e) {
@@ -74,12 +81,15 @@ class SignUpPage extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const { first, last, email, password } = this.state.values;
-        this
-            .props
-            .dispatch(account.signUp({ first: capitalize(first.trim()), last: capitalize(last.trim()), email: email.trim(), password }));        
+        const { isValidFirst, isValidLast, isValidEmail, isValidPassword } = this.state;
+        if (isValidFirst && isValidLast && isValidEmail && isValidPassword) {
+            this
+                .props
+                .dispatch(account.signUp({ first: capitalize(first.trim()), last: capitalize(last.trim()), email: email.trim(), password }));
+        }
     }
     render() {
-        const { isValidFirst, isValidLast, isValidEmail } = this.state;
+        const { isValidFirst, isValidLast, isValidEmail, isValidPassword } = this.state;
         // Waiting for user to be authenticated
         if (this.props.fetchingAccount) {
             return <div></div>
@@ -100,19 +110,19 @@ class SignUpPage extends Component {
                             type="text"
                             placeholder="First Name"
                             onChange={this.handleChange}
-                            onBlur={this.validateFirstName}
-                            invalid={!isValidFirst} />
-                            <FormFeedback invalid={"true"}>First name is required</FormFeedback>
+                            onBlur={this.validateFirst}
+                            invalid={isValidFirst === null ? null : !isValidFirst} />
+                        <FormFeedback invalid={"true"}>First name is required</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Input
                             id="last"
                             type="text"
                             placeholder="Last Name"
-                            onChange={this.handleChange} 
-                            onBlur={this.validateLastName}
-                            invalid={!isValidLast}/>
-                            <FormFeedback invalid={"true"}>Last name is required</FormFeedback>
+                            onChange={this.handleChange}
+                            onBlur={this.validateLast}
+                            invalid={isValidLast === null ? null : !isValidLast} />
+                        <FormFeedback invalid={"true"}>Last name is required</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Input
@@ -121,15 +131,18 @@ class SignUpPage extends Component {
                             placeholder="Email"
                             onChange={this.handleChange}
                             onBlur={this.validateEmail}
-                            invalid={!isValidEmail} />
-                            <FormFeedback invalid={"true"}>Email is required</FormFeedback>
+                            invalid={isValidEmail === null ? null : !isValidEmail} />
+                        <FormFeedback invalid={"true"}>Email is required</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Input
                             id="password"
                             type="password"
                             placeholder="Password"
-                            onChange={this.handleChange} />
+                            onChange={this.handleChange}
+                            onBlur={this.validatePassword}
+                            invalid={isValidPassword === null ? null : !isValidPassword} />
+                        <FormFeedback invalid={"true"}>Password is required</FormFeedback>
                     </FormGroup>
                     <Button className="w-100">Create Account</Button>
                 </Form>
@@ -138,7 +151,6 @@ class SignUpPage extends Component {
         );
     }
 }
-
 
 const SignUpLink = () => <div id="new-user" className="text-center">
     New user?<Link to='/register'> Create a new account.</Link>
