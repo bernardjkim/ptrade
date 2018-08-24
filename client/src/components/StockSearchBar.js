@@ -13,7 +13,7 @@ const theme = {
     container: 'autosuggest',
     input: 'form-control',
     suggestionsContainer: 'dropdown open h-100',
-    suggestionsList: 'dropdown-menu',
+    suggestionsList: 'custom-dropdown-menu bg-white',
     suggestion: 'dropdown-item',
     suggestionFocused: 'active',
     suggestionHighlighted: 'bg-light',
@@ -92,7 +92,7 @@ class Search extends Component {
 const renderSuggestion = suggestion => (
     <div>
         <div className="d-flex align-items-center">
-            <img className="mr-2"src={GraphIcon} width="16" height="16" alt="Graph" />
+            <img className="mr-2" src={GraphIcon} width="16" height="16" alt="Graph" />
             {suggestion.symbol}
         </div>
         <small className="form-text text-muted">{suggestion.name}</small>
