@@ -1,6 +1,6 @@
 /* Center element horizontally and vertically */
 
-.centered-horizontally-verically {
+.centered-horizontally-vertically {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -11,6 +11,12 @@
 
 .mw-330px {
     max-width: 330px;
+}
+
+/* remove a tag decoration */
+.custom-no-decoration {
+  color: inherit;
+  text-decoration:none;
 }
 
 /* stock search bar - dropdown menu */

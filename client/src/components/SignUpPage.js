@@ -101,7 +101,7 @@ class SignUpPage extends Component {
         }
 
         return (
-            <div className="centered-horizontally-verically w-100 mw-330px">
+            <div className="centered-horizontally-vertically w-100 mw-330px">
                 <Form onSubmit={this.handleSubmit}>
                     <h1>Sign Up</h1>
                     <FormGroup>
