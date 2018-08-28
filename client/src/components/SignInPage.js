@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Redirect, Link} from 'react-router-dom';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { Redirect, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
     Form,
     FormGroup,
@@ -8,7 +8,7 @@ import {
     Button
 } from 'reactstrap';
 
-import {SignUpLink} from 'components/SignUpPage';
+import { SignUpLink } from 'components/SignUpPage';
 import * as account from 'redux-modules/actions/accountActions';
 
 
@@ -33,14 +33,14 @@ class SignInPage extends Component {
     handleChange(e) {
         const values = this.state.values;
         values[e.target.id] = e.target.value;
-        this.setState({values: values})
+        this.setState({ values: values })
     }
 
     handleSubmit(e) {
-        const {email, password} = this.state.values;
+        const { email, password } = this.state.values;
         this
             .props
-            .dispatch(account.signIn({email, password}));
+            .dispatch(account.signIn({ email, password }));
         e.preventDefault();
     }
 
@@ -50,9 +50,9 @@ class SignInPage extends Component {
             return <div></div>
         }
 
-        // Redirect home if already authenticated
+        // Redirect back to previous page
         if (this.props.isAuthenticated) {
-            return <Redirect to="/"/>
+            this.props.history.goBack();
         }
 
         return (
@@ -60,22 +60,22 @@ class SignInPage extends Component {
                 <Form onSubmit={this.handleSubmit}>
                     <h1>Login</h1>
                     <FormGroup>
-                        <Input 
+                        <Input
                             id="email"
                             type="text"
-                            placeholder="Email" 
-                            onChange={this.handleChange}/>
+                            placeholder="Email"
+                            onChange={this.handleChange} />
                     </FormGroup>
                     <FormGroup>
-                        <Input 
+                        <Input
                             id="password"
-                            type="password" 
-                            placeholder="Password" 
-                            onChange={this.handleChange}/>
+                            type="password"
+                            placeholder="Password"
+                            onChange={this.handleChange} />
                     </FormGroup>
                     <Button className="w-100">Sign In</Button>
                 </Form>
-                <SignUpLink/>
+                <SignUpLink />
             </div>
         );
     }
@@ -87,4 +87,4 @@ const SignInLink = () => <div id="new-user" className="text-center">
 
 export default connect(mapStateToProps)(SignInPage);
 
-export {SignInLink}
+export { SignInLink }

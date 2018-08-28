@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import Autosuggest from 'react-autosuggest';
 import GraphIcon from '../assets/graph.png';
+import { connect } from 'react-redux';
 
 const theme = {
     container: 'autosuggest',
@@ -18,6 +19,13 @@ const theme = {
     suggestionFocused: 'active',
     suggestionHighlighted: 'bg-light',
 };
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.account.isAuthenticated,
+    name: state.account.firstName,
+    symbol: state.stock.symbol,
+    referenceDataSymbols: state.referenceData.dataSymbols
+});
 
 const getSuggestionValue = suggestion => suggestion.symbol;
 
@@ -56,10 +64,6 @@ class Search extends Component {
         // Handle submit in parent component
         e.preventDefault();
         this.props.handleSubmit(this.state.value)
-        console.log(this.props);
-        // if (this.props.location != "/dashboard") {
-        //     this.props.history.push("/dashboard");
-        // }
     }
 
     render() {
@@ -103,4 +107,4 @@ const renderSuggestion = suggestion => (
     </div>
 );
 
-export default Search;
+export default connect(mapStateToProps)(Search);

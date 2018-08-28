@@ -94,10 +94,10 @@ class SignUpPage extends Component {
         if (this.props.fetchingAccount) {
             return <div></div>
         }
-
-        // Return to home if already authenticated
-        if (this.props.isAuthenticated) {
-            return <Redirect to="/" />
+        
+        // Redirect back to previous page
+         if (this.props.isAuthenticated) {
+            this.props.history.goBack();
         }
 
         return (
