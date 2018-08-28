@@ -38,3 +38,9 @@
   border-radius: .25rem;
   box-shadow: 0 0px 12px rgba(0,0,0,.175)
 }
+
+/* Move to front  */ 
+
+.zindex-front {
+  z-index: 1;
+}

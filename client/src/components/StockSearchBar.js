@@ -56,6 +56,10 @@ class Search extends Component {
         // Handle submit in parent component
         e.preventDefault();
         this.props.handleSubmit(this.state.value)
+        console.log(this.props);
+        // if (this.props.location != "/dashboard") {
+        //     this.props.history.push("/dashboard");
+        // }
     }
 
     render() {

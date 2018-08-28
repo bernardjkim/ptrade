@@ -22,7 +22,7 @@ class Router extends Component {
         return (
             <BrowserRouter>
                 <div>
-                    <Navigation/>
+                    <Navigation />
                     <Switch>
                         {routeComponents}
                     </Switch>

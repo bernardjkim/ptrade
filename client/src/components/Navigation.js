@@ -63,7 +63,7 @@ class Navigation extends Component {
 
     render() {
         return (
-            <Navbar className="rounded-0" color="dark" dark expand="md">
+            <Navbar className="rounded-0 zindex-front" color="dark" dark expand="md">
                 <div className="container">
                     <Brand />
                     <NavbarToggler onClick={this.toggle} />
