@@ -1,60 +1,52 @@
 import React, { Component } from 'react';
 import {
-    Button,
-    Input,
     NavbarBrand,
     Navbar,
     NavbarToggler,
     Collapse,
     Nav,
-    InputGroup,
-    InputGroupAddon,
     NavItem,
     UncontrolledDropdown,
     DropdownToggle,
     DropdownItem,
     DropdownMenu,
-    NavLink
+    NavLink,
 } from 'reactstrap';
+import StockSearchBar from './StockSearchBar';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as account from 'redux-modules/actions/accountActions';
 import * as stock from 'redux-modules/actions/stockActions';
+import * as referenceData from 'redux-modules/actions/referenceDataActions';
 
 const mapStateToProps = state => ({
     isAuthenticated: state.account.isAuthenticated,
     name: state.account.firstName,
     symbol: state.stock.symbol,
+    referenceDataSymbols: state.referenceData.dataSymbols
 });
 
 class Navigation extends Component {
     constructor(props) {
         super(props);
-        this.handleSignOut = this
-            .handleSignOut
-            .bind(this);
-        this.handleSubmit = this
-            .handleSubmit
-            .bind(this);
-        this.toggle = this
-            .toggle
-            .bind(this);
-
+        this.handleSignOut = this.handleSignOut.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.toggle = this.toggle.bind(this);
         this.state = {
             isOpen: false
         }
     }
 
+    componentDidMount() {
+        this.props.dispatch(referenceData.getSymbols());
+    }
+
     componentWillMount() {
-        this
-            .props
-            .dispatch(account.check());
+        this.props.dispatch(account.check());
     }
 
     handleSignOut() {
-        this
-            .props
-            .dispatch(account.signOut());
+        this.props.dispatch(account.signOut());
     }
 
     handleSubmit(symbol) {
@@ -76,8 +68,8 @@ class Navigation extends Component {
                     <Brand />
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="d-flex justify-content-between w-100" navbar>
-                            <Search handleSubmit={this.handleSubmit} />
+                        <Nav className="d-flex justify-content-between w-100 m-auto" navbar>
+                            <StockSearchBar handleSubmit={this.handleSubmit} autocompleteData={this.props.referenceDataSymbols} />
                             <AccountMenu
                                 isAuthenticated={this.props.isAuthenticated}
                                 name={this.props.name}
@@ -85,7 +77,6 @@ class Navigation extends Component {
                         </Nav>
                     </Collapse>
                 </div>
-
             </Navbar>
         );
     }
@@ -99,39 +90,7 @@ function Brand() {
     )
 }
 
-class Search extends Component {
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.state = { value: '' };
-    }
-
-    handleChange(e) {
-        this.setState({ value: e.target.value });
-    }
-
-    handleSubmit() {
-        // Handle submit in parent component
-        this.props.handleSubmit(this.state.value)
-    }
-
-    render() {
-        return (
-            <NavItem className="d-flex align-items-center">
-                <InputGroup>
-                    <Input type='text' placeholder='Search' onChange={this.handleChange} />
-                    <InputGroupAddon addonType="append">
-                        <Button type="submit" onClick={this.handleSubmit}>Search</Button>
-                    </InputGroupAddon>
-                </InputGroup>
-            </NavItem>
-        )
-    }
-}
-
 function AccountMenu(props) {
-
     if (props.isAuthenticated) {
         return (
             <UncontrolledDropdown nav inNavbar>
