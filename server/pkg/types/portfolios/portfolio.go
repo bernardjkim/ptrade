@@ -4,7 +4,7 @@ import (
 	"github.com/bkim0128/stock/server/pkg/db"
 )
 
-type Portfolio []Transaction
+// type Portfolio []Transaction
 
 type Transaction db.TransactionTable
 
