@@ -42,7 +42,7 @@ func GetStocks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	portfolio := Portfolios.Portfolio{}
-	err = ORM.Find(db, &Portfolios.Stock{UserId: user.ID}, &portfolio)
+	err = ORM.Find(db, &Portfolios.Transaction{UserId: user.ID}, &portfolio)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "unable to get portfolio from database", http.StatusUnauthorized) //TODO: status code
