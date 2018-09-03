@@ -4,10 +4,10 @@ import (
 	"github.com/bkim0128/stock/server/pkg/db"
 )
 
-type Portfolios []Portfolio
+type Portfolio []Stock
 
-type Portfolio db.UserStockTable
+type Stock db.UserStockTable
 
-func (p *Portfolio) TableName() string {
+func (s *Stock) TableName() string {
 	return "user_stock_table"
 }
