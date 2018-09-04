@@ -31,6 +31,7 @@ func GetRoutes(db *xorm.Engine) routes.Routes {
 		routes.Route{"AuthCheck", "GET", "/auth/check", AuthHandler.Check},
 		routes.Route{"AuthSignout", "POST", "/auth/signup", AuthHandler.SignUp},
 		routes.Route{"PortfolioStocks", "GET", "/portfolio/stocks", PortfolioHandler.GetStocks},
+		routes.Route{"PortfolioStocks", "POST", "/portfolio/buy-shares", PortfolioHandler.BuyShares},
 		routes.Route{"StockList", "GET", "/stock/list", StockHandler.GetStockList},
 	}
 }

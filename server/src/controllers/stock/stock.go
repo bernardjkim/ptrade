@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	DB "github.com/bkim0128/stock/server/pkg/db"
+	Stocks "github.com/bkim0128/stock/server/pkg/types/stocks"
 	ORM "github.com/bkim0128/stock/server/src/system/db"
 
 	"github.com/go-xorm/xorm"
@@ -17,19 +17,11 @@ func Init(DB *xorm.Engine) {
 	db = DB
 }
 
-type Stock DB.StockTable
-
-type StockList []Stock
-
-func (s *Stock) TableName() string {
-	return "stock_table"
-}
-
 func GetStockList(w http.ResponseWriter, r *http.Request) {
 
-	var stockList StockList
+	var stockList Stocks.StockList
 
-	err := ORM.Find(db, &Stock{}, &stockList)
+	err := ORM.Find(db, &Stocks.Stock{}, &stockList)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "unable to get stock list", http.StatusNotFound) //TODO: status code

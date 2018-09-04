@@ -1,6 +1,8 @@
 package session
 
 import (
+	"fmt"
+
 	"github.com/bkim0128/stock/server/src/system/jwt"
 
 	"encoding/json"
@@ -10,7 +12,9 @@ import (
 
 func Check(w http.ResponseWriter, r *http.Request) {
 	tokenVal := r.Header.Get("X-App-Token")
-	// fmt.Println(tokenVal)
+
+	fmt.Println("token val: ", tokenVal)
+
 	if len(tokenVal) < 1 {
 		log.Println("Ignoring request. No token present.")
 		http.Error(w, "Token required for check.", http.StatusUnauthorized)
@@ -23,6 +27,8 @@ func Check(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+
+	user.Password = ""
 
 	login := LoginData{User: user, Token: tokenVal}
 	packet, err := json.Marshal(login)
