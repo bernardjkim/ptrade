@@ -14,16 +14,18 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Server struct contains its port number and a reference to the db
 type Server struct {
 	port string
 	Db   *xorm.Engine
 }
 
+// NewServer returns a new server
 func NewServer() Server {
 	return Server{}
 }
 
-// Init all vals
+// Init port and db
 func (s *Server) Init(port string, db *xorm.Engine) {
 	log.Println("Initializing server...")
 	s.port = ":" + port

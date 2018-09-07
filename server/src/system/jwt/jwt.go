@@ -4,7 +4,6 @@ import (
 	"crypto/rsa"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -13,10 +12,8 @@ import (
 )
 
 const (
-	// privKeyPath  = "./keys/app.rsa"     // openssl genrsa -out app.rsa keysize
-	// pubKeyPath   = "./keys/app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
-	HOURS_IN_DAY = 24
-	DAYS_IN_WEEK = 7
+	hoursInDay = 24
+	daysInWeek = 7
 )
 
 // private & public key pointers
@@ -51,11 +48,11 @@ func init() {
 	}
 }
 
-// Get token by id
+// GetToken returns a jwt token string assigned to the given id
 func GetToken(id int64) string {
 	token := jwt.New(jwt.SigningMethodRS512)
 	claims := make(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour * HOURS_IN_DAY * DAYS_IN_WEEK).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * hoursInDay * daysInWeek).Unix()
 	claims["iat"] = time.Now().Unix()
 	claims["id"] = id
 	token.Claims = claims
@@ -65,39 +62,48 @@ func GetToken(id int64) string {
 	return tokenString
 }
 
-// Validate token
+// IsTokenValid will validate a token. This function accepts a token string val
+// and will return the user id assigned to that token and nil error.
+// If the token string is invalid, this function will return 0 for user id and
+// an error.
 func IsTokenValid(val string) (int64, error) {
 	token, err := jwt.Parse(val, func(token *jwt.Token) (interface{}, error) {
 		return verifyKey, nil
 	})
 
+	// Error codes returned by failures to parse token string
+	var (
+		errInvalidToken = errors.New("jwt: token is invalid")
+		errExpiredToken = errors.New("jwt: token has expired")
+		errParsingToken = errors.New("jwt: unable to parse token")
+	)
+
 	switch err.(type) {
 	case nil:
 		if !token.Valid {
-			return 0, errors.New("Token is invalid")
+			return 0, errInvalidToken
 		}
-
-		var user_id int64
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			return 0, errors.New("Token is invalid")
+			return 0, errInvalidToken
 		}
 
-		user_id = int64(claims["id"].(float64))
+		userID := int64(claims["id"].(float64))
+		return userID, nil
 
-		return user_id, nil
 	case *jwt.ValidationError:
 		vErr := err.(*jwt.ValidationError)
 
 		switch vErr.Errors {
 		case jwt.ValidationErrorExpired:
-			return 0, errors.New("Token Expired, get a new one.")
+			return 0, errExpiredToken
+
 		default:
-			log.Println(vErr)
-			return 0, errors.New("Error while Parsing Token!")
+			return 0, errParsingToken
 		}
+
 	default:
-		return 0, errors.New("Unable to parse token")
+		return 0, errParsingToken
 	}
 }

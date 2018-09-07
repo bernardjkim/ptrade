@@ -9,13 +9,13 @@ RA256=2048
 run:
 	$(GCC) $(GCMD) $(GPATH)
 
-build:
-	make build_db
+# build:
+# 	make build_db
 
-build_db:
-	rm -f pkg/db/db_structs.go
-	go run db_build.go -json=./pkg/db/config.json
-	mv db_structs.go pkg/db/
+# build_db:
+# 	rm -f pkg/db/db_structs.go
+# 	go run db_build.go -json=./pkg/db/config.json
+# 	mv db_structs.go pkg/db/
 
 install:
 	make install_db
