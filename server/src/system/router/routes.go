@@ -13,12 +13,14 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
+// Middleware function for Router
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		next.ServeHTTP(w, r)
 	})
 }
 
+// GetRoutes returns a list of routes handled by this router
 func GetRoutes(db *xorm.Engine) routes.Routes {
 	AuthHandler.Init(db)
 	// HomeHandler.Init(db)
@@ -26,6 +28,10 @@ func GetRoutes(db *xorm.Engine) routes.Routes {
 	StockHandler.Init(db)
 
 	return routes.Routes{
+
+		// warning: composite literal uses unkeyed fields
+		// can remove warnings by including field names (field: value)
+
 		// routes.Route{"Home", "GET", "/", HomeHandler.Index},
 		routes.Route{"AuthStore", "POST", "/auth/login", AuthHandler.Login},
 		routes.Route{"AuthCheck", "GET", "/auth/check", AuthHandler.Check},

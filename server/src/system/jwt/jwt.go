@@ -71,22 +71,22 @@ func IsTokenValid(val string) (int64, error) {
 		return verifyKey, nil
 	})
 
-	// Error codes returned by failures to parse token string
+	// Error codes returned by failures to validate token
 	var (
-		errInvalidToken = errors.New("jwt: token is invalid")
-		errExpiredToken = errors.New("jwt: token has expired")
-		errParsingToken = errors.New("jwt: unable to parse token")
+		ErrInvalidToken = errors.New("jwt: token is invalid")
+		ErrExpiredToken = errors.New("jwt: token has expired")
+		ErrParsingToken = errors.New("jwt: unable to parse token")
 	)
 
 	switch err.(type) {
 	case nil:
 		if !token.Valid {
-			return 0, errInvalidToken
+			return 0, ErrInvalidToken
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			return 0, errInvalidToken
+			return 0, ErrInvalidToken
 		}
 
 		userID := int64(claims["id"].(float64))
@@ -97,13 +97,13 @@ func IsTokenValid(val string) (int64, error) {
 
 		switch vErr.Errors {
 		case jwt.ValidationErrorExpired:
-			return 0, errExpiredToken
+			return 0, ErrExpiredToken
 
 		default:
-			return 0, errParsingToken
+			return 0, ErrParsingToken
 		}
 
 	default:
-		return 0, errParsingToken
+		return 0, ErrParsingToken
 	}
 }

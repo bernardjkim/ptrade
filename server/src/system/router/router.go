@@ -8,10 +8,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Router is a wrapper for a mux router.
 type Router struct {
 	Router *mux.Router
 }
 
+// Init will initialize this router's routes and database connection.
 func (r *Router) Init(db *xorm.Engine) {
 	r.Router.Use(Middleware)
 
@@ -46,6 +48,7 @@ func (r *Router) Init(db *xorm.Engine) {
 // 	return
 // }
 
+// NewRouter simply returns a new Rounter
 func NewRouter() (r Router) {
 	r.Router = mux.NewRouter().StrictSlash(true)
 	return
