@@ -109,14 +109,19 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 		},
 		"/v1/users": routes.SubRoutePackage{
 			Routes: routes.Routes{
-				routes.Route{"UserTransactions", "GET", "/transactions", NotImplemented}
+
+				// TODO: for have users GET/POST transactions directly.
+				// maybe want to have user create orders first
+
+				routes.Route{"UserTransactions", "GET", "/transactions", NotImplemented},
 
 				// TODO: how to add url parameter
 				// ex. /transaction/txn/{txn-id}
-				routes.Route{"UserTransactions", "GET", "/transaction/txn", NotImplemented}
-				routes.Route{"UserTransactions", "POST", "/transaction/txn", NotImplemented}
-			}
-		}
+				routes.Route{"UserTransactions", "GET", "/transaction/txn", NotImplemented},
+				routes.Route{"UserTransactions", "POST", "/transaction/txn", NotImplemented},
+			},
+			Middleware: []mux.MiddlewareFunc{},
+		},
 	}
 	return
 }
