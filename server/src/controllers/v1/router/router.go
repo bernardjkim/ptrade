@@ -1,34 +1,128 @@
 package router
 
-// import (
-// 	"net/http"
+import (
+	"bytes"
+	"context"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
 
-// 	"github.com/bkim0128/stock/server/pkg/types/routes"
-// 	StatusHandler "github.com/bkim0128/stock/server/src/controllers/v1/status"
+	"github.com/gorilla/mux"
 
-// 	"github.com/go-xorm/xorm"
-// )
+	"github.com/go-xorm/xorm"
 
-// var db *xorm.Engine
+	"github.com/bkim0128/stock/server/pkg/types/routes"
 
-// func Middleware(next http.Handler) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		next.ServeHTTP(w, r)
-// 	})
-// }
+	PortfolioHandler "github.com/bkim0128/stock/server/src/controllers/portfolio"
+	AuthHandler "github.com/bkim0128/stock/server/src/controllers/v1/auth"
+	StockHandler "github.com/bkim0128/stock/server/src/controllers/v1/stocks"
+	"github.com/bkim0128/stock/server/src/system/jwt"
+)
 
-// func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
-// 	db = DB
+var db *xorm.Engine
 
-// 	StatusHandler.Init(DB)
-// 	/* ROUTES */
-// 	SubRoute = map[string]routes.SubRoutePackage{
-// 		"/v1": routes.SubRoutePackage{
-// 			Routes: routes.Routes{
-// 				routes.Route{"Status", "GET", "/status", StatusHandler.Index},
-// 			},
-// 			Middleware: Middleware,
-// 		},
-// 	}
-// 	return
-// }
+// TODO: auth middleware
+
+// Middleware for subrouter. Currently just calls the next handler.
+func Middleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r)
+	})
+}
+
+// LoggingMiddleware logs all requests received by router
+func LoggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// TODO: what to log?
+		// Dont want to log certain requests that may hold sesitive information
+		bodyBytes, _ := ioutil.ReadAll(r.Body)
+		r.Body.Close() //  must close
+		r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+		bodyString := string(bodyBytes)
+		log.Println(bodyString)
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+// AuthMiddleware handles authentication of requests received by router
+func AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		fmt.Println("Auth Middleware")
+		fmt.Println(r.URL)
+
+		// check if token is present
+		tokenVal := r.Header.Get("X-App-Token")
+		if len(tokenVal) < 1 {
+			log.Println("Ignoring request. No token present.")
+			http.Error(w, "No token sent to validate.", http.StatusUnauthorized) //TODO: status code
+			return
+		}
+
+		// get owner of token
+		user, err := jwt.GetUserFromToken(db, tokenVal)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusUnauthorized) //TODO: status code
+			return
+		}
+
+		// pass on user id to next handler
+		type key string
+		const userIDKey key = "userID"
+		ctx := context.WithValue(r.Context(), userIDKey, user.ID)
+
+		// Pass down the request to the next middleware (or final handler)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+// GetRoutes returns mappings from names to subroute packages.
+func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
+	db = DB
+
+	AuthHandler.Init(DB)
+	PortfolioHandler.Init(DB)
+	StockHandler.Init(DB)
+
+	/* ROUTES */
+
+	// Warning: Composite literal uses unkeyed fields.
+	// Can remove warnings by including field names (field: value).
+	SubRoute = map[string]routes.SubRoutePackage{
+		"/v1/auth": routes.SubRoutePackage{
+			Routes: routes.Routes{
+				routes.Route{"AuthLogin", "POST", "/login", AuthHandler.Login},
+				routes.Route{"AuthLogout", "POST", "/logout", NotImplemented},
+				routes.Route{"AuthSignup", "POST", "/signup", AuthHandler.SignUp},
+			},
+			Middleware: []mux.MiddlewareFunc{LoggingMiddleware},
+		},
+		"/v1/stocks": routes.SubRoutePackage{
+			Routes: routes.Routes{
+				routes.Route{"StockData", "GET", "/", StockHandler.GetStocks},
+			},
+			Middleware: []mux.MiddlewareFunc{LoggingMiddleware},
+		},
+		"/v1/users": routes.SubRoutePackage{
+			Routes: routes.Routes{
+				routes.Route{"UserTransactions", "GET", "/transactions", NotImplemented}
+
+				// TODO: how to add url parameter
+				// ex. /transaction/txn/{txn-id}
+				routes.Route{"UserTransactions", "GET", "/transaction/txn", NotImplemented}
+				routes.Route{"UserTransactions", "POST", "/transaction/txn", NotImplemented}
+			}
+		}
+	}
+	return
+}
+
+// NotImplemented handler is used for API endpoints not yet implemented and will
+// return the message "Not Implemented".
+var NotImplemented = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Not Implemented"))
+})

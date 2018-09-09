@@ -49,7 +49,7 @@ func GetStocks(w http.ResponseWriter, r *http.Request) {
 	// get all transactions made by user
 	var transactionList []Portfolios.Transaction
 
-	err = ORM.Find(db, &Portfolios.Transaction{UserId: user.ID}, &transactionList)
+	err = ORM.Find(db, &Portfolios.Transaction{UserID: user.ID}, &transactionList)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "unable to get portfolio from database", http.StatusUnauthorized) //TODO: status code
@@ -138,8 +138,8 @@ func BuyShares(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Current Share Price: ", price)
 
 	transaction := Portfolios.Transaction{
-		UserId:   user.ID,
-		StockId:  stock.Id,
+		UserID:   user.ID,
+		StockID:  stock.ID,
 		Date:     timeStamp,
 		Price:    price,
 		Quantity: quantity,
@@ -225,8 +225,8 @@ func SellShares(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Current Share Price: ", price)
 
 	transaction := Portfolios.Transaction{
-		UserId:   user.ID,
-		StockId:  stock.Id,
+		UserID:   user.ID,
+		StockID:  stock.ID,
 		Date:     timeStamp,
 		Price:    price,
 		Quantity: quantity,

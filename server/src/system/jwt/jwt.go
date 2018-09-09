@@ -22,6 +22,13 @@ var (
 	signKey   *rsa.PrivateKey
 )
 
+// Error codes returned by failures to validate token
+var (
+	ErrInvalidToken = errors.New("jwt: token is invalid")
+	ErrExpiredToken = errors.New("jwt: token has expired")
+	ErrParsingToken = errors.New("jwt: unable to parse token")
+)
+
 // Parse private & public keys
 func init() {
 	var (
@@ -52,7 +59,8 @@ func init() {
 func GetToken(id int64) string {
 	token := jwt.New(jwt.SigningMethodRS512)
 	claims := make(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour * hoursInDay * daysInWeek).Unix()
+	// claims["exp"] = time.Now().Add(time.Hour * hoursInDay * daysInWeek).Unix()
+	claims["exp"] = time.Now().Add(time.Hour).Unix() // token expires in one hour
 	claims["iat"] = time.Now().Unix()
 	claims["id"] = id
 	token.Claims = claims
@@ -70,13 +78,6 @@ func IsTokenValid(val string) (int64, error) {
 	token, err := jwt.Parse(val, func(token *jwt.Token) (interface{}, error) {
 		return verifyKey, nil
 	})
-
-	// Error codes returned by failures to validate token
-	var (
-		ErrInvalidToken = errors.New("jwt: token is invalid")
-		ErrExpiredToken = errors.New("jwt: token has expired")
-		ErrParsingToken = errors.New("jwt: unable to parse token")
-	)
 
 	switch err.(type) {
 	case nil:
