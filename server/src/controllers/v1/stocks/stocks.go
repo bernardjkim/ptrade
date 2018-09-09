@@ -22,7 +22,7 @@ func Init(DB *xorm.Engine) {
 // id, symbol, and company name.
 func GetStocks(w http.ResponseWriter, r *http.Request) {
 
-	var stockList Stocks.StockList
+	stockList := Stocks.StockList{}
 
 	// get list of available stocks from database
 	if err := ORM.Find(db, &Stocks.Stock{}, &stockList); err != nil {

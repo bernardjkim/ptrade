@@ -15,6 +15,7 @@ import (
 	ORM "github.com/bkim0128/stock/server/src/system/db"
 
 	"github.com/go-xorm/xorm"
+	mux "github.com/gorilla/mux"
 )
 
 var db *xorm.Engine
@@ -27,18 +28,21 @@ func Init(DB *xorm.Engine) {
 // GetTransactions returns an array of transactions made by a user
 func GetTransactions(w http.ResponseWriter, r *http.Request) {
 
-	// TODO: get userid from url parameter
-
-	// type assertion
-	userID := r.Context().Value(Users.UserIDKey).(int64)
+	// get user id from url
+	userID, err := strconv.ParseInt(mux.Vars(r)["ID"], 10, 64)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Provided invalid id", http.StatusBadRequest)
+		return
+	}
 
 	// get all transactions made by user
-	var transactionList []Transactions.Transaction
+	transactionList := []Transactions.Transaction{}
 
 	// find all transactions with given user id
 	if err := ORM.Find(db, &Transactions.Transaction{UserID: userID}, &transactionList); err != nil {
 		log.Println(err)
-		http.Error(w, "Unable to get transactions from database", http.StatusUnauthorized) //TODO: status code
+		http.Error(w, "Unable to get transactions from database", http.StatusInternalServerError)
 		return
 	}
 
@@ -46,7 +50,7 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 	packet, err := json.Marshal(transactionList)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Unable to marshal json.", http.StatusUnauthorized) // TODO: status code
+		http.Error(w, "Unable to marshal json.", http.StatusInternalServerError)
 		return
 	}
 
@@ -59,9 +63,9 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 func BuyShares(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	symbol := r.FormValue("symbol")
+	userID := r.Context().Value(Users.UserIDKey).(int64)
 
-	//
+	// TODO: buy/sell depending on sign of quantity
 	quantity, err := strconv.ParseInt(r.FormValue("quantity"), 10, 64)
 	if err != nil {
 		log.Println(err)
@@ -69,14 +73,17 @@ func BuyShares(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// type assertion
-	user := r.Context().Value(Users.UserIDKey).(Users.User)
+	symbol := r.FormValue("symbol")
+	if len(symbol) < 1 {
+		log.Println("Symbol not provided by user")
+		http.Error(w, "No symbol provided", http.StatusBadRequest)
+		return
+	}
 
-	// verify valid stock symbol
 	stock := Stocks.Stock{Symbol: symbol}
-	if err = ORM.FindBy(db, &stock); err != nil || user.ID < 1 {
+	if err = ORM.FindBy(db, &stock); err != nil || userID < 1 {
 		log.Println(err)
-		http.Error(w, "Stock symbol not found", http.StatusNoContent) // TODO: status code
+		http.Error(w, "Stock symbol not found", http.StatusNotFound)
 		return
 	}
 
@@ -91,7 +98,7 @@ func BuyShares(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get("https://api.iextrading.com/1.0/stock/" + symbol + "/price")
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Unable to retrieve stock price", http.StatusNoContent) // TODO: status code
+		http.Error(w, "Unable to retrieve stock price", http.StatusServiceUnavailable)
 		return
 	}
 
@@ -99,19 +106,19 @@ func BuyShares(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Error reading body", http.StatusNoContent) // TODO: status code
+		http.Error(w, "Error reading body", http.StatusInternalServerError)
 		return
 	}
 
 	price, err := strconv.ParseFloat(string(body), 64)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Error getting price", http.StatusBadRequest)
+		http.Error(w, "Error getting price", http.StatusInternalServerError)
 		return
 	}
 
 	transaction := Transactions.Transaction{
-		UserID:   user.ID,
+		UserID:   userID,
 		StockID:  stock.ID,
 		Date:     timeStamp,
 		Price:    price,
@@ -121,8 +128,9 @@ func BuyShares(w http.ResponseWriter, r *http.Request) {
 	// store new transaction into database
 	if err = ORM.Store(db, &transaction); err != nil {
 		log.Println(err)
-		http.Error(w, "Unable to make transaction", http.StatusBadRequest) //TODO: status code
+		http.Error(w, "Unable to make transaction", http.StatusInternalServerError)
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 }

@@ -8,17 +8,17 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-xorm/xorm"
 	"github.com/gorilla/mux"
 
-	"github.com/go-xorm/xorm"
-
 	"github.com/bkim0128/stock/server/pkg/types/routes"
+	"github.com/bkim0128/stock/server/src/system/jwt"
 
 	Users "github.com/bkim0128/stock/server/pkg/types/users"
 	AuthHandler "github.com/bkim0128/stock/server/src/controllers/v1/auth"
 	StockHandler "github.com/bkim0128/stock/server/src/controllers/v1/stocks"
 	TransactionHandler "github.com/bkim0128/stock/server/src/controllers/v1/transactions"
-	"github.com/bkim0128/stock/server/src/system/jwt"
+	UserHandler "github.com/bkim0128/stock/server/src/controllers/v1/users"
 )
 
 var db *xorm.Engine
@@ -84,6 +84,7 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 	AuthHandler.Init(DB)
 	TransactionHandler.Init(DB)
 	StockHandler.Init(DB)
+	UserHandler.Init(DB)
 
 	/* ROUTES */
 
@@ -97,6 +98,8 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 			Routes: routes.Routes{
 				routes.Route{"AuthLogin", "POST", "/login", AuthHandler.Login},
 				routes.Route{"AuthLogout", "POST", "/logout", NotImplemented}, // TODO: implement logout function
+
+				// TODO: move to POST /users ?
 				routes.Route{"AuthSignup", "POST", "/signup", AuthHandler.SignUp},
 			},
 			Middleware: []mux.MiddlewareFunc{LoggingMiddleware},
@@ -110,17 +113,17 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 		"/v1/users": routes.SubRoutePackage{
 			Routes: routes.Routes{
 
-				routes.Route{"UserInfo", "GET", "/{id:[0-9]+}", NotImplemented},
+				routes.Route{"GetUsers", "GET", "/", NotImplemented},
+				routes.Route{"GetUser", "GET", "/{ID:[0-9]+}", UserHandler.GetUser},
 
-				// TODO: for have users GET/POST transactions directly.
-				// maybe want to have user create orders first
+				// TODO: currently have users GET/POST transactions directly.
+				// maybe want to have user create orders first and later
+				// execute transaction
 
-				routes.Route{"UserTransactions", "GET", "/{id:[0-9]+}/transactions", TransactionHandler.GetTransactions},
+				routes.Route{"GetUserTxns", "GET", "/{ID:[0-9]+}/transactions", TransactionHandler.GetTransactions},
+				routes.Route{"CreateUserTxn", "POST", "/self/transactions", TransactionHandler.BuyShares},
 
-				// TODO: how to add url parameter
-				// ex. /transaction/txn/{txn-id}
-				routes.Route{"UserTransactions", "GET", "/{id:[0-9]+}/transaction/txn", NotImplemented},
-				routes.Route{"UserTransactions", "POST", "/{id:[0-9]+}/transaction/txn", NotImplemented},
+				routes.Route{"GetUserTxn", "GET", "/{ID:[0-9]+}/transaction/{txnID:[0-9]+}", NotImplemented},
 			},
 			Middleware: []mux.MiddlewareFunc{LoggingMiddleware, AuthMiddleware},
 		},

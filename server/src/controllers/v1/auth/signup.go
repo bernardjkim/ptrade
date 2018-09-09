@@ -40,7 +40,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	encryptedPassword, err := Passwords.Encrypt(password)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Unable to encrypt password", http.StatusBadRequest)
+		http.Error(w, "Unable to encrypt password", http.StatusInternalServerError)
 		return
 	}
 
@@ -51,7 +51,9 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	// store new user into database
 	if err = ORM.Store(db, &user); err != nil {
 		log.Println(err)
-		http.Error(w, "Unable to create account", http.StatusBadRequest)
+		http.Error(w, "Unable to create account", http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }
