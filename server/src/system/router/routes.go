@@ -5,9 +5,9 @@ import (
 
 	"github.com/bkim0128/stock/server/pkg/types/routes"
 
-	AuthHandler "github.com/bkim0128/stock/server/src/controllers/auth"
-	PortfolioHandler "github.com/bkim0128/stock/server/src/controllers/portfolio"
-	StockHandler "github.com/bkim0128/stock/server/src/controllers/stock"
+	// AuthHandler "github.com/bkim0128/stock/server/src/controllers/auth"
+	// PortfolioHandler "github.com/bkim0128/stock/server/src/controllers/portfolio"
+	// StockHandler "github.com/bkim0128/stock/server/src/controllers/stock"
 
 	"github.com/go-xorm/xorm"
 )
@@ -21,9 +21,9 @@ func Middleware(next http.Handler) http.Handler {
 
 // GetRoutes returns a list of routes handled by this router
 func GetRoutes(db *xorm.Engine) routes.Routes {
-	AuthHandler.Init(db)
-	PortfolioHandler.Init(db)
-	StockHandler.Init(db)
+	// AuthHandler.Init(db)
+	// PortfolioHandler.Init(db)
+	// StockHandler.Init(db)
 
 	return routes.Routes{
 

@@ -1,4 +1,4 @@
-package portfolios
+package transactions
 
 import (
 	"github.com/bkim0128/stock/server/pkg/db"

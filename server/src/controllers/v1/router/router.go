@@ -14,15 +14,14 @@ import (
 
 	"github.com/bkim0128/stock/server/pkg/types/routes"
 
-	PortfolioHandler "github.com/bkim0128/stock/server/src/controllers/portfolio"
+	Users "github.com/bkim0128/stock/server/pkg/types/users"
 	AuthHandler "github.com/bkim0128/stock/server/src/controllers/v1/auth"
 	StockHandler "github.com/bkim0128/stock/server/src/controllers/v1/stocks"
+	TransactionHandler "github.com/bkim0128/stock/server/src/controllers/v1/transactions"
 	"github.com/bkim0128/stock/server/src/system/jwt"
 )
 
 var db *xorm.Engine
-
-// TODO: auth middleware
 
 // Middleware for subrouter. Currently just calls the next handler.
 func Middleware(next http.Handler) http.Handler {
@@ -58,7 +57,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		tokenVal := r.Header.Get("X-App-Token")
 		if len(tokenVal) < 1 {
 			log.Println("Ignoring request. No token present.")
-			http.Error(w, "No token sent to validate.", http.StatusUnauthorized) //TODO: status code
+			http.Error(w, "No token provided for validation.", http.StatusUnauthorized) //TODO: status code
 			return
 		}
 
@@ -71,9 +70,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		// pass on user id to next handler
-		type key string
-		const userIDKey key = "userID"
-		ctx := context.WithValue(r.Context(), userIDKey, user.ID)
+		ctx := context.WithValue(r.Context(), Users.UserIDKey, user.ID)
 
 		// Pass down the request to the next middleware (or final handler)
 		next.ServeHTTP(w, r.WithContext(ctx))
@@ -85,10 +82,13 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 	db = DB
 
 	AuthHandler.Init(DB)
-	PortfolioHandler.Init(DB)
+	TransactionHandler.Init(DB)
 	StockHandler.Init(DB)
 
 	/* ROUTES */
+
+	// TODO: nested subrouters
+	// how to add a subroute to the subroute?
 
 	// Warning: Composite literal uses unkeyed fields.
 	// Can remove warnings by including field names (field: value).
@@ -96,7 +96,7 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 		"/v1/auth": routes.SubRoutePackage{
 			Routes: routes.Routes{
 				routes.Route{"AuthLogin", "POST", "/login", AuthHandler.Login},
-				routes.Route{"AuthLogout", "POST", "/logout", NotImplemented},
+				routes.Route{"AuthLogout", "POST", "/logout", NotImplemented}, // TODO: implement logout function
 				routes.Route{"AuthSignup", "POST", "/signup", AuthHandler.SignUp},
 			},
 			Middleware: []mux.MiddlewareFunc{LoggingMiddleware},
@@ -110,17 +110,19 @@ func GetRoutes(DB *xorm.Engine) (SubRoute map[string]routes.SubRoutePackage) {
 		"/v1/users": routes.SubRoutePackage{
 			Routes: routes.Routes{
 
+				routes.Route{"UserInfo", "GET", "/{id:[0-9]+}", NotImplemented},
+
 				// TODO: for have users GET/POST transactions directly.
 				// maybe want to have user create orders first
 
-				routes.Route{"UserTransactions", "GET", "/transactions", NotImplemented},
+				routes.Route{"UserTransactions", "GET", "/{id:[0-9]+}/transactions", TransactionHandler.GetTransactions},
 
 				// TODO: how to add url parameter
 				// ex. /transaction/txn/{txn-id}
-				routes.Route{"UserTransactions", "GET", "/transaction/txn", NotImplemented},
-				routes.Route{"UserTransactions", "POST", "/transaction/txn", NotImplemented},
+				routes.Route{"UserTransactions", "GET", "/{id:[0-9]+}/transaction/txn", NotImplemented},
+				routes.Route{"UserTransactions", "POST", "/{id:[0-9]+}/transaction/txn", NotImplemented},
 			},
-			Middleware: []mux.MiddlewareFunc{},
+			Middleware: []mux.MiddlewareFunc{LoggingMiddleware, AuthMiddleware},
 		},
 	}
 	return
