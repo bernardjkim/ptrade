@@ -3,6 +3,10 @@
   "scripts": {
   },
   "env": {
+    "NODE_PATH": {
+      "description": "src path",
+      "value": "src"
+    }
   },
   "formation": {
   },
