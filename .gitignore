@@ -1,10 +1,4 @@
-// server
-server/.*
-**/keys/
-**/vendor/*/
-config.ini
+node_modules/
+.env
 
 
-
-// client
-**/node_modules/
