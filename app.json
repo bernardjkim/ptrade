@@ -10,6 +10,10 @@
     "API_URL": {
       "description": "backend api url",
       "value": "https://ptrade-api-staging.herokuapp.com/v1"
+    },
+    "IEX_URL": {
+      "description": "iex api url",
+      "value": "https://api.iextrading.com/1.0/stock"
     }
   },
   "formation": {
