@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, } from 'react-router-dom';
 
 import './App.css';
 
-import routes from 'containers/index';
+import routes from './containers/index';
 
 class App extends Component {
   render() {

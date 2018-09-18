@@ -24,11 +24,12 @@ const publicUrl = '';
 const env = getClientEnvironment(publicUrl);
 
 // add dot env variables to env
-Object.keys(dotenv.config().parsed).forEach((key) => {
-  env.raw[key] = JSON.stringify(dotenv.config().parsed[key])
-  env.stringified['process.env'][key] = JSON.stringify(dotenv.config().parsed[key])
-
-})
+if (dotenv.config().parsed != null) {
+  Object.keys(dotenv.config().parsed).forEach((key) => {
+    env.raw[key] = JSON.stringify(dotenv.config().parsed[key])
+    env.stringified['process.env'][key] = JSON.stringify(dotenv.config().parsed[key])
+  })
+}
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
