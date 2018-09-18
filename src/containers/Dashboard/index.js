@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 // TODO: probably dont want to import all of d3 
 import * as d3 from 'd3';
 
-import { signin, validate } from 'redux/actions';
+import { validate } from 'redux/actions';
 
 import Dashboard from './Dashboard';
 
@@ -48,6 +48,7 @@ class Index extends React.Component {
         }
         this.getData();
         this.getQuote();
+        this.setState({ symbol: '' }); // prevent client from sending request for same symbol repeatedly.
     }
 
     // Send a GET request for the quote for the current state.symbol.

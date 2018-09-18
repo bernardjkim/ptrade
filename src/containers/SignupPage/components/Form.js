@@ -13,7 +13,7 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
-    buttonContainer: {
+    containerButton: {
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -93,7 +93,7 @@ const Form = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
                     error={showMissing ? form['passwordConfirm'].length < 1 : false}
                 />
             </div>
-            <div className={classes.buttonContainer}>
+            <div className={classes.containerButton}>
                 <Button size="small" color="primary" className={classes.button} component={SigninLink}>
                     Already have an account?
                 </Button>

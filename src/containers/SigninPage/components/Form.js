@@ -19,7 +19,7 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
-    buttonContainer: {
+    containerButton: {
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -66,7 +66,7 @@ const Form = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
                 margin="normal"
                 error={showMissing ? form['password'].length < 1 : false}
             />
-            <div className={classes.buttonContainer}>
+            <div className={classes.containerButton}>
                 <Button size="small" color="primary" className={classes.button} component={SignupLink}>
                     Register
                 </Button>
