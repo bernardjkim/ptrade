@@ -12,31 +12,61 @@ export default class extends React.Component {
         this.state = {
             data: [],
             quote: {},
+            symbol: 'AMZN', // default symbol
         };
     }
 
+    // Get initial data/quote
     componentWillMount() {
         this.getData();
         this.getQuote();
     }
 
-    getQuote = () => {
-        const IEX_URL = 'https://api.iextrading.com/1.0/stock';
-        const symbol = 'AMZN';
-        const createSessionRequest = {
-            method: 'GET',
-            url: IEX_URL + '/' + symbol + '/quote',
-        }
-        Axios(createSessionRequest)
-            .then((response) => {
-                this.parseQuote(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
+    // Update symbol value based on search input. 
+    changeSearch = event => {
+        this.setState({ symbol: event.target.value });
     }
 
+    // Submit search, send requests for data/quote for current state.symbol
+    submitSearch = event => {
+        event.preventDefault()
+        if (this.state['symbol'].length < 1) {
+            console.log('No search input.')
+            return
+        }
+        this.getData();
+        this.getQuote();
+    }
+
+    // Send a GET request for the quote for the current state.symbol.
+    // If successful, parse quote.
+    // Else, log error.
+    // TODO: handle error.
+    getQuote = () => {
+        const createSessionRequest = {
+            method: 'GET',
+            url: process.env.IEX_URL + '/' + this.state.symbol + '/quote',
+        }
+        Axios(createSessionRequest)
+            .then((response) => { this.parseQuote(response.data); })
+            .catch((error) => { console.log(error); });
+    }
+
+    // Send a GET request for 1d data for the current state.symbol.
+    // If successful, parse data.
+    // Else, log error.
+    // TODO: handle error.
+    getData = () => {
+        const createSessionRequest = {
+            method: 'GET',
+            url: process.env.IEX_URL + '/' + this.state.symbol + '/chart/1d?chartInterval=5',
+        }
+        Axios(createSessionRequest)
+            .then((response) => { this.parseData(response.data); })
+            .catch((error) => { console.log(error); });
+    }
+
+    // Parse quote, store import stats into state quote.
     parseQuote = (data) => {
         let parsedQuote = {
             symbol: data['symbol'],
@@ -56,22 +86,9 @@ export default class extends React.Component {
         this.setState({ quote: parsedQuote });
     }
 
-    getData = () => {
-        const IEX_URL = 'https://api.iextrading.com/1.0/stock';
-        const symbol = 'AMZN';
-        const createSessionRequest = {
-            method: 'GET',
-            url: IEX_URL + '/' + symbol + '/chart/1d?chartInterval=5',
-        }
-        Axios(createSessionRequest)
-            .then((response) => {
-                this.parseData(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
+    // Parse data, set data to an array of objects containing a date and value,
+    // with the format date: %H:%M and price: 1234.56.
+    // Ex. [{date: '12:30', 3.50}, {date: '12:35', 3.52}, {date: '12:40', 3.55}]
     parseData = (data) => {
         const formatTime = d3.timeFormat("%I:%M");
         const parseTime = d3.timeParse("%H:%M");
@@ -88,7 +105,10 @@ export default class extends React.Component {
 
     render() {
         return (
-            <Dashboard {...this.props} {...this.state} />
+            <Dashboard {...this.props} {...this.state}
+                changeSearch={this.changeSearch}
+                submitSearch={this.submitSearch}
+            />
         );
     }
 }

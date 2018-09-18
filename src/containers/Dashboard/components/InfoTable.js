@@ -36,7 +36,7 @@ const InfoTable = ({ classes, quote }) => (
     <Table className={classes.table}>
         <TableHead className={classes.tableHead}>
             <TableRow>
-                <TableCell>Info</TableCell>
+                <TableCell>{quote['symbol']}</TableCell>
                 <TableCell></TableCell>
             </TableRow>
         </TableHead>
