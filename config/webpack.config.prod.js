@@ -30,14 +30,11 @@ const publicUrl = publicPath.slice(0, -1);
 const env = getClientEnvironment(publicUrl);
 
 // add dot env variables to env
-if (dotenv != null) {
-  console.log(dotenv)
+if (dotenv.config().parsed != null) {
   Object.keys(dotenv.config().parsed).forEach((key) => {
     env.raw[key] = JSON.stringify(dotenv.config().parsed[key])
     env.stringified['process.env'][key] = JSON.stringify(dotenv.config().parsed[key])
   })
-} else {
-  console.log(process.env)
 }
 
 // Assert this just to be safe.
