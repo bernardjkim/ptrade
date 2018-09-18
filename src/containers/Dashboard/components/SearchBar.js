@@ -20,6 +20,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import { SigninLink } from 'containers/SigninPage/SigninPage';
+
 const styles = theme => ({
     root: {
         width: '100%',
@@ -89,10 +91,6 @@ const styles = theme => ({
         },
     },
 });
-
-
-const MyLink = props => <Link to="/signin" {...props} />
-
 
 class SearchBar extends React.Component {
     state = {
@@ -197,7 +195,7 @@ class SearchBar extends React.Component {
                         </div>
                         <div className={classes.grow} />
                         <div className={classes.sectionDesktop}>
-                            <Button component={MyLink}>
+                            <Button component={SigninLink}>
                                 <Typography variant="subheading">Sign in</Typography>
                             </Button>
                             {/* <IconButton

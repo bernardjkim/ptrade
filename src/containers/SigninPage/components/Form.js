@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import { SignupLink } from 'containers/SignupPage/SignupPage';
+
 const styles = theme => ({
     avatar: {
         margin: theme.spacing.unit,
@@ -63,12 +65,12 @@ const Form = ({ classes, handleChange, handleSubmit }) => (
                 margin="normal"
             />
             <div className={classes.buttonContainer}>
-                <Button size="small" color="primary" className={classes.button} type="submit">
-                    Sign Up
-                        </Button>
+                <Button size="small" color="primary" className={classes.button} component={SignupLink}>
+                    Register
+                </Button>
                 <Button size="small" variant="contained" color="primary" className={classes.button} type="submit">
                     Sign In
-                    </Button>
+                </Button>
             </div>
         </form>
     </Paper>

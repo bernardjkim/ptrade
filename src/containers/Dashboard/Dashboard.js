@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -38,6 +39,9 @@ const styles = theme => ({
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
     },
 });
+
+// Link to dashboard 
+export const DashboardLink = props => <Link to="/dashboard" {...props} />
 
 const Dashboard = ({ classes, submitSearch, changeSearch, data, quote }) => (
     <div className={classes.container}>

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles';
 
-import Form from './components/Form'
+import Form from './components/Form';
 
 const styles = theme => ({
     container: {
@@ -13,6 +14,10 @@ const styles = theme => ({
         height: '100vh',
     },
 });
+
+
+// Link to signin page
+export const SigninLink = props => <Link to="/signin" {...props} />
 
 const SigninPage = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
     <div className={classes.container}>

@@ -7,13 +7,15 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import { SigninLink } from 'containers/SigninPage/SigninPage';
+
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
     buttonContainer: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
     },
     paper: {
         marginTop: theme.spacing.unit * 8,
@@ -92,9 +94,12 @@ const Form = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
                 />
             </div>
             <div className={classes.buttonContainer}>
+                <Button size="small" color="primary" className={classes.button} component={SigninLink}>
+                    Already have an account?
+                </Button>
                 <Button size="small" variant="contained" color="primary" className={classes.button} type="submit">
                     Create Account
-                    </Button>
+                </Button>
             </div>
         </form>
     </Paper>
