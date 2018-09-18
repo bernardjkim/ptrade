@@ -28,6 +28,13 @@ const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
+// add dot env variables to env
+Object.keys(dotenv.config().parsed).forEach((key) => {
+  env.raw[key] = JSON.stringify(dotenv.config().parsed[key])
+  env.stringified['process.env'][key] = JSON.stringify(dotenv.config().parsed[key])
+
+})
+
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
 if (env.stringified['process.env'].NODE_ENV !== '"production"') {

@@ -14,7 +14,7 @@ const SimpleLineChart = ({ data }) => (
     <ResponsiveContainer width="99%" height="99%">
         <LineChart data={data}>
             <XAxis dataKey="date" />
-            <YAxis type="number" domain={['dataMin - 1', 'dataMax + 1']} />
+            <YAxis type="number" width={70} domain={['dataMin', 'dataMax']} />
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <Tooltip />
             <Legend />
