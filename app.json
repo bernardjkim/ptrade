@@ -6,6 +6,10 @@
     "NODE_PATH": {
       "description": "src path",
       "value": "src"
+    },
+    "API_URL": {
+      "description": "backend api url",
+      "value": "https://ptrade-api-staging.herokuapp.com/v1"
     }
   },
   "formation": {
