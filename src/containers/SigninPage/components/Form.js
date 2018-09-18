@@ -41,7 +41,7 @@ const styles = theme => ({
     },
 });
 
-const Form = ({ classes, handleChange, handleSubmit }) => (
+const Form = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
     <Paper className={classes.paper} elevation={1}>
         <Avatar className={classes.avatar}>
             <LockIcon />
@@ -54,6 +54,7 @@ const Form = ({ classes, handleChange, handleSubmit }) => (
                 className={classes.textField}
                 onChange={handleChange('email')}
                 margin="normal"
+                error={showMissing ? form['email'].length < 1 : false}
             />
             <TextField
                 id="password"
@@ -63,6 +64,7 @@ const Form = ({ classes, handleChange, handleSubmit }) => (
                 autoComplete="current-password"
                 onChange={handleChange('password')}
                 margin="normal"
+                error={showMissing ? form['password'].length < 1 : false}
             />
             <div className={classes.buttonContainer}>
                 <Button size="small" color="primary" className={classes.button} component={SignupLink}>
@@ -80,6 +82,8 @@ Form.propTypes = {
     classes: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
+    form: PropTypes.object.isRequired,
+    showMissing: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(Form);

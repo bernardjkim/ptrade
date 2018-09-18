@@ -33,6 +33,8 @@ SigninPage.propTypes = {
     classes: PropTypes.object.isRequired,
     handleChange: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    form: PropTypes.object.isRequired,
+    showMissing: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(SigninPage); 
