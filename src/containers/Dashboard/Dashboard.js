@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 import LineChart from './components/LineChart';
 import InfoTable from './components/InfoTable';
@@ -31,21 +32,23 @@ const styles = theme => ({
         minHeight: '500px',
         marginTop: theme.spacing.unit,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
     },
 });
 
-const Dashboard = ({ classes, data, quote }) => (
+const Dashboard = ({ classes, submitSearch, changeSearch, data, quote }) => (
     <div className={classes.container}>
 
-        <SearchBar />
+        <SearchBar submitSearch={submitSearch} changeSearch={changeSearch} />
         <div className={classes.containerCharts}>
             <Paper className={`${classes.paper} ${classes.chartLeft}`} elevation={1}>
                 <LineChart data={data} />
             </Paper>
             <Paper className={`${classes.paper} ${classes.chartRight}`} elevation={1}>
+                <Typography variant="title" gutterBottom>{quote['name']}</Typography>
                 <InfoTable quote={quote} />
             </Paper>
         </div>
@@ -53,6 +56,8 @@ const Dashboard = ({ classes, data, quote }) => (
 );
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
+    submitSearch: PropTypes.func.isRequired,
+    changeSearch: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Dashboard);

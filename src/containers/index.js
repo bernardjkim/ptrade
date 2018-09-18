@@ -3,11 +3,11 @@ import SignUpPage from './SignupPage/index'
 import Dashboard from './Dashboard/index'
 
 const routes = [
-    // {
-    //     'path': '/',
-    //     'component': Home,
-    //     'exact': true
-    // },
+    {
+        'path': '/',
+        'component': Dashboard,
+        'exact': true
+    },
     {
         'path': '/signin',
         'component': SignInPage,
