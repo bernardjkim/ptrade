@@ -1,10 +1,23 @@
 import React from 'react';
-import qs from 'qs';
-import Axios from 'axios';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import View from './SignupPage';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-export default class extends React.Component {
+import { signup, validate } from 'redux/actions';
+
+import SignupPage from './SignupPage';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        signup: (first, last, email, password) => dispatch(signup(first, last, email, password)),
+        validate: () => dispatch(validate()),
+    };
+};
+const mapStateToProps = state => ({
+    user: state.user,
+});
+class Index extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -19,6 +32,11 @@ export default class extends React.Component {
         };
     }
 
+    componentWillMount() {
+        this.props.validate();
+    }
+
+    // Update form field values.
     change = name => event => {
         let form = { ...this.state.form };
         form[name] = event.target.value;
@@ -27,8 +45,7 @@ export default class extends React.Component {
         });
     }
 
-    // TODO: 
-    // - check email is not already in use
+    // Submit will send a create user request with the current form values.
     submit = event => {
         event.preventDefault()
         let form = this.state.form;
@@ -44,44 +61,35 @@ export default class extends React.Component {
             }
         })
 
+        // TODO: check email is not already in use
         // TODO: check for any spaces
-
         // TODO: check if password is 8 or more characters
-
         // TODO: check password and passwordConfirm match
 
         if (fieldsVerified) {
-            this.signup()
+            const { first, last, email, password } = form;
+            this.props.signup(first, last, email, password);
         }
     }
 
-    signup = () => {
-        const { first, last, email, password } = this.state.form;
-
-        const createUserRequest = {
-            method: 'POST',
-            url: process.env.API_URL + '/users',
-            data: qs.stringify({
-                first: capitalize(first),
-                last: capitalize(last),
-                email: email,
-                password: password,
-            }),
-        }
-        Axios(createUserRequest)
-            .then((response) => {
-                //TODO: redirect and signin
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    // Capitalize the given string.
+    capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
-
 
     render() {
+        const { user } = this.props;
+
+        if (user.fetching) {
+            return <LinearProgress />
+        }
+
+        // Redirect home if already authenticated
+        if (user.isAuthenticated) {
+            return <Redirect to="/dashboard" />
+        }
         return (
-            <View {...this.props} {...this.state}
+            <SignupPage {...this.props} {...this.state}
                 handleSubmit={this.submit}
                 handleChange={this.change}
             />
@@ -89,6 +97,4 @@ export default class extends React.Component {
     }
 }
 
-function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

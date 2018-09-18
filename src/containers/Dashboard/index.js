@@ -1,12 +1,23 @@
 import React from 'react';
 import Axios from 'axios';
+import { connect } from 'react-redux';
 
 // TODO: probably dont want to import all of d3 
 import * as d3 from 'd3';
 
+import { signin, validate } from 'redux/actions';
+
 import Dashboard from './Dashboard';
 
-export default class extends React.Component {
+const mapDispatchToProps = dispatch => {
+    return {
+        validate: () => dispatch(validate()),
+    };
+};
+const mapStateToProps = state => ({
+    user: state.user,
+});
+class Index extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -18,6 +29,7 @@ export default class extends React.Component {
 
     // Get initial data/quote
     componentWillMount() {
+        this.props.validate();
         this.getData();
         this.getQuote();
     }
@@ -112,3 +124,4 @@ export default class extends React.Component {
         );
     }
 }
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

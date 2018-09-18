@@ -1,10 +1,23 @@
 import React from 'react';
-import qs from 'qs';
-import Axios from 'axios';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import View from './SigninPage';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-export default class extends React.Component {
+import { signin, validate } from 'redux/actions';
+
+import SigninPage from './SigninPage';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        signin: (email, password) => dispatch(signin(email, password)),
+        validate: () => dispatch(validate()),
+    };
+};
+const mapStateToProps = state => ({
+    user: state.user,
+});
+class Index extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -16,6 +29,11 @@ export default class extends React.Component {
         };
     }
 
+    componentWillMount() {
+        this.props.validate();
+    }
+
+    // Change will update the form values.
     change = name => event => {
         let form = { ...this.state.form };
         form[name] = event.target.value;
@@ -24,10 +42,11 @@ export default class extends React.Component {
         });
     }
 
+    // Submit will verify fields and attempt to signin with the current
+    // form values.
     submit = event => {
         event.preventDefault()
         let form = this.state.form;
-
         let fieldsVerified = true;
 
         // check if any fields are empty
@@ -42,37 +61,31 @@ export default class extends React.Component {
         // TODO: check for any invalid characters
 
         if (fieldsVerified) {
-            this.signin()
+            //TODO: how to dispatch async action
+            this.props.signin(form['email'], form['password']);
         }
     }
 
-    signin = () => {
-        const { email, password } = this.state.form;
-
-        const createSessionRequest = {
-            method: 'POST',
-            url: process.env.API_URL + '/sessions',
-            data: qs.stringify({
-                email: email,
-                password: password,
-            }),
-        }
-        Axios(createSessionRequest)
-            .then((response) => {
-                // TODO: store session token
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
 
     render() {
+        const { user } = this.props;
+
+        if (user.fetching) {
+            return <LinearProgress />
+        }
+
+        // Redirect home if already authenticated
+        if (user.isAuthenticated) {
+            return <Redirect to="/dashboard" />
+        }
+
         return (
-            <View {...this.props} {...this.state}
+            <SigninPage {...this.props} {...this.state}
                 handleSubmit={this.submit}
                 handleChange={this.change}
             />
         );
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom'
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
+// import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
-import MailIcon from '@material-ui/icons/Mail';
-import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+// import MailIcon from '@material-ui/icons/Mail';
+// import Menu from '@material-ui/core/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import MoreIcon from '@material-ui/icons/MoreVert';
+// import NotificationsIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -116,10 +115,11 @@ class SearchBar extends React.Component {
     };
 
     render() {
-        const { anchorEl, mobileMoreAnchorEl } = this.state;
-        const { classes, changeSearch, submitSearch } = this.props;
+        // const { anchorEl, mobileMoreAnchorEl } = this.state;
+        const { anchorEl} = this.state;
+        const { classes, changeSearch, submitSearch, user } = this.props;
         const isMenuOpen = Boolean(anchorEl);
-        const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+        // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
         // const renderMenu = (
         //     <Menu
@@ -195,17 +195,20 @@ class SearchBar extends React.Component {
                         </div>
                         <div className={classes.grow} />
                         <div className={classes.sectionDesktop}>
-                            <Button component={SigninLink}>
-                                <Typography variant="subheading">Sign in</Typography>
-                            </Button>
-                            {/* <IconButton
-                                aria-owns={isMenuOpen ? 'material-appbar' : null}
-                                aria-haspopup="true"
-                                onClick={this.handleProfileMenuOpen}
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton> */}
+                            {user.isAuthenticated ?
+                                <IconButton
+                                    aria-owns={isMenuOpen ? 'material-appbar' : null}
+                                    aria-haspopup="true"
+                                    onClick={this.handleProfileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                :
+                                <Button component={SigninLink}>
+                                    <Typography variant="subheading">Sign in</Typography>
+                                </Button>
+                            }
                         </div>
                         {/* <div className={classes.sectionMobile}>
                             <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
@@ -225,6 +228,7 @@ SearchBar.propTypes = {
     classes: PropTypes.object.isRequired,
     submitSearch: PropTypes.func.isRequired,
     changeSearch: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(SearchBar);

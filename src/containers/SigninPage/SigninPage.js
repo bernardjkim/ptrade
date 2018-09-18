@@ -35,4 +35,4 @@ SigninPage.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(SigninPage);
+export default withStyles(styles)(SigninPage); 

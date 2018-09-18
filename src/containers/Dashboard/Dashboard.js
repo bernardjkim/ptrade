@@ -43,10 +43,9 @@ const styles = theme => ({
 // Link to dashboard 
 export const DashboardLink = props => <Link to="/dashboard" {...props} />
 
-const Dashboard = ({ classes, submitSearch, changeSearch, data, quote }) => (
+const Dashboard = ({ classes, submitSearch, changeSearch, data, quote, user}) => (
     <div className={classes.container}>
-
-        <SearchBar submitSearch={submitSearch} changeSearch={changeSearch} />
+        <SearchBar submitSearch={submitSearch} changeSearch={changeSearch} user={user}/>
         <div className={classes.containerCharts}>
             <Paper className={`${classes.paper} ${classes.chartLeft}`} elevation={1}>
                 <LineChart data={data} />
@@ -62,6 +61,9 @@ Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
     submitSearch: PropTypes.func.isRequired,
     changeSearch: PropTypes.func.isRequired,
+    data: PropTypes.array.isRequired,
+    quote: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Dashboard);
