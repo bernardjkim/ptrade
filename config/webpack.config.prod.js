@@ -37,6 +37,16 @@ if (dotenv.config().parsed != null) {
   })
 }
 
+if (env.raw['API_URL'] == null) {
+  throw new Error('Error: API_URL environment variable not found')
+}
+if (env.raw['IEX_URL'] == null) {
+  throw new Error('Error: IEX_URL environment variable not found')
+}
+if (env.raw['NODE_PATH'] == null) {
+  throw new Error('Error: NODE_PATH environment variable not found')
+}
+
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
 if (env.stringified['process.env'].NODE_ENV !== '"production"') {

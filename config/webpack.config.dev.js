@@ -31,6 +31,16 @@ if (dotenv.config().parsed != null) {
   })
 }
 
+if (env.raw['API_URL'] == null) {
+  throw new Error('Error: .env does not contain API_URL variable')
+}
+if (env.raw['IEX_URL'] == null) {
+  throw new Error('Error: .env does not contain IEX_URL variable')
+}
+if (env.raw['NODE_PATH'] == null) {
+  throw new Error('Error: .env does not contain NODE_PATH variable')
+}
+
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
