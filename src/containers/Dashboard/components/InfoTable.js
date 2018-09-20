@@ -11,6 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
+
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
@@ -57,7 +58,7 @@ const data = (quote) => [
     createData('MKT CAP', quote['marketCap'] ? quote['marketCap'] : 'N/A'),
 ];
 
-const InfoTable = ({ classes, quote }) => (
+const InfoTable = ({ classes, quote, user }) => (
     <Paper className={classes.paper} elevation={1}>
         <Typography variant="title" gutterBottom>{quote['name'] ? quote['name'] : 'N/A'}</Typography>
         <div className={classes.containerTable}>
@@ -82,10 +83,24 @@ const InfoTable = ({ classes, quote }) => (
                 </TableBody>
             </Table>
             <div className={classes.containerButton}>
-                <Button size="large" variant="contained" color="primary" className={classes.button} type="submit">
+                <Button
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    type="submit"
+                    disabled={!user.isAuthenticated}
+                >
                     Buy
                 </Button>
-                <Button size="large" variant="contained" color="primary" className={classes.button} type="submit">
+                <Button
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    type="submit"
+                    disabled={!user.isAuthenticated}
+                >
                     Sell
                 </Button>
             </div>
@@ -95,6 +110,10 @@ const InfoTable = ({ classes, quote }) => (
 
 InfoTable.propTypes = {
     classes: PropTypes.object.isRequired,
+    quote: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(InfoTable);
+
+

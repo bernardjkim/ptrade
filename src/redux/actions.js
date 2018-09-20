@@ -7,6 +7,7 @@ import {
     SESSION_CREATE_START,
     SESSION_CREATE_SUCCESS,
     SESSION_CREATE_FAIL,
+    SESSION_DELETE,
     USER_CREATE_START,
     USER_CREATE_SUCCESS,
     USER_CREATE_FAIL,
@@ -15,8 +16,7 @@ import {
     VALIDATE_FAIL,
 } from './types';
 
-// Send a request to the ptrade api to create a new session with the
-// given email and password.
+// Send aan api request to create a new session with the given email and password.
 export const signin = (email, password) => {
     const createSessionRequest = {
         method: 'POST',
@@ -36,8 +36,33 @@ export const signin = (email, password) => {
     };
 }
 
-// Send a request to the ptrade api to create a new user with the
-// given email and password.
+
+// Sign out, send an api request to delete the current session for this token.
+export const signout = () => {
+    const createSessionRequest = {
+        method: 'DELETE',
+        url: process.env.API_URL + '/sessions',
+        headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
+    };
+    auth.removeCookie('api.ptrade.com');
+    return (dispatch) => {
+        dispatch({ type: SESSION_DELETE })
+    }
+    // TODO: send delete request 
+    // return (dispatch) => {
+    //     dispatch({ type: SESSION_DELETE_START })
+    //     axios(createSessionRequest)
+    //         .then(response => {
+    //             dispatch({ type: SESSION_DELETE_SUCCESS, payload: response.data, });
+    //             dispatch(validate());
+    //         })
+    //         .catch(error => {
+    //             dispatch({ type: SESSION_DELETE_FAIL, payload: error, })
+    //         });
+    // };
+}
+
+// Send an api request to create a new user with the given fields.
 export const signup = (first, last, email, password) => {
     const createUserRequest = {
         method: 'POST',
@@ -62,7 +87,7 @@ export const signup = (first, last, email, password) => {
     };
 }
 
-// Send a request to ptrade api to validate the current Session-Token.
+// Send an api request to validate the current Session-Token 
 export const validate = () => {
     const validateRequest = {
         method: 'GET',

@@ -4,6 +4,7 @@ import {
     SESSION_CREATE_START,
     SESSION_CREATE_SUCCESS,
     SESSION_CREATE_FAIL,
+    SESSION_DELETE,
     USER_CREATE_START,
     USER_CREATE_SUCCESS,
     USER_CREATE_FAIL,
@@ -35,6 +36,10 @@ export default function reducer(state = { ...initialState }, action) {
         }
         case SESSION_CREATE_FAIL: {
             return { ...state, user: { ...state.user, fetching: false } };
+        }
+
+        case SESSION_DELETE: {
+            return { ...state, user: { ...state.user, isAuthenticated: false } };
         }
 
         // **CREATE USER**

@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 // TODO: probably dont want to import all of d3 
 import * as d3 from 'd3';
 
-import { validate } from 'redux/actions';
+import { signout, validate } from 'redux/actions';
 
 import Dashboard from './Dashboard';
 
 const mapDispatchToProps = dispatch => {
     return {
+        signout: () => dispatch(signout()),
         validate: () => dispatch(validate()),
     };
 };
@@ -33,6 +34,12 @@ class Index extends React.Component {
         this.getData();
         this.getQuote();
     }
+
+    // Signout, delete current session
+    signout = () => {
+        this.props.signout();
+    }
+
 
     // Update symbol value based on search input. 
     changeSearch = event => {
@@ -121,6 +128,7 @@ class Index extends React.Component {
             <Dashboard {...this.props} {...this.state}
                 changeSearch={this.changeSearch}
                 submitSearch={this.submitSearch}
+                signout={this.signout}
             />
         );
     }

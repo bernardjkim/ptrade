@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import LineChart from './components/LineChart';
 import InfoTable from './components/InfoTable';
-import SearchBar from './components/SearchBar';
+import TopBar from './components/TopBar';
 
 const styles = theme => ({
     container: {
@@ -38,15 +38,20 @@ const styles = theme => ({
 // Link to dashboard 
 export const DashboardLink = props => <Link to="/dashboard" {...props} />
 
-const Dashboard = ({ classes, submitSearch, changeSearch, data, quote, user }) => (
+const Dashboard = ({ classes, changeSearch, submitSearch, signout, data, quote, user }) => (
     <div className={classes.container}>
-        <SearchBar submitSearch={submitSearch} changeSearch={changeSearch} user={user} />
+        <TopBar
+            submitSearch={submitSearch}
+            changeSearch={changeSearch}
+            signout={signout}
+            user={user}
+        />
         <div className={classes.containerCharts}>
             <div className={classes.chartLeft}>
                 <LineChart data={data} />
             </div>
             <div className={classes.chartRight}>
-                <InfoTable quote={quote} />
+                <InfoTable quote={quote} user={user} />
             </div>
         </div>
     </div>
@@ -55,6 +60,7 @@ Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
     submitSearch: PropTypes.func.isRequired,
     changeSearch: PropTypes.func.isRequired,
+    signout: PropTypes.func.isRequired,
     data: PropTypes.array.isRequired,
     quote: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
