@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles';
 
-import LineChart from './components/LineChart';
-import TransactionList from './components/TransactionList';
+// import LineChart from './components/LineChart';
+// import TransactionList from './components/TransactionList';
+import Portfolio from './components/Portfolio';
 // import InfoTable from './components/InfoTable';
 // import TopBar from './components/TopBar';
 
@@ -39,7 +40,7 @@ const styles = theme => ({
 // Link to dashboard 
 export const ProfileLink = props => <Link to="/profile" {...props} />
 
-const ProfilePage = ({ classes, data }) => (
+const ProfilePage = ({ classes, data, transactions, portfolioValue }) => (
     <div className={classes.container}>
         {/* <TopBar
             submitSearch={submitSearch}
@@ -53,14 +54,17 @@ const ProfilePage = ({ classes, data }) => (
             </div>
             <div className={classes.chartRight}>
                 {/* <InfoTable quote={quote} user={user} /> */}
-                <TransactionList data={data} />
+                {/* <TransactionList data={data} transactions={transactions} /> */}
+                <Portfolio data={data} portfolioValue={portfolioValue} />
             </div>
         </div>
     </div>
 );
 ProfilePage.propTypes = {
     classes: PropTypes.object.isRequired,
-    data: PropTypes.array.isRequired,
+    data: PropTypes.object.isRequired,
+    transactions: PropTypes.array.isRequired,
+    portfolioValue: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(ProfilePage);

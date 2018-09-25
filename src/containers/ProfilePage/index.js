@@ -21,7 +21,9 @@ class Index extends React.Component {
     constructor() {
         super();
         this.state = {
-            data: [],
+            transactions: [],
+            data: {},
+            portfolioValue: 0,
         };
     }
 
@@ -39,9 +41,38 @@ class Index extends React.Component {
         }
         axios(getTransactionsRequest)
             .then((response) => {
-                this.setState({ data: response.data });
+                this.processData(response.data);
+                this.setState({ transactions: response.data });
             })
             .catch((error) => { console.log(error); });
+    }
+
+    processData = (data) => {
+        let newData = {};
+        data.forEach(({ stock, transaction }) => {
+            let { symbol } = stock;
+            let { stock_id, price, quantity } = transaction;
+            if (!(stock_id in newData)) {
+                newData[stock_id] = {
+                    symbol: symbol,
+                    quantity: quantity,
+                    pps: price,
+                }
+            } else {
+                let prevQty = newData[stock_id]['quantity'];
+                newData[stock_id]['quantity'] = prevQty + quantity;
+            }
+        });
+
+        // get total profile value
+        let portfolioValue = 0;
+        Object.keys(newData).forEach(key => {
+            let pps = newData[key]['pps'];
+            let qty = newData[key]['quantity'];
+            portfolioValue = portfolioValue + (pps * qty);
+
+        })
+        this.setState({ data: newData, portfolioValue: portfolioValue });
     }
 
     render() {
