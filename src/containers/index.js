@@ -1,6 +1,7 @@
-import SignInPage from './SigninPage/index'
-import SignUpPage from './SignupPage/index'
-import Dashboard from './Dashboard/index'
+import SignInPage from './SigninPage/index';
+import SignUpPage from './SignupPage/index';
+import Dashboard from './Dashboard/index';
+import ProfilePage from './ProfilePage/index';
 
 const routes = [
     {
@@ -15,12 +16,17 @@ const routes = [
     },
     {
         'path': '/signup',
-        'component':SignUpPage,
+        'component': SignUpPage,
         'exact': false
     },
     {
         'path': '/dashboard',
-        'component':Dashboard,
+        'component': Dashboard,
+        'exact': false
+    },
+    {
+        'path': '/profile',
+        'component': ProfilePage,
         'exact': false
     },
 ]

@@ -2,8 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 import { connect } from 'react-redux';
 
-// TODO: probably dont want to import all of d3 
-import * as d3 from 'd3';
+import { timeFormat, timeParse } from 'd3';
 
 import { signout, validate } from 'redux/actions';
 
@@ -110,8 +109,8 @@ class Index extends React.Component {
     // with the format date: %H:%M and price: 1234.56.
     // Ex. [{date: '12:30', 3.50}, {date: '12:35', 3.52}, {date: '12:40', 3.55}]
     parseData = (data) => {
-        const formatTime = d3.timeFormat("%I:%M");
-        const parseTime = d3.timeParse("%H:%M");
+        const formatTime = timeFormat("%I:%M");
+        const parseTime = timeParse("%H:%M");
         let parsedData = data
             .map((d) => {
                 return {
