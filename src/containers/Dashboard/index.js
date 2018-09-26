@@ -1,10 +1,11 @@
 import React from 'react';
-import Axios from 'axios';
 import { connect } from 'react-redux';
-
 import { timeFormat, timeParse } from 'd3';
+import axios from 'axios';
+import qs from 'qs';
 
 import { signout, validate } from 'redux/actions';
+import * as auth from 'system/auth';
 
 import Dashboard from './Dashboard';
 
@@ -24,6 +25,9 @@ class Index extends React.Component {
             data: [],
             quote: {},
             symbol: 'AMZN', // default symbol
+
+            // trade form
+            quantity: 0,
         };
     }
 
@@ -34,27 +38,54 @@ class Index extends React.Component {
         this.getQuote();
     }
 
+    // Submit trade request
+    submitTrade = event => {
+        event.preventDefault()
+        const createTxnRequest = {
+            method: 'POST',
+            headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/transactions',
+            data: qs.stringify({
+                user_id: this.props.user.id,
+                symbol: this.state.symbol,
+                quantity: this.state.quantity,
+            }),
+        }
+        axios(createTxnRequest)
+            .then((response) => { console.log(response) })
+            .catch((error) => { console.log(error); });
+    }
+
+    changeBuyQty = event => {
+        // TOOD: trade request validation
+        this.setState({ quantity: event.target.value });
+    }
+
+    changeSellQty = event => {
+        // TOOD: trade request validation
+        this.setState({ quantity: -event.target.value });
+    }
+
     // Signout, delete current session
     signout = () => {
         this.props.signout();
     }
 
-
     // Update symbol value based on search input. 
     changeSearch = event => {
+        event.preventDefault();
         this.setState({ symbol: event.target.value });
     }
 
     // Submit search, send requests for data/quote for current state.symbol
     submitSearch = event => {
-        event.preventDefault()
+        event.preventDefault();
         if (this.state['symbol'].length < 1) {
-            console.log('No search input.')
-            return
+            console.log('No search input.');
+            return;
         }
         this.getData();
         this.getQuote();
-        this.setState({ symbol: '' }); // prevent client from sending request for same symbol repeatedly.
     }
 
     // Send a GET request for the quote for the current state.symbol.
@@ -66,7 +97,7 @@ class Index extends React.Component {
             method: 'GET',
             url: process.env.IEX_URL + '/' + this.state.symbol + '/quote',
         }
-        Axios(createSessionRequest)
+        axios(createSessionRequest)
             .then((response) => { this.parseQuote(response.data); })
             .catch((error) => { console.log(error); });
     }
@@ -80,7 +111,7 @@ class Index extends React.Component {
             method: 'GET',
             url: process.env.IEX_URL + '/' + this.state.symbol + '/chart/1d?chartInterval=5',
         }
-        Axios(createSessionRequest)
+        axios(createSessionRequest)
             .then((response) => { this.parseData(response.data); })
             .catch((error) => { console.log(error); });
     }
@@ -127,7 +158,9 @@ class Index extends React.Component {
             <Dashboard {...this.props} {...this.state}
                 changeSearch={this.changeSearch}
                 submitSearch={this.submitSearch}
-                signout={this.signout}
+                changeBuyQty={this.changeBuyQty}
+                changeSellQty={this.changeSellQty}
+                submitTrade={this.submitTrade}
             />
         );
     }
