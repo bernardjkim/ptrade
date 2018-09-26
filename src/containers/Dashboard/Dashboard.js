@@ -65,7 +65,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
             />
             <div className={classes.containerCharts}>
                 <Paper className={`${classes.chartLeft} ${classes.paper}`} elevation={1}>
-                    <LineChart data={data} />
+                    {/* <LineChart data={data} /> */}
                 </Paper>
                 <Paper className={`${classes.chartRight} ${classes.paper}`} elevation={1}>
                     <InfoTable
@@ -78,6 +78,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
                             title="Buy"
                             disabled={!user.isAuthenticated}
                             symbol={quote['symbol']}
+                            pps={quote['latestPrice']}
                             handleTrade={submitTrade}
                             handleChange={changeBuyQty}
                         />
@@ -85,6 +86,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
                             title="Sell"
                             disabled={!user.isAuthenticated}
                             symbol={quote['symbol']}
+                            pps={quote['latestPrice']}
                             handleTrade={submitTrade}
                             handleChange={changeSellQty}
                         />
