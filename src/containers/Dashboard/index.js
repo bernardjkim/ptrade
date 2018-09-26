@@ -9,6 +9,43 @@ import * as auth from 'system/auth';
 
 import Dashboard from './Dashboard';
 
+// Parse data, return an array of objects containing a date and value,
+// with the format date: %H:%M and price: ####.##.
+// Ex. [{date: '12:30', 3.50}, {date: '12:35', 3.52}, {date: '12:40', 3.55}]
+function parseData(data) {
+    const formatTime = timeFormat("%I:%M");
+    const parseTime = timeParse("%H:%M");
+    let parsedData = data
+        .map((d) => {
+            return {
+                date: formatTime(parseTime(d.minute)),
+                value: parseFloat(d.average.toPrecision(6)),
+            }
+        })
+        .filter(d => d.value > 0.0);
+    return parsedData;
+}
+
+// Parse quote, return an object of import stats.
+function parseQuote(data) {
+    let parsedQuote = {
+        symbol: data['symbol'],
+        name: data['companyName'],
+        open: data['open'].toFixed(2),
+        close: data['close'].toFixed(2),
+        high: data['high'].toFixed(2),
+        low: data['low'].toFixed(2),
+        latestPrice: data['latestPrice'].toFixed(2),
+        change: data['change'].toFixed(2),
+        changePercent: data['changePercent'],
+        avgTotalVolume: (data['avgTotalVolume'] / 1000000).toPrecision(4) + ' M',
+        marketCap: Math.floor(data['marketCap'] / 1000000) + ' M',
+        week52High: data['week52High'].toFixed(2),
+        week52Low: data['week52Low'].toFixed(2),
+    };
+    return parsedQuote;
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         signout: () => dispatch(signout()),
@@ -39,8 +76,7 @@ class Index extends React.Component {
     }
 
     // Submit trade request
-    submitTrade = event => {
-        event.preventDefault()
+    submitTrade = () => {
         const createTxnRequest = {
             method: 'POST',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
@@ -66,20 +102,13 @@ class Index extends React.Component {
         this.setState({ quantity: -event.target.value });
     }
 
-    // Signout, delete current session
-    signout = () => {
-        this.props.signout();
-    }
-
     // Update symbol value based on search input. 
     changeSearch = event => {
-        event.preventDefault();
         this.setState({ symbol: event.target.value });
     }
 
     // Submit search, send requests for data/quote for current state.symbol
-    submitSearch = event => {
-        event.preventDefault();
+    submitSearch = () => {
         if (this.state['symbol'].length < 1) {
             console.log('No search input.');
             return;
@@ -98,7 +127,9 @@ class Index extends React.Component {
             url: process.env.IEX_URL + '/' + this.state.symbol + '/quote',
         }
         axios(createSessionRequest)
-            .then((response) => { this.parseQuote(response.data); })
+            .then((response) => {
+                this.setState({ quote: parseQuote(response.data) });
+            })
             .catch((error) => { console.log(error); });
     }
 
@@ -112,45 +143,10 @@ class Index extends React.Component {
             url: process.env.IEX_URL + '/' + this.state.symbol + '/chart/1d?chartInterval=5',
         }
         axios(createSessionRequest)
-            .then((response) => { this.parseData(response.data); })
-            .catch((error) => { console.log(error); });
-    }
-
-    // Parse quote, store import stats into state quote.
-    parseQuote = (data) => {
-        let parsedQuote = {
-            symbol: data['symbol'],
-            name: data['companyName'],
-            open: data['open'],
-            close: data['close'],
-            high: data['high'],
-            low: data['low'],
-            latestPrice: data['latestPrice'],
-            change: data['change'],
-            changePercent: data['changePercent'],
-            avgTotalVolume: data['avgTotalVolume'],
-            marketCap: data['marketCap'],
-            week52High: data['week52High'],
-            week52Low: data['week52Low'],
-        };
-        this.setState({ quote: parsedQuote });
-    }
-
-    // Parse data, set data to an array of objects containing a date and value,
-    // with the format date: %H:%M and price: 1234.56.
-    // Ex. [{date: '12:30', 3.50}, {date: '12:35', 3.52}, {date: '12:40', 3.55}]
-    parseData = (data) => {
-        const formatTime = timeFormat("%I:%M");
-        const parseTime = timeParse("%H:%M");
-        let parsedData = data
-            .map((d) => {
-                return {
-                    date: formatTime(parseTime(d.minute)),
-                    value: parseFloat(d.average.toPrecision(6)),
-                }
+            .then((response) => {
+                this.setState({ data: parseData(response.data) });
             })
-            .filter(d => d.value > 0.0);
-        this.setState({ data: parsedData });
+            .catch((error) => { console.log(error); });
     }
 
     render() {
