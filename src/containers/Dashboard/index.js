@@ -104,6 +104,7 @@ class Index extends React.Component {
 
     // Update symbol value based on search input. 
     changeSearch = event => {
+        event.preventDefault();
         this.setState({ symbol: event.target.value });
     }
 
