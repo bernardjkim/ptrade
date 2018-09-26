@@ -39,11 +39,11 @@ export const signin = (email, password) => {
 
 // Sign out, send an api request to delete the current session for this token.
 export const signout = () => {
-    const createSessionRequest = {
-        method: 'DELETE',
-        url: process.env.API_URL + '/sessions',
-        headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-    };
+    // const deleteSessionRequest = {
+    //     method: 'DELETE',
+    //     url: process.env.API_URL + '/sessions',
+    //     headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
+    // };
     auth.removeCookie('api.ptrade.com');
     return (dispatch) => {
         dispatch({ type: SESSION_DELETE })

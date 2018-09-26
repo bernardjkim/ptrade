@@ -72,7 +72,7 @@ export default function reducer(state = { ...initialState }, action) {
             };
         }
         case VALIDATE_FAIL: {
-            return { ...state, user: { ...state.user, fetching: false } };
+            return { ...state, user: { ...state.user, isAuthenticated: false, fetching: false } };
             // return { ...state, fetching: false };
         }
 
