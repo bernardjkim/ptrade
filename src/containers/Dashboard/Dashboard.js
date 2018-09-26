@@ -65,7 +65,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
             />
             <div className={classes.containerCharts}>
                 <Paper className={`${classes.chartLeft} ${classes.paper}`} elevation={1}>
-                    {/* <LineChart data={data} /> */}
+                    <LineChart data={data} />
                 </Paper>
                 <Paper className={`${classes.chartRight} ${classes.paper}`} elevation={1}>
                     <InfoTable
