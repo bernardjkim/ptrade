@@ -56,9 +56,14 @@ class Index extends React.Component {
             .catch((error) => { console.log(error); });
     }
 
-    changeTradeQuantity = event => {
+    changeBuyQty = event => {
         // TOOD: trade request validation
         this.setState({ quantity: event.target.value });
+    }
+
+    changeSellQty = event => {
+        // TOOD: trade request validation
+        this.setState({ quantity: -event.target.value });
     }
 
     // Signout, delete current session
@@ -153,7 +158,8 @@ class Index extends React.Component {
             <Dashboard {...this.props} {...this.state}
                 changeSearch={this.changeSearch}
                 submitSearch={this.submitSearch}
-                changeTradeQuantity={this.changeTradeQuantity}
+                changeBuyQty={this.changeBuyQty}
+                changeSellQty={this.changeSellQty}
                 submitTrade={this.submitTrade}
             />
         );

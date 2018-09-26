@@ -74,9 +74,6 @@ const styles = theme => ({
 });
 
 class TopBar extends React.Component {
-    state = {
-    };
-
     render() {
         const { classes, changeSearch, submitSearch, signout, user } = this.props;
 
