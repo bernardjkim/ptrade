@@ -38,28 +38,36 @@ const styles = theme => ({
 // Link to dashboard 
 export const DashboardLink = props => <Link to="/dashboard" {...props} />
 
-const Dashboard = ({ classes, changeSearch, submitSearch, signout, data, quote, user }) => (
-    <div className={classes.container}>
-        <TopBar
-            submitSearch={submitSearch}
-            changeSearch={changeSearch}
-            signout={signout}
-            user={user}
-        />
-        <div className={classes.containerCharts}>
-            <div className={classes.chartLeft}>
-                <LineChart data={data} />
-            </div>
-            <div className={classes.chartRight}>
-                <InfoTable quote={quote} user={user} />
+const Dashboard = ({ classes, changeSearch, submitSearch, changeTradeQuantity,
+    submitTrade, signout, data, quote, user }) => (
+        <div className={classes.container}>
+            <TopBar
+                submitSearch={submitSearch}
+                changeSearch={changeSearch}
+                signout={signout}
+                user={user}
+            />
+            <div className={classes.containerCharts}>
+                <div className={classes.chartLeft}>
+                    <LineChart data={data} />
+                </div>
+                <div className={classes.chartRight}>
+                    <InfoTable
+                        quote={quote}
+                        user={user}
+                        changeTradeQuantity={changeTradeQuantity}
+                        submitTrade={submitTrade}
+                    />
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
     submitSearch: PropTypes.func.isRequired,
     changeSearch: PropTypes.func.isRequired,
+    submitTrade: PropTypes.func.isRequired,
+    changeTradeQuantity: PropTypes.func.isRequired,
     signout: PropTypes.func.isRequired,
     data: PropTypes.array.isRequired,
     quote: PropTypes.object.isRequired,

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,11 +10,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
+import TradeModal from './TradeModal';
 
 const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit,
-    },
     containerButton: {
         width: '100%',
         display: 'flex',
@@ -58,7 +55,7 @@ const data = (quote) => [
     createData('MKT CAP', quote['marketCap'] ? quote['marketCap'] : 'N/A'),
 ];
 
-const InfoTable = ({ classes, quote, user }) => (
+const InfoTable = ({ classes, changeTradeQuantity, submitTrade, quote, user }) => (
     <Paper className={classes.paper} elevation={1}>
         <Typography variant="title" gutterBottom>{quote['name'] ? quote['name'] : 'N/A'}</Typography>
         <div className={classes.containerTable}>
@@ -83,26 +80,20 @@ const InfoTable = ({ classes, quote, user }) => (
                 </TableBody>
             </Table>
             <div className={classes.containerButton}>
-                <Button
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    type="submit"
+                <TradeModal
+                    title="Buy"
                     disabled={!user.isAuthenticated}
-                >
-                    Buy
-                </Button>
-                <Button
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    type="submit"
+                    symbol={quote['symbol']}
+                    handleTrade={submitTrade}
+                    handleChange={changeTradeQuantity}
+                />
+                <TradeModal
+                    title="Sell"
                     disabled={!user.isAuthenticated}
-                >
-                    Sell
-                </Button>
+                    symbol={quote['symbol']}
+                    handleTrade={submitTrade}
+                    handleChange={changeTradeQuantity}
+                />
             </div>
         </div>
     </Paper>
@@ -110,6 +101,8 @@ const InfoTable = ({ classes, quote, user }) => (
 
 InfoTable.propTypes = {
     classes: PropTypes.object.isRequired,
+    submitTrade: PropTypes.func.isRequired,
+    changeTradeQuantity: PropTypes.func.isRequired,
     quote: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
 };

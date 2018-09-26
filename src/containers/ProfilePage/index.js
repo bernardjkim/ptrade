@@ -37,7 +37,7 @@ class Index extends React.Component {
         const getTransactionsRequest = {
             method: 'GET',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/1/transactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/transactions',
         }
         axios(getTransactionsRequest)
             .then((response) => {
