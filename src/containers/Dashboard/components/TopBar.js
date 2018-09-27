@@ -17,6 +17,9 @@ const styles = theme => ({
     root: {
         width: '100%',
     },
+    bar: {
+        boxShadow: 'none',
+    },
     grow: {
         flexGrow: 1,
     },
@@ -29,9 +32,9 @@ const styles = theme => ({
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
+        backgroundColor: fade('#EDE7F6', .15),
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
+            backgroundColor: fade('#EDE7F6', 0.25),
         },
         marginRight: theme.spacing.unit * 2,
         marginLeft: 0,
@@ -74,15 +77,21 @@ const styles = theme => ({
 });
 
 class TopBar extends React.Component {
+
+    handleSubmit = event => {
+        event.preventDefault();
+        this.props.submitSearch();
+    }
+
     render() {
-        const { classes, changeSearch, submitSearch, signout, user } = this.props;
+        const { classes, changeSearch, signout, user } = this.props;
 
         const renderSearchBar = (
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
                     <SearchIcon />
                 </div>
-                <form onSubmit={submitSearch}>
+                <form onSubmit={this.handleSubmit}>
                     <Input
                         onChange={changeSearch}
                         placeholder="Search…"
@@ -98,7 +107,7 @@ class TopBar extends React.Component {
 
         return (
             <div className={classes.root}>
-                <AppBar position="static">
+                <AppBar position="static" color="inherit" className={classes.bar}>
                     <Toolbar>
                         <Typography className={classes.title} variant="title" color="inherit" noWrap>
                             PTrade
@@ -109,8 +118,8 @@ class TopBar extends React.Component {
                             {user.isAuthenticated ?
                                 <UserMenu signout={signout} />
                                 :
-                                <Button component={SigninLink}>
-                                    <Typography variant="subheading">Sign in</Typography>
+                                <Button component={SigninLink} color='inherit' >
+                                    <Typography variant="subheading" color="inherit">Sign in</Typography>
                                 </Button>
                             }
                         </div>

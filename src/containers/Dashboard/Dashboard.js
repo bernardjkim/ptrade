@@ -78,6 +78,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
                             title="Buy"
                             disabled={!user.isAuthenticated}
                             symbol={quote['symbol']}
+                            pps={quote['latestPrice']}
                             handleTrade={submitTrade}
                             handleChange={changeBuyQty}
                         />
@@ -85,6 +86,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
                             title="Sell"
                             disabled={!user.isAuthenticated}
                             symbol={quote['symbol']}
+                            pps={quote['latestPrice']}
                             handleTrade={submitTrade}
                             handleChange={changeSellQty}
                         />

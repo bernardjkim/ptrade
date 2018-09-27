@@ -35,12 +35,12 @@ function createData(name, value) {
 }
 
 const data = (quote) => [
-    createData('OPEN', quote['open'] ? quote['open'] : 'N/A'),
-    createData('CLOSE', quote['close'] ? quote['close'] : 'N/A'),
-    createData('HIGH', quote['high'] ? quote['high'] : 'N/A'),
-    createData('LOW', quote['low'] ? quote['low'] : 'N/A'),
-    createData('52 WK HIGH', quote['week52High'] ? quote['week52High'] : 'N/A'),
-    createData('52 WK LOW', quote['week52Low'] ? quote['week52Low'] : 'N/A'),
+    createData('OPEN', quote['open'] ? '$' + quote['open'] : 'N/A'),
+    createData('CLOSE', quote['close'] ? '$' + quote['close'] : 'N/A'),
+    createData('HIGH', quote['high'] ? '$' + quote['high'] : 'N/A'),
+    createData('LOW', quote['low'] ? '$' + quote['low'] : 'N/A'),
+    createData('52 WK HIGH', quote['week52High'] ? '$' + quote['week52High'] : 'N/A'),
+    createData('52 WK LOW', quote['week52Low'] ? '$' + quote['week52Low'] : 'N/A'),
     createData('AVG VOL', quote['avgTotalVolume'] ? quote['avgTotalVolume'] : 'N/A'),
     createData('MKT CAP', quote['marketCap'] ? quote['marketCap'] : 'N/A'),
 ];
@@ -53,7 +53,7 @@ const InfoTable = ({ classes, quote }) => (
                 <TableHead className={classes.tableHead}>
                     <TableRow>
                         <TableCell>{quote['symbol'] ? quote['symbol'] : 'N/A'}</TableCell>
-                        <TableCell></TableCell>
+                        <TableCell numeric>{quote['latestPrice'] ? '$' + quote['latestPrice'] : 'N/A'}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody className={classes.tableBody}>
