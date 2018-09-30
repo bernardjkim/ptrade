@@ -52,7 +52,7 @@ const styles = theme => ({
 });
 
 // Link to dashboard 
-export const DashboardLink = props => <Link to="/dashboard" {...props} />
+export const DashboardLink = props => <Link style={{ textDecoration: 'none' }} to="/dashboard" {...props} />
 
 const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
     changeSellQty, submitTrade, signout, data, quote, user }) => (
@@ -77,16 +77,16 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
                         <TradeModal
                             title="Buy"
                             disabled={!user.isAuthenticated}
-                            symbol={quote['symbol']}
-                            pps={quote['latestPrice']}
+                            symbol={quote['symbol'] ? quote['symbol'] : 'N/A'}
+                            pps={quote['latestPrice'] ? quote['latestPrice'] : 'N/A'}
                             handleTrade={submitTrade}
                             handleChange={changeBuyQty}
                         />
                         <TradeModal
                             title="Sell"
                             disabled={!user.isAuthenticated}
-                            symbol={quote['symbol']}
-                            pps={quote['latestPrice']}
+                            symbol={quote['symbol'] ? quote['symbol'] : 'N/A'}
+                            pps={quote['latestPrice'] ? quote['latestPrice'] : 'N/A'}
                             handleTrade={submitTrade}
                             handleChange={changeSellQty}
                         />
