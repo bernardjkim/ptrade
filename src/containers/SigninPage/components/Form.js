@@ -55,6 +55,7 @@ const Form = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
                 onChange={handleChange('email')}
                 margin="normal"
                 error={showMissing ? form['email'].length < 1 : false}
+                autoFocus
             />
             <TextField
                 id="password"
