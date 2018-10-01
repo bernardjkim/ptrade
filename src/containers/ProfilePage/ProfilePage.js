@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles';
 
-// import LineChart from './components/LineChart';
+import LineChart from './components/LineChart';
 // import TransactionList from './components/TransactionList';
 import Portfolio from './components/Portfolio';
 // import InfoTable from './components/InfoTable';
@@ -40,7 +40,7 @@ const styles = theme => ({
 // Link to dashboard 
 export const ProfileLink = props => <Link style={{ textDecoration: 'none' }} to="/profile" {...props} />
 
-const ProfilePage = ({ classes, data, portfolioValue, signout, transactions, user }) => (
+const ProfilePage = ({ classes, portfolioData, portfolioHistory, portfolioValue, signout, transactions, user }) => (
     <div className={classes.container}>
         <TopBar
             signout={signout}
@@ -48,20 +48,22 @@ const ProfilePage = ({ classes, data, portfolioValue, signout, transactions, use
         />
         <div className={classes.containerCharts}>
             <div className={classes.chartLeft}>
-                {/* <LineChart data={data} /> */}
+                <LineChart data={portfolioHistory} />
             </div>
             <div className={classes.chartRight}>
                 {/* <TransactionList data={data} transactions={transactions} /> */}
-                <Portfolio data={data} portfolioValue={portfolioValue} />
+                <Portfolio data={portfolioData} portfolioValue={portfolioValue} />
             </div>
         </div>
     </div>
 );
 ProfilePage.propTypes = {
     classes: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
+    // data: PropTypes.object.isRequired,
     signout: PropTypes.func.isRequired,
     transactions: PropTypes.array.isRequired,
+    portfolioData: PropTypes.object.isRequired,
+    // portfolioHistory: PropTypes.object.isRequired,
     portfolioValue: PropTypes.number.isRequired,
 };
 

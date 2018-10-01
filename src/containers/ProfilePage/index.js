@@ -55,7 +55,8 @@ class Index extends React.Component {
         super();
         this.state = {
             transactions: [],
-            data: {},
+            portfolioData: {},
+            portfolioHistory: [],
             portfolioValue: 0,
         };
     }
@@ -82,7 +83,7 @@ class Index extends React.Component {
             .then((response) => {
                 let data = calculateShares(response.data);
                 let value = calculatePortfolioValue(data);
-                this.setState({ transactions: response.data, data: data, portfolioValue: value });
+                this.setState({ transactions: response.data, portfolioData: data, portfolioValue: value });
             })
             .catch((error) => { console.log(error); });
     }

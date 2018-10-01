@@ -30,18 +30,18 @@ function parseOneDayData(data) {
 function parseFiveYearData(data) {
     const formatTime = timeFormat("%Y-%m-%d");
     const parseTime = timeParse("%Y-%m-%d");
+
+
+    // add empty data points for missing data
     const today = new Date();
     const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
     var diff = Math.round((parseTime(data[0].date) - fiveYearsAgo) / (1000 * 60 * 60 * 24));
-
-    // add empty data points for missing data
     var filler = [];
     var current = fiveYearsAgo;
     for (var i = 0; i < diff; i++) {
         filler.push({ date: formatTime(current), close: data[0].open });
         current.setDate(current.getDate() + 1);
     }
-    console.log(data);
     data = filler.concat(data);
 
     let parsedData = data
