@@ -63,6 +63,19 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.props.validate();
+        // tmp data
+        this.setState({
+            portfolioHistory: [
+                { date: 'Sep 01 2018', value: 20000 },
+                { date: 'Sep 02 2018', value: 21000 },
+                { date: 'Sep 03 2018', value: 22000 },
+                { date: 'Sep 04 2018', value: 19000 },
+                { date: 'Sep 05 2018', value: 18000 },
+                { date: 'Sep 06 2018', value: 15000 },
+                { date: 'Sep 07 2018', value: 20000 },
+                { date: 'Sep 08 2018', value: 21000 },
+            ]
+        });
     }
 
     componentDidUpdate(prevProps) {
