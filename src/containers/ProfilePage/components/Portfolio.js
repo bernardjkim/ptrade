@@ -33,13 +33,11 @@ const styles = theme => ({
 
 const Portfolio = ({ classes, data, portfolioValue }) => (
     <Paper className={classes.paper} elevation={1}>
-        <Typography variant="title" gutterBottom>${portfolioValue}</Typography>
+        <Typography variant="title" gutterBottom>${portfolioValue.toFixed(2)}</Typography>
         <div className={classes.containerTable}>
             <Table className={classes.table}>
                 <TableHead className={classes.tableHead}>
                     <TableRow>
-                        {/* <TableCell>Symbol</TableCell>
-                        <TableCell numeric>Quantity</TableCell> */}
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                     </TableRow>
@@ -50,7 +48,7 @@ const Portfolio = ({ classes, data, portfolioValue }) => (
                             <TableCell component="th" scope="row" variant="head">
                                 {data[key]['symbol']} ({data[key]['quantity']})
                             </TableCell>
-                            <TableCell component="td" scope="row" numeric>${data[key]['pps']}</TableCell>
+                            <TableCell component="td" scope="row" numeric>${data[key]['pps'].toFixed(2)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

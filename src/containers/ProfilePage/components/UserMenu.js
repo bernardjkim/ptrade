@@ -6,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import { ProfileLink } from 'containers/ProfilePage/ProfilePage';
+
 class UserMenu extends React.Component {
     state = {
         anchorEl: null,
@@ -24,11 +26,6 @@ class UserMenu extends React.Component {
     signout = () => {
         this.handleClose();
         this.props.signout();
-    }
-
-    profile = () => {
-        this.handleClose();
-        this.props.profile();
     }
 
     render() {
@@ -50,7 +47,7 @@ class UserMenu extends React.Component {
                     open={Boolean(anchorEl)}
                     onClose={this.handleClose}
                 >
-                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleClose} component={ProfileLink}>Profile</MenuItem>
                     <MenuItem onClick={this.handleClose}>My account</MenuItem>
                     <MenuItem onClick={this.signout} >Sign out</MenuItem>
                 </Menu>

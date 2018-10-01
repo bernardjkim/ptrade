@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
+import ChartTabs from './components/ChartTabs';
 import LineChart from './components/LineChart';
 import TradeModal from './components/TradeModal';
 import InfoTable from './components/InfoTable';
@@ -35,6 +36,9 @@ const styles = theme => ({
         width: '65%',
         minWidth: '800px',
         height: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
     chartRight: {
         width: '30%',
@@ -52,10 +56,10 @@ const styles = theme => ({
 });
 
 // Link to dashboard 
-export const DashboardLink = props => <Link to="/dashboard" {...props} />
+export const DashboardLink = props => <Link style={{ textDecoration: 'none' }} to="/dashboard" {...props} />
 
 const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
-    changeSellQty, submitTrade, signout, data, quote, user }) => (
+    changeSellQty, changeTimeFrame, submitTrade, signout, data, quote, timeFrame, user }) => (
         <div className={classes.container}>
             <TopBar
                 submitSearch={submitSearch}
@@ -66,6 +70,7 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
             <div className={classes.containerCharts}>
                 <Paper className={`${classes.chartLeft} ${classes.paper}`} elevation={1}>
                     <LineChart data={data} />
+                    <ChartTabs changeTimeFrame={changeTimeFrame} timeFrame={timeFrame} />
                 </Paper>
                 <Paper className={`${classes.chartRight} ${classes.paper}`} elevation={1}>
                     <InfoTable
@@ -77,16 +82,16 @@ const Dashboard = ({ classes, changeSearch, submitSearch, changeBuyQty,
                         <TradeModal
                             title="Buy"
                             disabled={!user.isAuthenticated}
-                            symbol={quote['symbol']}
-                            pps={quote['latestPrice']}
+                            symbol={quote['symbol'] ? quote['symbol'] : 'N/A'}
+                            pps={quote['latestPrice'] ? quote['latestPrice'] : 'N/A'}
                             handleTrade={submitTrade}
                             handleChange={changeBuyQty}
                         />
                         <TradeModal
                             title="Sell"
                             disabled={!user.isAuthenticated}
-                            symbol={quote['symbol']}
-                            pps={quote['latestPrice']}
+                            symbol={quote['symbol'] ? quote['symbol'] : 'N/A'}
+                            pps={quote['latestPrice'] ? quote['latestPrice'] : 'N/A'}
                             handleTrade={submitTrade}
                             handleChange={changeSellQty}
                         />
@@ -102,9 +107,11 @@ Dashboard.propTypes = {
     submitTrade: PropTypes.func.isRequired,
     changeBuyQty: PropTypes.func.isRequired,
     changeSellQty: PropTypes.func.isRequired,
+    changeTimeFrame: PropTypes.func.isRequired,
     signout: PropTypes.func.isRequired,
     data: PropTypes.array.isRequired,
     quote: PropTypes.object.isRequired,
+    timeFrame: PropTypes.number.isRequired,
     user: PropTypes.object.isRequired,
 };
 

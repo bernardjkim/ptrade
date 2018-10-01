@@ -47,7 +47,7 @@ class UserMenu extends React.Component {
                     open={Boolean(anchorEl)}
                     onClose={this.handleClose}
                 >
-                    <MenuItem component={ProfileLink}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleClose} component={ProfileLink}>Profile</MenuItem>
                     <MenuItem onClick={this.handleClose}>My account</MenuItem>
                     <MenuItem onClick={this.signout} >Sign out</MenuItem>
                 </Menu>

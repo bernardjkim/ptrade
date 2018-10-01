@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { validate } from 'redux/actions';
+import { signout, validate } from 'redux/actions';
 import { Redirect } from 'react-router-dom';
 import * as auth from 'system/auth';
 
@@ -9,8 +9,41 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ProfilePage from './ProfilePage';
 
+// this function takes an array of transactions and returns an array with
+// the number of current shares for each stock.
+function calculateShares(data) {
+    let newData = {};
+
+    // get current number of shares for each stock
+    data.forEach(({ stock, transaction }) => {
+        let { symbol } = stock;
+        let { stock_id, price, quantity } = transaction;
+        if (!(stock_id in newData)) {
+            newData[stock_id] = { symbol: symbol, quantity: quantity, pps: price, };
+        } else {
+            let prevQty = newData[stock_id]['quantity'];
+            newData[stock_id]['quantity'] = prevQty + quantity;
+        }
+    });
+    return newData;
+}
+
+// this function takes an array containing the number of shares for each stock
+// and calculates and returns the total value of the portfolio.
+function calculatePortfolioValue(data) {
+    // get total portfolio value
+    let portfolioValue = 0;
+    Object.keys(data).forEach(key => {
+        let pps = data[key]['pps'];
+        let qty = data[key]['quantity'];
+        portfolioValue = portfolioValue + (pps * qty);
+    })
+    return portfolioValue;
+}
+
 const mapDispatchToProps = dispatch => {
     return {
+        signout: () => dispatch(signout()),
         validate: () => dispatch(validate()),
     };
 };
@@ -29,7 +62,13 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.props.validate();
-        this.getTransactions();
+    }
+
+    componentDidUpdate(prevProps) {
+        // Don't forget to compare to prev props, o.w. infinite loop?
+        if (this.props.user.isAuthenticated && prevProps.user !== this.props.user) {
+            this.getTransactions();
+        }
     }
 
     // Send a GET request for a list of transactions made by the specified user id.
@@ -41,38 +80,11 @@ class Index extends React.Component {
         }
         axios(getTransactionsRequest)
             .then((response) => {
-                this.processData(response.data);
-                this.setState({ transactions: response.data });
+                let data = calculateShares(response.data);
+                let value = calculatePortfolioValue(data);
+                this.setState({ transactions: response.data, data: data, portfolioValue: value });
             })
             .catch((error) => { console.log(error); });
-    }
-
-    processData = (data) => {
-        let newData = {};
-        data.forEach(({ stock, transaction }) => {
-            let { symbol } = stock;
-            let { stock_id, price, quantity } = transaction;
-            if (!(stock_id in newData)) {
-                newData[stock_id] = {
-                    symbol: symbol,
-                    quantity: quantity,
-                    pps: price,
-                }
-            } else {
-                let prevQty = newData[stock_id]['quantity'];
-                newData[stock_id]['quantity'] = prevQty + quantity;
-            }
-        });
-
-        // get total profile value
-        let portfolioValue = 0;
-        Object.keys(newData).forEach(key => {
-            let pps = newData[key]['pps'];
-            let qty = newData[key]['quantity'];
-            portfolioValue = portfolioValue + (pps * qty);
-
-        })
-        this.setState({ data: newData, portfolioValue: portfolioValue });
     }
 
     render() {

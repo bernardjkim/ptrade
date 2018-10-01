@@ -17,7 +17,7 @@ const styles = theme => ({
 
 
 // Link to signin page
-export const SigninLink = props => <Link to="/signin" {...props} />
+export const SigninLink = props => <Link style={{ textDecoration: 'none' }} to="/signin" {...props} />
 
 const SigninPage = ({ classes, handleChange, handleSubmit, form, showMissing }) => (
     <div className={classes.container}>

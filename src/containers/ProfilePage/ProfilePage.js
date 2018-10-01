@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 // import TransactionList from './components/TransactionList';
 import Portfolio from './components/Portfolio';
 // import InfoTable from './components/InfoTable';
-// import TopBar from './components/TopBar';
+import TopBar from './components/TopBar';
 
 const styles = theme => ({
     container: {
@@ -38,22 +38,19 @@ const styles = theme => ({
 });
 
 // Link to dashboard 
-export const ProfileLink = props => <Link to="/profile" {...props} />
+export const ProfileLink = props => <Link style={{ textDecoration: 'none' }} to="/profile" {...props} />
 
-const ProfilePage = ({ classes, data, transactions, portfolioValue }) => (
+const ProfilePage = ({ classes, data, portfolioValue, signout, transactions, user }) => (
     <div className={classes.container}>
-        {/* <TopBar
-            submitSearch={submitSearch}
-            changeSearch={changeSearch}
+        <TopBar
             signout={signout}
             user={user}
-        /> */}
+        />
         <div className={classes.containerCharts}>
             <div className={classes.chartLeft}>
                 {/* <LineChart data={data} /> */}
             </div>
             <div className={classes.chartRight}>
-                {/* <InfoTable quote={quote} user={user} /> */}
                 {/* <TransactionList data={data} transactions={transactions} /> */}
                 <Portfolio data={data} portfolioValue={portfolioValue} />
             </div>
@@ -63,6 +60,7 @@ const ProfilePage = ({ classes, data, transactions, portfolioValue }) => (
 ProfilePage.propTypes = {
     classes: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
+    signout: PropTypes.func.isRequired,
     transactions: PropTypes.array.isRequired,
     portfolioValue: PropTypes.number.isRequired,
 };
