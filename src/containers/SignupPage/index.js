@@ -8,6 +8,11 @@ import { signup, validate } from 'redux/actions';
 
 import SignupPage from './SignupPage';
 
+// Capitalize the given string.
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         signup: (first, last, email, password) => dispatch(signup(first, last, email, password)),
@@ -34,7 +39,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.props.validate();
-    }
+    } 
 
     // Update form field values.
     change = name => event => {
@@ -68,14 +73,10 @@ class Index extends React.Component {
 
         if (fieldsVerified) {
             const { first, last, email, password } = form;
-            this.props.signup(first, last, email, password);
+            this.props.signup(capitalize(first), capitalize(last), email, password);
         }
     }
 
-    // Capitalize the given string.
-    capitalize(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
 
     render() {
         const { user } = this.props;

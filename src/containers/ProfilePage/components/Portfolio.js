@@ -12,11 +12,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 const styles = theme => ({
-    containerTable: {
-        width: '100%',
-    },
-    paper: {
-        height: '100%',
+    container: {
         width: '100%',
         marginTop: theme.spacing.unit,
         display: 'flex',
@@ -25,6 +21,9 @@ const styles = theme => ({
         justifyContent: 'space-around',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
     },
+    containerTable: {
+        width: '100%',
+    },
     table: {
         width: '100%',
         overflowX: 'auto',
@@ -32,7 +31,7 @@ const styles = theme => ({
 });
 
 const Portfolio = ({ classes, data, portfolioValue }) => (
-    <Paper className={classes.paper} elevation={1}>
+    <div className={classes.container}>
         <Typography variant="title" gutterBottom>${portfolioValue.toFixed(2)}</Typography>
         <div className={classes.containerTable}>
             <Table className={classes.table}>
@@ -54,7 +53,7 @@ const Portfolio = ({ classes, data, portfolioValue }) => (
                 </TableBody>
             </Table>
         </div>
-    </Paper>
+    </div>
 );
 
 Portfolio.propTypes = {

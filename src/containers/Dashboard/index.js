@@ -31,7 +31,6 @@ function parseFiveYearData(data) {
     const formatTime = timeFormat("%Y-%m-%d");
     const parseTime = timeParse("%Y-%m-%d");
 
-
     // add empty data points for missing data
     const today = new Date();
     const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
@@ -148,7 +147,7 @@ class Index extends React.Component {
                 break;
             case 4:
                 date = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
-                data = formatDate(this.state.fiveYearData, date, 35);
+                data = formatDate(this.state.fiveYearData, date, 30);
                 break;
             default:
                 break;
@@ -202,7 +201,7 @@ class Index extends React.Component {
         const createTxnRequest = {
             method: 'POST',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/transactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/stocktransactions',
             data: qs.stringify({
                 user_id: this.props.user.id,
                 symbol: this.state.symbolSelected,

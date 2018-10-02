@@ -1,8 +1,11 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
-import { signout, validate } from 'redux/actions';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios';
+import qs from 'qs';
+import { timeFormat, timeParse } from 'd3';
+
+import { signout, validate } from 'redux/actions';
 import * as auth from 'system/auth';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -41,6 +44,47 @@ function calculatePortfolioValue(data) {
     return portfolioValue;
 }
 
+function fillHistory(date, value) {
+    // add empty data points for missing data
+    // const formatTime = timeFormat("%Y-%m-%d");
+    const today = new Date();
+    const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+    var diff = Math.round((date - fiveYearsAgo) / (1000 * 60 * 60 * 24));
+    var filler = [];
+    var current = fiveYearsAgo;
+    for (var i = 0; i < diff; i++) {
+        filler.push({ date: current, value: value });
+        current.setDate(current.getDate() + 1);
+    }
+    return filler;
+}
+
+// function formatDate(data, date, interval) {
+function formatDate(data, interval) {
+    const formatTime = timeFormat("%b %d %Y");
+    let newData = data
+        .filter((d, i) => (i % interval === 0))
+        .map(d => ({ date: formatTime(d.date), value: d.value, }));
+    return newData;
+}
+
+function calculateWalletHistory(data) {
+    // const formatTime = timeFormat("%Y-%m-%d");
+    const parseTime = timeParse("%Y-%m-%dT%H:%M:%SZ");
+    var value = 0;
+    let filler = fillHistory(parseTime(data[0].date), data[0].value);
+    let newData = data.map((d) => {
+        value = value + d.value;
+        return { date: parseTime(d.date), value: value };
+    });
+    newData = filler.concat(newData);
+    return formatDate(newData, 31);
+}
+
+function calculateWalletValue(data) {
+
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         signout: () => dispatch(signout()),
@@ -54,49 +98,83 @@ class Index extends React.Component {
     constructor() {
         super();
         this.state = {
-            transactions: [],
+            amount: 0,  // withdraw/deposit amount
+
+            bankingTrasactions: [],
+            walletHistory: [],
+            walletValue: 0,
+
+            stockTransactions: [],
             portfolioData: {},
-            portfolioHistory: [],
             portfolioValue: 0,
         };
     }
 
     componentWillMount() {
         this.props.validate();
-        // tmp data
-        this.setState({
-            portfolioHistory: [
-                { date: 'Sep 01 2018', value: 20000 },
-                { date: 'Sep 02 2018', value: 21000 },
-                { date: 'Sep 03 2018', value: 22000 },
-                { date: 'Sep 04 2018', value: 19000 },
-                { date: 'Sep 05 2018', value: 18000 },
-                { date: 'Sep 06 2018', value: 15000 },
-                { date: 'Sep 07 2018', value: 20000 },
-                { date: 'Sep 08 2018', value: 21000 },
-            ]
-        });
     }
 
     componentDidUpdate(prevProps) {
         // Don't forget to compare to prev props, o.w. infinite loop?
         if (this.props.user.isAuthenticated && prevProps.user !== this.props.user) {
-            this.getTransactions();
+            this.getStockTransactions();
+            this.getBankingTransactions();
         }
     }
 
-    // Send a GET request for a list of transactions made by the specified user id.
-    getTransactions = () => {
+    changeDepositAmount = event => {
+        // TOOD: deposit request validation
+        this.setState({ amount: event.target.value });
+    }
+
+    changeWithdrawAmount = event => {
+        // TOOD: withdraw request validation
+        this.setState({ amount: -event.target.value });
+    }
+
+    createBankingTransaction = () => {
+        const createTransactionRequest = {
+            method: 'POST',
+            headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/bankingtransactions',
+            data: qs.stringify({ value: this.state.amount }),
+        }
+        axios(createTransactionRequest)
+            .then((response) => {
+                console.log(response);
+                this.getBankingTransactions();
+            })
+            .catch((error) => { console.log(error); });
+    }
+
+    // Send a GET request for a list of stock transactions made by the specified user id.
+    getStockTransactions = () => {
         const getTransactionsRequest = {
             method: 'GET',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/transactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/stocktransactions',
         }
         axios(getTransactionsRequest)
             .then((response) => {
                 let data = calculateShares(response.data);
                 let value = calculatePortfolioValue(data);
-                this.setState({ transactions: response.data, portfolioData: data, portfolioValue: value });
+                this.setState({ stockTransactions: response.data, portfolioData: data, portfolioValue: value });
+            })
+            .catch((error) => { console.log(error); });
+    }
+
+    // Send a GET request for a list of banking transactions made by the specified user id.
+    getBankingTransactions = () => {
+        const getTransactionsRequest = {
+            method: 'GET',
+            headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/bankingtransactions',
+        }
+        axios(getTransactionsRequest)
+            .then((response) => {
+                let history = calculateWalletHistory(response.data);
+                let value = history[history.length - 1]['amount'];
+                this.setState({ bankingTransactions: response.data, walletHistory: history, walletValue: value });
             })
             .catch((error) => { console.log(error); });
     }
@@ -113,7 +191,11 @@ class Index extends React.Component {
         }
 
         return (
-            <ProfilePage {...this.props} {...this.state} />
+            <ProfilePage {...this.props} {...this.state}
+                changeDeposit={this.changeDepositAmount}
+                changeWithdraw={this.changeWithdrawAmount}
+                submitTransaction={this.createBankingTransaction}
+            />
         );
     }
 }
