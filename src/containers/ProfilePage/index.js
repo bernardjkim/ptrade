@@ -12,77 +12,50 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ProfilePage from './ProfilePage';
 
-// this function takes an array of transactions and returns an array with
-// the number of current shares for each stock.
-function calculateShares(data) {
-    let newData = {};
+// function fillHistory(date, value) {
+//     // add empty data points for missing data
+//     // const formatTime = timeFormat("%Y-%m-%d");
+//     const today = new Date();
+//     const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+//     var diff = Math.round((date - fiveYearsAgo) / (1000 * 60 * 60 * 24));
+//     var filler = [];
+//     var current = fiveYearsAgo;
+//     for (var i = 0; i < diff; i++) {
+//         filler.push({ date: current, value: value });
+//         current.setDate(current.getDate() + 1);
+//     }
+//     return filler;
+// }
 
-    // get current number of shares for each stock
-    data.forEach(({ stock, transaction }) => {
-        let { symbol } = stock;
-        let { stock_id, price, quantity } = transaction;
-        if (!(stock_id in newData)) {
-            newData[stock_id] = { symbol: symbol, quantity: quantity, pps: price, };
-        } else {
-            let prevQty = newData[stock_id]['quantity'];
-            newData[stock_id]['quantity'] = prevQty + quantity;
-        }
-    });
-    return newData;
-}
+// // function formatDate(data, date, interval) {
+// function formatDate(data, interval) {
+//     const formatTime = timeFormat("%b %d %Y");
+//     let newData = data
+//         .filter((d, i) => (i % interval === 0))
+//         .map(d => ({ date: formatTime(d.date), value: d.value, }));
+//     return newData;
+// }
 
-// this function takes an array containing the number of shares for each stock
-// and calculates and returns the total value of the portfolio.
-function calculatePortfolioValue(data) {
-    // get total portfolio value
-    let portfolioValue = 0;
-    Object.keys(data).forEach(key => {
-        let pps = data[key]['pps'];
-        let qty = data[key]['quantity'];
-        portfolioValue = portfolioValue + (pps * qty);
-    })
-    return portfolioValue;
-}
-
-function fillHistory(date, value) {
-    // add empty data points for missing data
-    // const formatTime = timeFormat("%Y-%m-%d");
-    const today = new Date();
-    const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
-    var diff = Math.round((date - fiveYearsAgo) / (1000 * 60 * 60 * 24));
-    var filler = [];
-    var current = fiveYearsAgo;
-    for (var i = 0; i < diff; i++) {
-        filler.push({ date: current, value: value });
-        current.setDate(current.getDate() + 1);
-    }
-    return filler;
-}
-
-// function formatDate(data, date, interval) {
-function formatDate(data, interval) {
-    const formatTime = timeFormat("%b %d %Y");
-    let newData = data
-        .filter((d, i) => (i % interval === 0))
-        .map(d => ({ date: formatTime(d.date), value: d.value, }));
-    return newData;
-}
-
-function calculateWalletHistory(data) {
-    // const formatTime = timeFormat("%Y-%m-%d");
+function formatHistory(history) {
     const parseTime = timeParse("%Y-%m-%dT%H:%M:%SZ");
-    var value = 0;
-    let filler = fillHistory(parseTime(data[0].date), data[0].value);
-    let newData = data.map((d) => {
-        value = value + d.value;
-        return { date: parseTime(d.date), value: value };
-    });
-    newData = filler.concat(newData);
-    return formatDate(newData, 31);
+    const formatTime = timeFormat("%b %d %Y");
+
+    let newHistory = history.map(h => (
+        {
+            date: formatTime(parseTime(h.date)),
+            value: h.value,
+        }
+    ))
+    return newHistory;
+
 }
 
-function calculateWalletValue(data) {
-
+function calcTotalValue(balance, positions) {
+    let total = balance;
+    positions.forEach((p) => {
+        total += p['shares'] * p['price_per_share'];
+    })
+    return total;
 }
 
 const mapDispatchToProps = dispatch => {
@@ -98,15 +71,14 @@ class Index extends React.Component {
     constructor() {
         super();
         this.state = {
-            amount: 0,  // withdraw/deposit amount
+            balance: 0, // balance for new transfer order
 
-            bankingTrasactions: [],
-            walletHistory: [],
-            walletValue: 0,
+            accountBalance: 0,
+            positions: [],
 
-            stockTransactions: [],
-            portfolioData: {},
-            portfolioValue: 0,
+            totalValue: 0,
+
+            portfolioHistory: [],
         };
     }
 
@@ -114,32 +86,37 @@ class Index extends React.Component {
         this.props.validate();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         // Don't forget to compare to prev props, o.w. infinite loop?
         if (this.props.user.isAuthenticated && prevProps.user !== this.props.user) {
-            this.getStockTransactions();
-            this.getBankingTransactions();
+            this.getAccountBalance();
+            this.getAccountPositions();
+            this.getPortfolioHistory();
+        }
+
+        if (prevState.balance !== this.state.balance || prevState.positions !== this.state.positions) {
+            this.setState({ totalValue: calcTotalValue(this.state.accountBalance, this.state.positions) })
         }
     }
 
     changeDepositAmount = event => {
         // TOOD: deposit request validation
-        this.setState({ amount: event.target.value });
+        this.setState({ balance: event.target.value });
     }
 
     changeWithdrawAmount = event => {
         // TOOD: withdraw request validation
-        this.setState({ amount: -event.target.value });
+        this.setState({ balance: -event.target.value });
     }
 
-    createBankingTransaction = () => {
-        const createTransactionRequest = {
+    createTransferOrder = () => {
+        const req = {
             method: 'POST',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/bankingtransactions',
-            data: qs.stringify({ value: this.state.amount }),
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/transfers',
+            data: qs.stringify({ balance: this.state.balance }),
         }
-        axios(createTransactionRequest)
+        axios(req)
             .then((response) => {
                 console.log(response);
                 this.getBankingTransactions();
@@ -147,34 +124,44 @@ class Index extends React.Component {
             .catch((error) => { console.log(error); });
     }
 
-    // Send a GET request for a list of stock transactions made by the specified user id.
-    getStockTransactions = () => {
-        const getTransactionsRequest = {
+    getAccountBalance = () => {
+        const req = {
             method: 'GET',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/stocktransactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/balance',
         }
-        axios(getTransactionsRequest)
+        axios(req)
             .then((response) => {
-                let data = calculateShares(response.data);
-                let value = calculatePortfolioValue(data);
-                this.setState({ stockTransactions: response.data, portfolioData: data, portfolioValue: value });
+                let balance = response.data['balance']
+                this.setState({ accountBalance: balance });
             })
             .catch((error) => { console.log(error); });
     }
 
-    // Send a GET request for a list of banking transactions made by the specified user id.
-    getBankingTransactions = () => {
-        const getTransactionsRequest = {
+    getAccountPositions = () => {
+        const req = {
             method: 'GET',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/bankingtransactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/positions',
         }
-        axios(getTransactionsRequest)
+        axios(req)
             .then((response) => {
-                let history = calculateWalletHistory(response.data);
-                let value = history[history.length - 1]['amount'];
-                this.setState({ bankingTransactions: response.data, walletHistory: history, walletValue: value });
+                let positions = response.data['positions']
+                this.setState({ positions: positions });
+            })
+            .catch((error) => { console.log(error); });
+    }
+
+    getPortfolioHistory = () => {
+        const req = {
+            method: 'GET',
+            headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/charts',
+        }
+        axios(req)
+            .then((response) => {
+                let portfolioHistory = response.data['history']
+                this.setState({ portfolioHistory: formatHistory(portfolioHistory) });
             })
             .catch((error) => { console.log(error); });
     }
@@ -194,7 +181,7 @@ class Index extends React.Component {
             <ProfilePage {...this.props} {...this.state}
                 changeDeposit={this.changeDepositAmount}
                 changeWithdraw={this.changeWithdrawAmount}
-                submitTransaction={this.createBankingTransaction}
+                submitTransaction={this.createTransferOrder}
             />
         );
     }

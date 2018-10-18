@@ -201,11 +201,10 @@ class Index extends React.Component {
         const createTxnRequest = {
             method: 'POST',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/stocktransactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/trades',
             data: qs.stringify({
-                user_id: this.props.user.id,
                 symbol: this.state.symbolSelected,
-                quantity: this.state.quantity,
+                shares: this.state.quantity,
             }),
         }
         axios(createTxnRequest)

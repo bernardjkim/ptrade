@@ -10,7 +10,6 @@ import LineChart from './components/LineChart';
 // import TransactionList from './components/TransactionList';
 import Portfolio from './components/Portfolio';
 import BankingModal from './components/BankingModal';
-import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     container: {
@@ -59,21 +58,20 @@ const styles = theme => ({
 // Link to dashboard 
 export const ProfileLink = props => <Link style={{ textDecoration: 'none' }} to="/profile" {...props} />
 
-const ProfilePage = ({ classes, portfolioData, portfolioValue,
-    signout, user, changeDeposit, changeWithdraw, submitTransaction, walletHistory, walletValue }) => (
+const ProfilePage = ({ classes, positions, signout, user, changeDeposit,
+    changeWithdraw, submitTransaction, portfolioHistory, totalValue}) => (
         <div className={classes.container}>
             <TopBar
                 signout={signout}
                 user={user}
             />
             <div className={classes.containerCharts}>
-                <Paper className={`${classes.chartLeft} ${classes.paper}`} elevation={1}>
-                    <LineChart data={walletHistory} />
+                <Paper className={`${classes.chartLeft} ${classes.paper}`}>
+                    <LineChart data={portfolioHistory} />
                 </Paper>
-                <Paper className={`${classes.chartRight} ${classes.paper}`} elevation={1}>
+                <Paper className={`${classes.chartRight} ${classes.paper}`}>
                     {/* <TransactionList data={data} transactions={transactions} /> */}
-                    <Typography>{walletValue}</Typography>
-                    <Portfolio data={portfolioData} portfolioValue={portfolioValue} />
+                    <Portfolio data={positions} portfolioValue={totalValue} />
                     <div className={classes.containerButton}>
                         <BankingModal
                             title="Deposit"
@@ -95,8 +93,6 @@ ProfilePage.propTypes = {
     // data: PropTypes.object.isRequired,
     signout: PropTypes.func.isRequired,
     // transactions: PropTypes.array.isRequired,
-    portfolioData: PropTypes.object.isRequired,
-    portfolioValue: PropTypes.number.isRequired,
 
     changeDeposit: PropTypes.func.isRequired,
     changeWithdraw: PropTypes.func.isRequired,
