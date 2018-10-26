@@ -38,12 +38,12 @@ import ProfilePage from './ProfilePage';
 
 function formatHistory(history) {
     const parseTime = timeParse("%Y-%m-%dT%H:%M:%SZ");
-    const formatTime = timeFormat("%b %d %Y");
+    const formatTime = timeFormat("%b %d %Y %H:%M");
 
     let newHistory = history.map(h => (
         {
             date: formatTime(parseTime(h.date)),
-            value: h.value,
+            value: Math.round(h.value*100) / 100, 
         }
     ))
     return newHistory;
@@ -72,6 +72,7 @@ class Index extends React.Component {
         super();
         this.state = {
             balance: 0, // balance for new transfer order
+            timeFrame: 0,
 
             accountBalance: 0,
             positions: [],
@@ -97,6 +98,46 @@ class Index extends React.Component {
         if (prevState.balance !== this.state.balance || prevState.positions !== this.state.positions) {
             this.setState({ totalValue: calcTotalValue(this.state.accountBalance, this.state.positions) })
         }
+
+        if (this.state.timeFrame !== prevState.timeFrame) {
+            this.updateChart();
+        }
+    }
+
+    updateChart = () => {
+        // TODO: enable time frame selection
+        // var today = new Date();
+        // var data;
+        // var date;
+        // switch (this.state.timeFrame) {
+        //     case 0:
+        //         this.setState({ data: this.state.oneDayData });
+        //         data = this.state.oneDayData;
+        //         break;
+        //     case 1:
+        //         date = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        //         data = formatDate(this.state.fiveYearData, date, 1);
+        //         break;
+        //     case 2:
+        //         date = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
+        //         data = formatDate(this.state.fiveYearData, date, 3);
+        //         break;
+        //     case 3:
+        //         date = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        //         data = formatDate(this.state.fiveYearData, date, 7);
+        //         break;
+        //     case 4:
+        //         date = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+        //         data = formatDate(this.state.fiveYearData, date, 30);
+        //         break;
+        //     default:
+        //         break;
+        // }
+        // this.setState({ data: data });
+    }
+
+    changeTimeFrame = (event, tf) => {
+        this.setState({ timeFrame: tf });
     }
 
     changeDepositAmount = event => {
@@ -181,6 +222,7 @@ class Index extends React.Component {
             <ProfilePage {...this.props} {...this.state}
                 changeDeposit={this.changeDepositAmount}
                 changeWithdraw={this.changeWithdrawAmount}
+                changeTimeFrame={this.changeTimeFrame}
                 submitTransaction={this.createTransferOrder}
             />
         );

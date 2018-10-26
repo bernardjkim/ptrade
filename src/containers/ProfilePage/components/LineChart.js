@@ -10,6 +10,7 @@ import Tooltip from 'recharts/lib/component/Tooltip';
 import XAxis from 'recharts/lib/cartesian/XAxis';
 import YAxis from 'recharts/lib/cartesian/YAxis';
 
+
 const SimpleLineChart = ({ data }) => (
     /* 99% per https://github.com/recharts/recharts/issues/172 */
     <ResponsiveContainer width="99%" height="99%">
