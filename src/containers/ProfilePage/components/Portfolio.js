@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,11 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 const styles = theme => ({
-    containerTable: {
-        width: '100%',
-    },
-    paper: {
-        height: '100%',
+    container: {
         width: '100%',
         marginTop: theme.spacing.unit,
         display: 'flex',
@@ -25,6 +20,9 @@ const styles = theme => ({
         justifyContent: 'space-around',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
     },
+    containerTable: {
+        width: '100%',
+    },
     table: {
         width: '100%',
         overflowX: 'auto',
@@ -32,7 +30,7 @@ const styles = theme => ({
 });
 
 const Portfolio = ({ classes, data, portfolioValue }) => (
-    <Paper className={classes.paper} elevation={1}>
+    <div className={classes.container}>
         <Typography variant="title" gutterBottom>${portfolioValue.toFixed(2)}</Typography>
         <div className={classes.containerTable}>
             <Table className={classes.table}>
@@ -43,23 +41,23 @@ const Portfolio = ({ classes, data, portfolioValue }) => (
                     </TableRow>
                 </TableHead>
                 <TableBody className={classes.tableBody}>
-                    {Object.keys(data).map(key => (
+                    {data.map((d, key) => (
                         <TableRow key={key} className={classes.tableRow}>
                             <TableCell component="th" scope="row" variant="head">
-                                {data[key]['symbol']} ({data[key]['quantity']})
+                                {d['symbol']} ({d['shares']})
                             </TableCell>
-                            <TableCell component="td" scope="row" numeric>${data[key]['pps'].toFixed(2)}</TableCell>
+                            <TableCell component="td" scope="row" numeric>${d['price_per_share'].toFixed(2)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
         </div>
-    </Paper>
+    </div>
 );
 
 Portfolio.propTypes = {
     classes: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
+    data: PropTypes.array.isRequired,
     portfolioValue: PropTypes.number.isRequired,
 };
 

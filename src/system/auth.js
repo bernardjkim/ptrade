@@ -7,7 +7,7 @@ export function getCookie(name) {
 }
 
 export function setCookie(name, val) {
-    return cookies.set(name, val, { maxAge: 300});
+    return cookies.set(name, val, { maxAge: 60 * 60}); // expires in 1 hour
 }
 
 export function removeCookie(name) {

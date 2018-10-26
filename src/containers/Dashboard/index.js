@@ -30,18 +30,17 @@ function parseOneDayData(data) {
 function parseFiveYearData(data) {
     const formatTime = timeFormat("%Y-%m-%d");
     const parseTime = timeParse("%Y-%m-%d");
+
+    // add empty data points for missing data
     const today = new Date();
     const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
     var diff = Math.round((parseTime(data[0].date) - fiveYearsAgo) / (1000 * 60 * 60 * 24));
-
-    // add empty data points for missing data
     var filler = [];
     var current = fiveYearsAgo;
     for (var i = 0; i < diff; i++) {
         filler.push({ date: formatTime(current), close: data[0].open });
         current.setDate(current.getDate() + 1);
     }
-    console.log(data);
     data = filler.concat(data);
 
     let parsedData = data
@@ -148,7 +147,7 @@ class Index extends React.Component {
                 break;
             case 4:
                 date = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
-                data = formatDate(this.state.fiveYearData, date, 35);
+                data = formatDate(this.state.fiveYearData, date, 30);
                 break;
             default:
                 break;
@@ -202,11 +201,10 @@ class Index extends React.Component {
         const createTxnRequest = {
             method: 'POST',
             headers: { 'Session-Token': auth.getCookie('api.ptrade.com') },
-            url: process.env.API_URL + '/users/' + this.props.user.id + '/transactions',
+            url: process.env.API_URL + '/users/' + this.props.user.id + '/trades',
             data: qs.stringify({
-                user_id: this.props.user.id,
                 symbol: this.state.symbolSelected,
-                quantity: this.state.quantity,
+                shares: this.state.quantity,
             }),
         }
         axios(createTxnRequest)
