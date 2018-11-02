@@ -1,11 +1,15 @@
-// import React from 'react';
-// import { mount } from 'enzyme';
-// import { enzymeFind } from 'styled-components/test-utils';
+import React from 'react';
+import { mount } from 'enzyme';
 
-// import TopBar from '../index';
+import TopBar from '../index';
+
+const handleSubmit = () => {};
+const handleChange = () => {};
+const renderComponent = (props = {}) => mount(<TopBar {...props} />);
 
 describe('<TopBar />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('should render a StyledAppBar', () => {
+    const renderedComponent = renderComponent({ handleChange, handleSubmit });
+    expect(renderedComponent.find('StyledAppBar')).toHaveLength(1);
   });
 });

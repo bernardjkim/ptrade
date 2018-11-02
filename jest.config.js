@@ -1,4 +1,5 @@
 module.exports = {
+  verbose: true,
   collectCoverageFrom: [
     'app/**/*.{js,jsx}',
     '!app/**/*.test.{js,jsx}',

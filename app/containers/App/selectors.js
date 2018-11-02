@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+const selectGlobal = state => state.get('global');
+
 const selectRouter = state => state.get('router');
 
 const makeSelectLocation = () =>
@@ -7,4 +9,4 @@ const makeSelectLocation = () =>
     routerState.get('location').toJS(),
   );
 
-export { makeSelectLocation };
+export { selectGlobal, makeSelectLocation };

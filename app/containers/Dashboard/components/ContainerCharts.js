@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const ContainerCharts = styled.div`
   height: 90vh;
   min-height: 600px;
   max-height: 800px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  padding-top: 1em;
+  padding-bottom: 1em;
 `;
 
-export default Container;
+export default ContainerCharts;

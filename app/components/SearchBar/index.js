@@ -25,6 +25,7 @@ function SearchBar(props) {
       <form onSubmit={props.handleSubmit}>
         <StyledInput
           placeholder="Search…"
+          value={props.search}
           disableUnderline
           onChange={props.handleChange}
         />
@@ -34,6 +35,7 @@ function SearchBar(props) {
 }
 
 SearchBar.propTypes = {
+  search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
 };

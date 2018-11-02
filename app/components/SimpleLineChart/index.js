@@ -25,7 +25,7 @@ function SimpleLineChart({ data }) {
   return (
     /* 99% per https://github.com/recharts/recharts/issues/172 */
     <ResponsiveContainer width="99%" height="99%">
-      <LineChart data={data}>
+      <LineChart data={data || []}>
         <XAxis dataKey="date" />
         <YAxis type="number" width={70} domain={['dataMin', 'dataMax']} />
         <CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -38,7 +38,7 @@ function SimpleLineChart({ data }) {
 }
 
 SimpleLineChart.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 export default SimpleLineChart;

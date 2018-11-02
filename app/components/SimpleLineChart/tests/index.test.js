@@ -1,11 +1,14 @@
-// import React from 'react';
-// import { mount } from 'enzyme';
-// import { enzymeFind } from 'styled-components/test-utils';
+import React from 'react';
+import { mount } from 'enzyme';
 
-// import SimpleLineChart from '../index';
+import SimpleLineChart from '../index';
+
+const data = [{ value: 1, date: 1 }, { value: 2, date: 2 }];
+const renderComponent = (props = {}) => mount(<SimpleLineChart {...props} />);
 
 describe('<SimpleLineChart />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('should render a ResponsiveContainer', () => {
+    const renderedComponent = renderComponent({ data });
+    expect(renderedComponent.find('ResponsiveContainer')).toHaveLength(1);
   });
 });

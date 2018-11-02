@@ -1,11 +1,15 @@
-// import React from 'react';
-// import { mount } from 'enzyme';
-// import { enzymeFind } from 'styled-components/test-utils';
+import React from 'react';
+import { mount } from 'enzyme';
 
-// import SearchBar from '../index';
+import SearchBar from '../index';
+
+const handleSubmit = () => {};
+const handleChange = () => {};
+const renderComponent = (props = {}) => mount(<SearchBar {...props} />);
 
 describe('<SearchBar />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('should render a SearchDiv', () => {
+    const renderedComponent = renderComponent({ handleChange, handleSubmit });
+    expect(renderedComponent.find('SearchDiv')).toHaveLength(1);
   });
 });

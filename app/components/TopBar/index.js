@@ -31,6 +31,7 @@ function TopBar(props) {
           PTrade
         </Typography>
         <SearchBar
+          search={props.search}
           handleSubmit={props.handleSubmit}
           handleChange={props.handleChange}
         />
@@ -46,6 +47,7 @@ function TopBar(props) {
 }
 
 TopBar.propTypes = {
+  search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
 };

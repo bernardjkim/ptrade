@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboardReducer handles the changeSearch action 1`] = `
+Immutable.Map {
+  "search": "AAPL",
+  "loading": false,
+  "error": false,
+  "currentSymbol": false,
+  "stockData": false,
+}
+`;
+
+exports[`dashboardReducer handles the changeTimeFrame action 1`] = `
+Immutable.Map {
+  "search": false,
+  "loading": false,
+  "error": false,
+  "currentSymbol": false,
+  "stockData": false,
+  "timeFrame": 1,
+}
+`;
+
+exports[`dashboardReducer returns the initial state 1`] = `
+Immutable.Map {
+  "search": false,
+  "timeFrame": 0,
+  "loading": false,
+  "error": false,
+  "stockData": false,
+}
+`;
+
+exports[`dashboardReducer should handle the loadStockData action correctly 1`] = `
+Immutable.Map {
+  "search": false,
+  "loading": true,
+  "error": false,
+  "currentSymbol": false,
+  "stockData": false,
+}
+`;
+
+exports[`dashboardReducer should handle the stockDataLoaded action correctly 1`] = `
+Immutable.Map {
+  "search": false,
+  "loading": false,
+  "error": false,
+  "currentSymbol": false,
+  "stockData": Array [
+    Object {
+      "name": "My Repo",
+    },
+  ],
+}
+`;
+
+exports[`dashboardReducer should handle the stockDataLoadingError action correctly 1`] = `
+Immutable.Map {
+  "search": false,
+  "loading": false,
+  "error": Object {
+    "msg": "Not found",
+  },
+  "currentSymbol": false,
+  "stockData": false,
+}
+`;

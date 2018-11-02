@@ -5,16 +5,24 @@
  */
 
 import {
+  CHANGE_SEARCH,
+  CHANGE_TIME_FRAME,
   LOAD_STOCK_DATA,
   LOAD_STOCK_DATA_SUCCESS,
   LOAD_STOCK_DATA_ERROR,
-  CHANGE_SEARCH,
 } from './constants';
 
 export function changeSearch(search) {
   return {
     type: CHANGE_SEARCH,
     search,
+  };
+}
+
+export function changeTimeFrame(tf) {
+  return {
+    type: CHANGE_TIME_FRAME,
+    tf,
   };
 }
 
