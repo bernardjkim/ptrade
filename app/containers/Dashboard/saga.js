@@ -18,7 +18,7 @@ export function* getStockData() {
   const tf = yield select(makeSelectTimeFrame());
   if (tf < 0 || tf > 4) return;
 
-  // get desired url for given timeFrame ans symbol
+  // get desired url for given timeFrame and symbol
   const requestURL = getChart(tf, symbol);
   if (requestURL === '') return;
 
