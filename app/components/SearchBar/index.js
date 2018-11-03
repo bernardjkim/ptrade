@@ -22,10 +22,10 @@ function SearchBar(props) {
       <SearchIconDiv>
         <SearchIcon />
       </SearchIconDiv>
-      <form onSubmit={props.handleSubmit}>
+      <form onSubmit={e => props.handleSubmit(e, props.search)}>
         <StyledInput
           placeholder="Search…"
-          value={props.search}
+          value={props.search ? props.search : ''}
           disableUnderline
           onChange={props.handleChange}
         />

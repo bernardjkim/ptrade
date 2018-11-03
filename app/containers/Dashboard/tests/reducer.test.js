@@ -3,9 +3,9 @@ import dashboardReducer from '../reducer';
 import {
   changeSearch,
   changeTimeFrame,
-  loadStockData,
-  stockDataLoaded,
-  stockDataLoadingError,
+  selectSymbol,
+  loadChart,
+  loadQuote,
 } from '../actions';
 
 describe('dashboardReducer', () => {
@@ -13,10 +13,11 @@ describe('dashboardReducer', () => {
   beforeEach(() => {
     state = fromJS({
       search: false,
+      symbol: false,
       loading: false,
       error: false,
-      currentSymbol: false,
-      stockData: false,
+      chart: false,
+      quote: false,
     });
   });
   it('returns the initial state', () => {
@@ -27,33 +28,19 @@ describe('dashboardReducer', () => {
     expect(dashboardReducer(state, changeSearch('AAPL'))).toMatchSnapshot();
   });
 
+  it('handles the selectSymbol action', () => {
+    expect(dashboardReducer(state, selectSymbol('AAPL'))).toMatchSnapshot();
+  });
+
   it('handles the changeTimeFrame action', () => {
     expect(dashboardReducer(state, changeTimeFrame(1))).toMatchSnapshot();
   });
 
-  it('should handle the loadStockData action correctly', () => {
-    expect(dashboardReducer(state, loadStockData())).toMatchSnapshot();
+  it('should handle the loadChart action correctly', () => {
+    expect(dashboardReducer(state, loadChart())).toMatchSnapshot();
   });
 
-  it('should handle the stockDataLoaded action correctly', () => {
-    const fixture = [
-      {
-        name: 'My Repo',
-      },
-    ];
-    const currentSymbol = 'AAPL';
-
-    expect(
-      dashboardReducer(state, stockDataLoaded(fixture, currentSymbol)),
-    ).toMatchSnapshot();
-  });
-
-  it('should handle the stockDataLoadingError action correctly', () => {
-    const fixture = {
-      msg: 'Not found',
-    };
-    expect(
-      dashboardReducer(state, stockDataLoadingError(fixture)),
-    ).toMatchSnapshot();
+  it('should handle the loadQuote action correctly', () => {
+    expect(dashboardReducer(state, loadQuote())).toMatchSnapshot();
   });
 });

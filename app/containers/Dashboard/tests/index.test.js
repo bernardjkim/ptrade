@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import { Dashboard, mapDispatchToProps } from '../index';
-import { changeSearch, changeTimeFrame, loadStockData } from '../actions';
+import { changeSearch, changeTimeFrame, selectSymbol } from '../actions';
 
 describe('<Dashboard />', () => {
   it('should render the TopBar', () => {
@@ -71,11 +71,11 @@ describe('handleSubmit', () => {
     expect(result.handleSubmit).toBeDefined();
   });
 
-  it('should dispatch loadStockData when called', () => {
+  it('should dispatch selectSymbol when called', () => {
     const dispatch = jest.fn();
     const result = mapDispatchToProps(dispatch);
     result.handleSubmit();
-    expect(dispatch).toHaveBeenCalledWith(loadStockData());
+    expect(dispatch).toHaveBeenCalledWith(selectSymbol());
   });
 
   it('should preventDefault if called with event', () => {

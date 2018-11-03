@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import StyledPaper from './StyledPaper';
 
-const ContainerRight = styled.div`
+const ContainerRight = styled(StyledPaper)`
   width: 30%;
   min-width: 300px;
   height: 100%;

@@ -4,9 +4,14 @@
 
 /* eslint-disable redux-saga/yield-effects */
 import { put, takeLatest } from 'redux-saga/effects';
-import { LOAD_STOCK_DATA } from '../constants';
-import { stockDataLoaded, stockDataLoadingError } from '../actions';
-import stockData, { getStockData } from '../saga';
+import { LOAD_CHART, LOAD_QUOTE } from '../constants';
+import {
+  chartLoaded,
+  chartLoadingError,
+  quoteLoaded,
+  quoteLoadingError,
+} from '../actions';
+import saga, { getChart, getQuote } from '../saga';
 
 const symbol = 'AAPL';
 
@@ -16,7 +21,7 @@ describe('getData Saga', () => {
   // We have to test twice, once for a successful load and once for an unsuccessful one
   // so we do all the stuff that happens beforehand automatically in the beforeEach
   beforeEach(() => {
-    getDataGenerator = getStockData();
+    getDataGenerator = getChart();
 
     const selectDescriptor = getDataGenerator.next().value;
     expect(selectDescriptor).toMatchSnapshot();
@@ -38,7 +43,7 @@ describe('getData Saga', () => {
 
     getDataGenerator.next(timeFrame);
     const putDescriptor = getDataGenerator.next(data).value;
-    expect(putDescriptor).toEqual(put(stockDataLoaded(response, symbol)));
+    expect(putDescriptor).toEqual(put(chartLoaded(response, symbol)));
   });
 
   it('requests the data successfully with 1m data', () => {
@@ -54,7 +59,7 @@ describe('getData Saga', () => {
 
     getDataGenerator.next(timeFrame);
     const putDescriptor = getDataGenerator.next(data).value;
-    expect(putDescriptor).toEqual(put(stockDataLoaded(response, symbol)));
+    expect(putDescriptor).toEqual(put(chartLoaded(response)));
   });
 
   it('should call the stockDataLoadingError action if the response errors', () => {
@@ -63,17 +68,45 @@ describe('getData Saga', () => {
 
     getDataGenerator.next(timeFrame);
     const putDescriptor = getDataGenerator.throw(response).value;
-    expect(putDescriptor).toEqual(put(stockDataLoadingError(response)));
+    expect(putDescriptor).toEqual(put(chartLoadingError(response)));
   });
 });
 
-describe('stockDataSaga Saga', () => {
-  const stockDataSaga = stockData();
+describe('getQuote Saga', () => {
+  let getDataGenerator;
 
+  // We have to test twice, once for a successful load and once for an unsuccessful one
+  // so we do all the stuff that happens beforehand automatically in the beforeEach
+  beforeEach(() => {
+    getDataGenerator = getQuote();
+
+    const selectDescriptor = getDataGenerator.next().value;
+    expect(selectDescriptor).toMatchSnapshot();
+
+    const callDescriptor = getDataGenerator.next(symbol).value;
+    expect(callDescriptor).toMatchSnapshot();
+  });
+
+  it('requests the quote successfully', () => {
+    const response = { quote: {} };
+    const data = { quote: {} };
+    const putDescriptor = getDataGenerator.next(data).value;
+    expect(putDescriptor).toEqual(put(quoteLoaded(response)));
+  });
+
+  it('should call the stockDataLoadingError action if the response errors', () => {
+    const response = new Error('Some error');
+    const putDescriptor = getDataGenerator.throw(response).value;
+    expect(putDescriptor).toEqual(put(quoteLoadingError(response)));
+  });
+});
+
+describe('Saga', () => {
   it('should start task to watch for LOAD_STOCK_DATA action', () => {
-    const takeLatestDescriptor = stockDataSaga.next().value;
-    expect(takeLatestDescriptor).toEqual(
-      takeLatest(LOAD_STOCK_DATA, getStockData),
-    );
+    const takeLatestDescriptor = saga().next().value;
+    expect(takeLatestDescriptor).toEqual([
+      takeLatest(LOAD_CHART, getChart),
+      takeLatest(LOAD_QUOTE, getQuote),
+    ]);
   });
 });

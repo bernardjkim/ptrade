@@ -59,3 +59,49 @@ Object {
   },
 }
 `;
+
+exports[`getQuote Saga requests the quote successfully 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getQuote Saga requests the quote successfully 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://api.iextrading.com/1.0/stock/AAPL/quote",
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`getQuote Saga should call the stockDataLoadingError action if the response errors 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getQuote Saga should call the stockDataLoadingError action if the response errors 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://api.iextrading.com/1.0/stock/AAPL/quote",
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;

@@ -1,9 +1,11 @@
 import { fromJS } from 'immutable';
 import {
   selectDashboardDomain,
+  makeSelectSearch,
   makeSelectSymbol,
   makeSelectTimeFrame,
-  makeSelectStockData,
+  makeSelectChart,
+  makeSelectQuote,
   makeSelectLoading,
   makeSelectError,
 } from '../selectors';
@@ -18,16 +20,29 @@ describe('selectDashboardDomain', () => {
   });
 });
 
-describe('makeSelectSymbol', () => {
-  const symbolSelector = makeSelectSymbol();
-  it('should select the symbol', () => {
+describe('makeSelectSearch', () => {
+  const searchSelector = makeSelectSearch();
+  it('should select the search symbol', () => {
     const search = 'AAPL';
     const mockedState = fromJS({
       dashboard: {
         search,
       },
     });
-    expect(symbolSelector(mockedState)).toEqual(search);
+    expect(searchSelector(mockedState)).toEqual(search);
+  });
+});
+
+describe('makeSelectSymbol', () => {
+  const symbolSelector = makeSelectSymbol();
+  it('should select the selected symbol', () => {
+    const symbol = 'AAPL';
+    const mockedState = fromJS({
+      dashboard: {
+        symbol,
+      },
+    });
+    expect(symbolSelector(mockedState)).toEqual(symbol);
   });
 });
 
@@ -44,16 +59,29 @@ describe('makeSelectTimeFrame', () => {
   });
 });
 
-describe('makeSelectStockData', () => {
-  const currentUserSelector = makeSelectStockData();
-  it('should select the stock data', () => {
-    const stockData = fromJS([{ date: 1, value: 1 }]);
+describe('makeSelectChart', () => {
+  const dataSelector = makeSelectChart();
+  it('should select the chart data', () => {
+    const chart = fromJS([{ date: 1, value: 1 }]);
     const mockedState = fromJS({
       dashboard: {
-        stockData,
+        chart,
       },
     });
-    expect(currentUserSelector(mockedState)).toEqual(stockData);
+    expect(dataSelector(mockedState)).toEqual(chart);
+  });
+});
+
+describe('makeSelectStockQuote', () => {
+  const quoteSelector = makeSelectQuote();
+  it('should select the stock quote', () => {
+    const quote = fromJS({ quote: {} });
+    const mockedState = fromJS({
+      dashboard: {
+        quote,
+      },
+    });
+    expect(quoteSelector(mockedState)).toEqual(quote);
   });
 });
 

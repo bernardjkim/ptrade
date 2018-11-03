@@ -10,18 +10,22 @@ const selectDashboardDomain = state => state.get('dashboard', initialState);
 /**
  * Other specific selectors
  */
-const makeSelectSymbol = () =>
+const makeSelectSearch = () =>
   createSelector(selectDashboardDomain, homeState => homeState.get('search'));
+
+const makeSelectSymbol = () =>
+  createSelector(selectDashboardDomain, homeState => homeState.get('symbol'));
 
 const makeSelectTimeFrame = () =>
   createSelector(selectDashboardDomain, homeState =>
     homeState.get('timeFrame'),
   );
 
-const makeSelectStockData = () =>
-  createSelector(selectDashboardDomain, homeState =>
-    homeState.get('stockData'),
-  );
+const makeSelectChart = () =>
+  createSelector(selectDashboardDomain, homeState => homeState.get('chart'));
+
+const makeSelectQuote = () =>
+  createSelector(selectDashboardDomain, homeState => homeState.get('quote'));
 
 const makeSelectLoading = () =>
   createSelector(selectDashboardDomain, homeState => homeState.get('loading'));
@@ -39,9 +43,11 @@ const makeSelectDashboard = () =>
 export default makeSelectDashboard;
 export {
   selectDashboardDomain,
+  makeSelectSearch,
   makeSelectSymbol,
   makeSelectTimeFrame,
   makeSelectLoading,
   makeSelectError,
-  makeSelectStockData,
+  makeSelectChart,
+  makeSelectQuote,
 };

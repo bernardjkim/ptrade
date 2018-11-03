@@ -1,12 +1,13 @@
 /**
- * Return a url formatted with the given time frame and symbol
+ * Return a url to get iex chart data formatted with the given time frame and
+ * symbol.
  *
  * @param  {number} timeFrame   The desired time frame
  * @param  {string} symbol      A stock symbol
  *
  * @return {string}             A iex api endpoint url
  */
-export function getChart(timeFrame, symbol) {
+export function getChartURL(timeFrame, symbol) {
   switch (timeFrame) {
     case 0:
       return `${process.env.IEX_URL}/${symbol}/chart/1d?chartInterval=5`;
@@ -21,4 +22,15 @@ export function getChart(timeFrame, symbol) {
     default:
       return ``;
   }
+}
+
+/**
+ * Return a url to get iex quote data formatted with the given symbol.
+ *
+ * @param  {string} symbol  A stock symbol
+ *
+ * @return {string}         A iex api endpoint url
+ */
+export function getQuoteURL(symbol) {
+  return `${process.env.IEX_URL}/${symbol}/quote`;
 }

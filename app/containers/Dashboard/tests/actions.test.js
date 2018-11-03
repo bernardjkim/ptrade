@@ -1,16 +1,16 @@
 import {
   changeSearch,
   changeTimeFrame,
-  loadStockData,
-  stockDataLoaded,
-  stockDataLoadingError,
+  selectSymbol,
+  loadChart,
+  loadQuote,
 } from '../actions';
 import {
   CHANGE_SEARCH,
   CHANGE_TIME_FRAME,
-  LOAD_STOCK_DATA,
-  LOAD_STOCK_DATA_SUCCESS,
-  LOAD_STOCK_DATA_ERROR,
+  SELECT_SYMBOL,
+  LOAD_CHART,
+  LOAD_QUOTE,
 } from '../constants';
 
 describe('Dashboard actions', () => {
@@ -23,6 +23,15 @@ describe('Dashboard actions', () => {
     });
   });
 
+  describe('selectSymbol', () => {
+    it('has a type of SELECT_SYMBOL', () => {
+      const expected = {
+        type: SELECT_SYMBOL,
+      };
+      expect(selectSymbol()).toEqual(expected);
+    });
+  });
+
   describe('changeTimeFrame', () => {
     it('has a type of CHANGE_TIME_FRAME', () => {
       const expected = {
@@ -31,41 +40,23 @@ describe('Dashboard actions', () => {
       expect(changeTimeFrame()).toEqual(expected);
     });
   });
-  describe('loadStockData', () => {
+  describe('loadChart', () => {
     it('should return the correct type', () => {
       const expectedResult = {
-        type: LOAD_STOCK_DATA,
+        type: LOAD_CHART,
       };
 
-      expect(loadStockData()).toEqual(expectedResult);
+      expect(loadChart()).toEqual(expectedResult);
     });
   });
 
-  describe('stockDataLoaded', () => {
-    it('should return the correct type and the passed data', () => {
-      const fixture = ['Test'];
-      const symbol = 'AAPL';
+  describe('loadQuote', () => {
+    it('should return the correct type', () => {
       const expectedResult = {
-        type: LOAD_STOCK_DATA_SUCCESS,
-        data: fixture,
-        symbol,
+        type: LOAD_QUOTE,
       };
 
-      expect(stockDataLoaded(fixture, symbol)).toEqual(expectedResult);
-    });
-  });
-
-  describe('stockDataLoadingError', () => {
-    it('should return the correct type and the error', () => {
-      const fixture = {
-        msg: 'Something went wrong!',
-      };
-      const expectedResult = {
-        type: LOAD_STOCK_DATA_ERROR,
-        error: fixture,
-      };
-
-      expect(stockDataLoadingError(fixture)).toEqual(expectedResult);
+      expect(loadQuote()).toEqual(expectedResult);
     });
   });
 });
