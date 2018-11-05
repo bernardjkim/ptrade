@@ -7,7 +7,7 @@ const ContainerCharts = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  padding-top: 1em;
+  padding-top: 20px;
   padding-bottom: 1em;
 `;
 

@@ -12,16 +12,20 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import ChartTabs from 'components/ChartTabs';
-import SimpleLineChart from 'components/SimpleLineChart';
-import TopBar from 'components/TopBar';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+// import Typography from '@material-ui/core/Typography';
+
+import ChartTabs from 'components/ChartTabs';
+import SimpleLineChart from 'components/SimpleLineChart';
+import TopBar from 'components/TopBar';
+
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+import { formatQuote } from 'utils/quote';
+
 import makeSelectDashboard, {
   makeSelectSearch,
   makeSelectTimeFrame,
@@ -45,6 +49,7 @@ import ContainerLeft from './components/ContainerLeft';
 import ContainerRight from './components/ContainerRight';
 import ContainerQuote from './components/ContainerQuote';
 import StyledTable from './components/StyledTable';
+import CompanyName from './components/CompanyName';
 
 /* eslint-disable react/prefer-stateless-function */
 export class Dashboard extends React.PureComponent {
@@ -80,23 +85,6 @@ export class Dashboard extends React.PureComponent {
       handleSubmit,
     } = this.props;
 
-    let id = 0;
-    function createData(name, value) {
-      id += 1;
-      return { id, name, value };
-    }
-
-    const data = q => [
-      createData('OPEN', q.open ? `$${q.open}` : 'N/A'),
-      createData('CLOSE', q.close ? `$${q.close}` : 'N/A'),
-      createData('HIGH', q.high ? `$${q.high}` : 'N/A'),
-      createData('LOW', q.low ? `$${q.low}` : 'N/A'),
-      createData('52 WK HIGH', q.week52High ? `$${q.week52High}` : 'N/A'),
-      createData('52 WK LOW', q.week52Low ? `$${q.week52Low}` : 'N/A'),
-      createData('AVG VOL', q.avgTotalVolume ? q.avgTotalVolume : 'N/A'),
-      createData('MKT CAP', q.marketCap ? q.marketCap : 'N/A'),
-    ];
-
     return (
       <div>
         <Helmet>
@@ -117,24 +105,35 @@ export class Dashboard extends React.PureComponent {
             />
           </ContainerLeft>
           <ContainerRight>
+            {quote && (
+              <CompanyName variant="title" gutterBottom>
+                {quote.companyName}
+              </CompanyName>
+            )}
             <ContainerQuote>
               <StyledTable>
                 <TableHead>
                   <TableRow>
-                    <TableCell>{quote.symbol ? quote.symbol : 'N/A'}</TableCell>
-                    <TableCell numeric>
-                      {quote.latestPrice ? `$${quote.latestPrice}` : 'N/A'}
-                    </TableCell>
+                    {quote && (
+                      <React.Fragment>
+                        <TableCell>
+                          {quote.symbol ? quote.symbol : 'N/A'}
+                        </TableCell>
+                        <TableCell numeric>
+                          {quote.latestPrice ? `$${quote.latestPrice}` : 'N/A'}
+                        </TableCell>
+                      </React.Fragment>
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data(quote).map(n => (
-                    <TableRow key={n.id}>
+                  {formatQuote(quote).map(q => (
+                    <TableRow key={q.name}>
                       <TableCell component="th" scope="row" variant="head">
-                        {n.name}
+                        {q.name}
                       </TableCell>
                       <TableCell component="td" scope="row" numeric>
-                        {n.value}
+                        {q.value}
                       </TableCell>
                     </TableRow>
                   ))}

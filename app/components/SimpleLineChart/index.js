@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 // import { FormattedMessage } from 'react-intl';
 
 import CartesianGrid from 'recharts/lib/cartesian/CartesianGrid';
-import Legend from 'recharts/lib/component/Legend';
+// import Legend from 'recharts/lib/component/Legend';
 import Line from 'recharts/lib/cartesian/Line';
 import LineChart from 'recharts/lib/chart/LineChart';
 import ResponsiveContainer from 'recharts/lib/component/ResponsiveContainer';
@@ -21,16 +21,23 @@ import YAxis from 'recharts/lib/cartesian/YAxis';
 
 // import messages from './messages';
 
+const formatter = value => `$${value}`;
+
 function SimpleLineChart({ data }) {
   return (
     /* 99% per https://github.com/recharts/recharts/issues/172 */
-    <ResponsiveContainer width="99%" height="99%">
+    <ResponsiveContainer width="99%" height="90%">
       <LineChart data={data || []}>
         <XAxis dataKey="date" />
-        <YAxis type="number" width={70} domain={['dataMin', 'dataMax']} />
+        <YAxis
+          tickFormatter={formatter}
+          type="number"
+          width={70}
+          domain={['dataMin', 'dataMax']}
+        />
         <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <Tooltip />
-        <Legend />
+        <Tooltip formatter={value => `$${value}`} />
+        {/* <Legend /> */}
         <Line type="monotone" dataKey="value" stroke="#82ca9d" />
       </LineChart>
     </ResponsiveContainer>

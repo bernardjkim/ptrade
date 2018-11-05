@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { getChartURL, getQuoteURL } from 'api/iex';
 import request from 'utils/request';
-import { parseData } from 'utils/stockData';
+import { parseChart } from 'utils/chart';
 import { LOAD_CHART, LOAD_QUOTE } from './constants';
 import {
   chartLoaded,
@@ -29,9 +29,9 @@ export function* getChart() {
 
   try {
     // Call our request helper (see 'utils/request')
-    const data = yield call(request, requestURL);
+    const chart = yield call(request, requestURL);
 
-    yield put(chartLoaded(parseData(data, tf === 0)));
+    yield put(chartLoaded(parseChart(chart, tf === 0)));
   } catch (err) {
     yield put(chartLoadingError(err));
   }
