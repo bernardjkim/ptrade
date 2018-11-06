@@ -18,6 +18,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 // import Typography from '@material-ui/core/Typography';
 
+import { SigninLink } from 'containers/SigninPage/index';
+
 import ChartTabs from 'components/ChartTabs';
 import SimpleLineChart from 'components/SimpleLineChart';
 import TopBar from 'components/TopBar';
@@ -26,6 +28,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { formatQuote } from 'utils/quote';
 
+import { makeSelectToken } from 'containers/App/selectors';
 import makeSelectDashboard, {
   makeSelectSearch,
   makeSelectTimeFrame,
@@ -75,6 +78,7 @@ export class Dashboard extends React.PureComponent {
       quote,
       timeFrame,
       search,
+      token,
       // symbol,
     } = this.props;
 
@@ -92,9 +96,12 @@ export class Dashboard extends React.PureComponent {
           <meta name="description" content="Description of Dashboard" />
         </Helmet>
         <TopBar
+          token={token}
           search={search}
           handleSubmit={handleSubmit}
           handleChange={handleChangeSearch}
+          handleSignout={() => {}}
+          signinLink={SigninLink}
         />
         <ContainerCharts>
           <ContainerLeft>
@@ -156,6 +163,7 @@ Dashboard.propTypes = {
   chart: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   quote: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   timeFrame: PropTypes.number,
+  token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 
   // dispatch functions
   handleChangeSearch: PropTypes.func.isRequired,
@@ -167,6 +175,7 @@ Dashboard.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   dashboard: makeSelectDashboard(),
+  token: makeSelectToken(),
   timeFrame: makeSelectTimeFrame(),
   chart: makeSelectChart(),
   quote: makeSelectQuote(),

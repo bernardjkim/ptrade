@@ -11,7 +11,7 @@ import {
   quoteLoaded,
   quoteLoadingError,
 } from '../actions';
-import saga, { getChart, getQuote } from '../saga';
+import dashboard, { getChart, getQuote } from '../saga';
 
 const symbol = 'AAPL';
 
@@ -102,8 +102,10 @@ describe('getQuote Saga', () => {
 });
 
 describe('Saga', () => {
+  const dashboardSaga = dashboard();
+
   it('should start task to watch for LOAD_STOCK_DATA action', () => {
-    const takeLatestDescriptor = saga().next().value;
+    const takeLatestDescriptor = dashboardSaga.next().value;
     expect(takeLatestDescriptor).toEqual([
       takeLatest(LOAD_CHART, getChart),
       takeLatest(LOAD_QUOTE, getQuote),

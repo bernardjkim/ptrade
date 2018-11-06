@@ -12,10 +12,12 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 
+// import { SigninLink } from 'containers/SigninPage/index';
 import SearchBar from 'components/SearchBar';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
+import UserMenu from 'components/UserMenu';
 import StyledAppBar from './StyledAppBar';
 
 const Grow = styled.div`
@@ -36,20 +38,25 @@ function TopBar(props) {
           handleChange={props.handleChange}
         />
         <Grow />
-        <Button color="inherit">
-          <Typography variant="subheading" color="inherit" noWrap>
-            Sign in
-          </Typography>
-        </Button>
+        {props.token ? (
+          <UserMenu handleSignout={props.handleSignout} />
+        ) : (
+          <Button component={props.signinLink} color="inherit">
+            <Typography color="inherit">Sign in</Typography>
+          </Button>
+        )}
       </Toolbar>
     </StyledAppBar>
   );
 }
 
 TopBar.propTypes = {
+  signinLink: PropTypes.element,
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleSignout: PropTypes.func.isRequired,
 };
 
 export default TopBar;

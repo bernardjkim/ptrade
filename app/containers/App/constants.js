@@ -8,3 +8,8 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
+
+// ** CREATE SESSION **
+export const CREATE_SESSION = 'app/App/CREATE_SESSION';
+export const CREATE_SESSION_SUCCESS = 'app/App/CREATE_SESSION_SUCCESS';
+export const CREATE_SESSION_ERROR = 'app/App/CREATE_SESSION_ERROR';

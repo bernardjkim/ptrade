@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`signinPageReducer handles the changeInput action 1`] = `
+Immutable.Map {
+  "email": "test@email.com",
+  "password": false,
+  "loading": false,
+  "error": false,
+}
+`;
+
+exports[`signinPageReducer returns the initial state 1`] = `
+Immutable.Map {
+  "email": false,
+  "password": false,
+  "loading": false,
+  "error": false,
+}
+`;

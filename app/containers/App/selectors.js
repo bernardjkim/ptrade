@@ -9,4 +9,7 @@ const makeSelectLocation = () =>
     routerState.get('location').toJS(),
   );
 
-export { selectGlobal, makeSelectLocation };
+const makeSelectToken = () =>
+  createSelector(selectGlobal, globalState => globalState.get('token'));
+
+export { selectGlobal, makeSelectLocation, makeSelectToken };

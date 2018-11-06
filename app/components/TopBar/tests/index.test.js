@@ -5,11 +5,16 @@ import TopBar from '../index';
 
 const handleSubmit = () => {};
 const handleChange = () => {};
+const handleSignout = () => {};
 const renderComponent = (props = {}) => mount(<TopBar {...props} />);
 
 describe('<TopBar />', () => {
   it('should render a StyledAppBar', () => {
-    const renderedComponent = renderComponent({ handleChange, handleSubmit });
+    const renderedComponent = renderComponent({
+      handleChange,
+      handleSubmit,
+      handleSignout,
+    });
     expect(renderedComponent.find('StyledAppBar')).toHaveLength(1);
   });
 });
