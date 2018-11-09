@@ -1,14 +1,16 @@
 import { fromJS } from 'immutable';
 import {
-  selectSigninPageDomain,
+  selectSignupPageDomain,
   makeSelectEmail,
   makeSelectError,
   makeSelectLoading,
   makeSelectPassword,
+  makeSelectUsername,
 } from '../selectors';
 
 const mockedState = fromJS({
-  signinPage: {
+  signupPage: {
+    username: 'username',
     email: 'test@email.com',
     password: 'password',
     loading: false,
@@ -16,9 +18,16 @@ const mockedState = fromJS({
   },
 });
 
-describe('selectSigninPageDomain', () => {
-  it('should select the SigninPage state', () => {
-    expect(selectSigninPageDomain(mockedState)).toMatchSnapshot();
+describe('selectSignupPageDomain', () => {
+  it('should select the SignupPage state', () => {
+    expect(selectSignupPageDomain(mockedState)).toMatchSnapshot();
+  });
+});
+
+describe('makeSelectUsername', () => {
+  const usernameSelector = makeSelectUsername();
+  it('should select the username', () => {
+    expect(usernameSelector(mockedState)).toEqual('username');
   });
 });
 

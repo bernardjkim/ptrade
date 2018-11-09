@@ -42,31 +42,33 @@ export function deleteSession() {
 /**
  * Create session, this action starts the request saga
  *
- * @return {object} An action object with a type of CREATE_SESSION
+ * @param  {string} email     User email
+ * @param  {string} password  User password
+ *
+ * @return {object}           An action object with a type of CREATE_SESSION
  */
-export function createSession() {
+export function createSession(email, password) {
   return {
     type: CREATE_SESSION,
+    email,
+    password,
   };
 }
 
 /**
  * Dispatched when the session token is loaded by the request saga
  *
- * @param  {string} token The chart data
+ * @return {object} An action object with a type of CREATE_SESSION_SUCCESS
  *
- * @return {object}       An action object with a type of CREATE_SESSION_SUCCESS
- *                        passing the token
  */
-export function createSessionSuccess(token) {
+export function createSessionSuccess() {
   return {
     type: CREATE_SESSION_SUCCESS,
-    token,
   };
 }
 
 /**
- * Dispatched when createing the session fails
+ * Dispatched when creating the session fails
  *
  * @param  {object} error The error
  *

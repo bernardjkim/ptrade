@@ -14,10 +14,14 @@ describe('Dashboard actions', () => {
   });
   describe('createSession', () => {
     it('has a type of CREATE_SESSION', () => {
+      const email = 'email';
+      const password = 'password';
       const expected = {
         type: CREATE_SESSION,
+        email,
+        password,
       };
-      expect(createSession()).toEqual(expected);
+      expect(createSession(email, password)).toEqual(expected);
     });
   });
   describe('deleteSession', () => {

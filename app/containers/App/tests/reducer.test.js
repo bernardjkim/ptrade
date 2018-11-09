@@ -7,6 +7,8 @@ describe('appReducer', () => {
   beforeEach(() => {
     state = fromJS({
       token: false,
+      email: false,
+      password: false,
       loading: false,
       error: false,
     });
@@ -20,7 +22,9 @@ describe('appReducer', () => {
   });
 
   it('handles the createSession action', () => {
-    expect(appReducer(state, createSession())).toMatchSnapshot();
+    const email = 'email';
+    const password = 'password';
+    expect(appReducer(state, createSession(email, password))).toMatchSnapshot();
   });
 
   it('handles the deleteSession action', () => {

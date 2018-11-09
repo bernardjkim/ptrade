@@ -1,6 +1,6 @@
 /**
  *
- * SigninPage
+ * SignupPage
  *
  */
 
@@ -14,15 +14,12 @@ import { Redirect } from 'react-router-dom';
 
 import Typography from '@material-ui/core/Typography';
 
-import { SignupLink } from 'components/Links/index';
-import { createSession, loadToken } from 'containers/App/actions';
 import { makeSelectToken } from 'containers/App/selectors';
+import { loadToken } from 'containers/App/actions';
+import { SigninLink } from 'components/Links/index';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectSigninPage, {
-  makeSelectEmail,
-  makeSelectPassword,
-} from './selectors';
+import makeSelectSignupPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -32,10 +29,10 @@ import StyledForm from './components/StyledForm';
 import StyledPaper from './components/StyledPaper';
 import StyledTextField from './components/StyledTextField';
 import StyledButton from './components/StyledButton';
-import { changeInput } from './actions';
+import { changeInput, createUser } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
-export class SigninPage extends React.PureComponent {
+export class SignupPage extends React.PureComponent {
   componentWillMount() {
     // check if token is already stored in storage
     if (!this.props.token) {
@@ -48,6 +45,7 @@ export class SigninPage extends React.PureComponent {
       handleSubmit,
       handleChangeInput,
       showMissing,
+      username,
       email,
       password,
       token,
@@ -57,25 +55,27 @@ export class SigninPage extends React.PureComponent {
     if (token) {
       return <Redirect to="/dashboard" />;
     }
-
     return (
       <StyledContainer>
         <StyledPaper>
           <Typography variant="headline" component="h3" align="center">
-            Sign in
+            Sign up
           </Typography>
-          <StyledForm
-            noValidate
-            autoComplete="off"
-            onSubmit={e => handleSubmit(e, email, password)}
-          >
+          <StyledForm noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <StyledTextField
+              id="username"
+              label="Username"
+              margin="normal"
+              onChange={e => handleChangeInput('username', e.target.value)}
+              error={showMissing ? username.length < 1 : false}
+              autoFocus
+            />
             <StyledTextField
               id="email"
               label="Email"
               margin="normal"
               onChange={e => handleChangeInput('email', e.target.value)}
               error={showMissing ? email.length < 1 : false}
-              autoFocus
             />
             <StyledTextField
               id="password"
@@ -92,10 +92,10 @@ export class SigninPage extends React.PureComponent {
               color="primary"
               type="submit"
             >
-              Sign In
-            </StyledButton>
-            <StyledButton size="small" color="primary" component={SignupLink}>
               Register
+            </StyledButton>
+            <StyledButton size="small" color="primary" component={SigninLink}>
+              Sign in
             </StyledButton>
           </StyledForm>
         </StyledPaper>
@@ -104,21 +104,20 @@ export class SigninPage extends React.PureComponent {
   }
 }
 
-SigninPage.propTypes = {
+SignupPage.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   getToken: PropTypes.func.isRequired,
   showMissing: PropTypes.bool,
+  username: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   email: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   password: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
-  signinPage: makeSelectSigninPage(),
+  signupPage: makeSelectSignupPage(),
   token: makeSelectToken(),
-  email: makeSelectEmail(),
-  password: makeSelectPassword(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -127,9 +126,9 @@ export function mapDispatchToProps(dispatch) {
       dispatch(changeInput(field, value));
     },
 
-    handleSubmit: (evt, email, password) => {
+    handleSubmit: evt => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(createSession(email, password));
+      dispatch(createUser());
     },
     getToken: () => {
       dispatch(loadToken());
@@ -142,11 +141,11 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'signinPage', reducer });
-const withSaga = injectSaga({ key: 'signinPage', saga });
+const withReducer = injectReducer({ key: 'signupPage', reducer });
+const withSaga = injectSaga({ key: 'signupPage', saga });
 
 export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(SigninPage);
+)(SignupPage);

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`signupPageReducer handles the changeInput action for email 1`] = `
+Immutable.Map {
+  "username": false,
+  "email": "test@email.com",
+  "password": false,
+  "loading": false,
+  "error": false,
+}
+`;
+
+exports[`signupPageReducer handles the changeInput action for password 1`] = `
+Immutable.Map {
+  "username": false,
+  "email": false,
+  "password": "password",
+  "loading": false,
+  "error": false,
+}
+`;
+
+exports[`signupPageReducer handles the changeInput action for username 1`] = `
+Immutable.Map {
+  "username": "username",
+  "email": false,
+  "password": false,
+  "loading": false,
+  "error": false,
+}
+`;
+
+exports[`signupPageReducer returns the initial state 1`] = `
+Immutable.Map {
+  "username": false,
+  "email": false,
+  "password": false,
+  "loading": false,
+  "error": false,
+}
+`;

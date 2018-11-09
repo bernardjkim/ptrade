@@ -3,7 +3,7 @@
  */
 
 /* eslint-disable redux-saga/yield-effects */
-import { put, takeLatest } from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import { LOAD_CHART, LOAD_QUOTE } from '../constants';
 import {
   chartLoaded,
@@ -62,7 +62,7 @@ describe('getData Saga', () => {
     expect(putDescriptor).toEqual(put(chartLoaded(response)));
   });
 
-  it('should call the stockDataLoadingError action if the response errors', () => {
+  it('should call the chartLoadingError action if the response errors', () => {
     const timeFrame = 0;
     const response = new Error('Some error');
 
@@ -94,7 +94,7 @@ describe('getQuote Saga', () => {
     expect(putDescriptor).toEqual(put(quoteLoaded(response)));
   });
 
-  it('should call the stockDataLoadingError action if the response errors', () => {
+  it('should call the chartLoadingError action if the response errors', () => {
     const response = new Error('Some error');
     const putDescriptor = getDataGenerator.throw(response).value;
     expect(putDescriptor).toEqual(put(quoteLoadingError(response)));
@@ -104,11 +104,10 @@ describe('getQuote Saga', () => {
 describe('Saga', () => {
   const dashboardSaga = dashboard();
 
-  it('should start task to watch for LOAD_STOCK_DATA action', () => {
+  it('should start task to watch for LOAD_CHART/LOAD_QUOTE action', () => {
     const takeLatestDescriptor = dashboardSaga.next().value;
-    expect(takeLatestDescriptor).toEqual([
-      takeLatest(LOAD_CHART, getChart),
-      takeLatest(LOAD_QUOTE, getQuote),
-    ]);
+    expect(takeLatestDescriptor).toEqual(
+      all([takeLatest(LOAD_CHART, getChart), takeLatest(LOAD_QUOTE, getQuote)]),
+    );
   });
 });

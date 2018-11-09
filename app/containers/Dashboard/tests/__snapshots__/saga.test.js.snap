@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`getData Saga should call the stockDataLoadingError action if the response errors 1`] = `
+exports[`getData Saga should call the chartLoadingError action if the response errors 1`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -50,7 +50,7 @@ Object {
 }
 `;
 
-exports[`getData Saga should call the stockDataLoadingError action if the response errors 2`] = `
+exports[`getData Saga should call the chartLoadingError action if the response errors 2`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -83,7 +83,7 @@ Object {
 }
 `;
 
-exports[`getQuote Saga should call the stockDataLoadingError action if the response errors 1`] = `
+exports[`getQuote Saga should call the chartLoadingError action if the response errors 1`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -93,7 +93,7 @@ Object {
 }
 `;
 
-exports[`getQuote Saga should call the stockDataLoadingError action if the response errors 2`] = `
+exports[`getQuote Saga should call the chartLoadingError action if the response errors 2`] = `
 Object {
   "@@redux-saga/IO": true,
   "CALL": Object {

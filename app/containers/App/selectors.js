@@ -12,6 +12,12 @@ const makeSelectLocation = () =>
 const makeSelectToken = () =>
   createSelector(selectGlobal, globalState => globalState.get('token'));
 
+const makeSelectEmail = () =>
+  createSelector(selectGlobal, globalState => globalState.get('email'));
+
+const makeSelectPassword = () =>
+  createSelector(selectGlobal, globalState => globalState.get('password'));
+
 const makeSelectLoading = () =>
   createSelector(selectGlobal, globalState => globalState.get('loading'));
 
@@ -22,6 +28,8 @@ export {
   selectGlobal,
   makeSelectLocation,
   makeSelectToken,
+  makeSelectEmail,
+  makeSelectPassword,
   makeSelectError,
   makeSelectLoading,
 };

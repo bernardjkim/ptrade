@@ -4,6 +4,8 @@ import {
   selectGlobal,
   makeSelectLocation,
   makeSelectToken,
+  makeSelectEmail,
+  makeSelectPassword,
   makeSelectLoading,
   makeSelectError,
 } from '../selectors';
@@ -43,7 +45,7 @@ describe('makeSelectLocation', () => {
 });
 
 describe('makeSelectToken', () => {
-  const searchSelector = makeSelectToken();
+  const tokenSelector = makeSelectToken();
   it('should select the token', () => {
     const token = 'token';
     const mockedState = fromJS({
@@ -51,12 +53,38 @@ describe('makeSelectToken', () => {
         token,
       },
     });
-    expect(searchSelector(mockedState)).toEqual(token);
+    expect(tokenSelector(mockedState)).toEqual(token);
+  });
+});
+
+describe('makeSelectEmail', () => {
+  const emailSelector = makeSelectEmail();
+  it('should select the email', () => {
+    const email = 'email';
+    const mockedState = fromJS({
+      global: {
+        email,
+      },
+    });
+    expect(emailSelector(mockedState)).toEqual(email);
+  });
+});
+
+describe('makeSelectPassword', () => {
+  const passwordSelector = makeSelectPassword();
+  it('should select the password', () => {
+    const password = 'password';
+    const mockedState = fromJS({
+      global: {
+        password,
+      },
+    });
+    expect(passwordSelector(mockedState)).toEqual(password);
   });
 });
 
 describe('makeSelectLoading', () => {
-  const searchSelector = makeSelectLoading();
+  const loadingSelector = makeSelectLoading();
   it('should select the loading value', () => {
     const loading = false;
     const mockedState = fromJS({
@@ -64,12 +92,12 @@ describe('makeSelectLoading', () => {
         loading,
       },
     });
-    expect(searchSelector(mockedState)).toEqual(false);
+    expect(loadingSelector(mockedState)).toEqual(false);
   });
 });
 
 describe('makeSelectError', () => {
-  const searchSelector = makeSelectError();
+  const errorSelector = makeSelectError();
   it('should select the error', () => {
     const error = 404;
     const mockedState = fromJS({
@@ -77,6 +105,6 @@ describe('makeSelectError', () => {
         error,
       },
     });
-    expect(searchSelector(mockedState)).toEqual(error);
+    expect(errorSelector(mockedState)).toEqual(error);
   });
 });

@@ -1,5 +1,6 @@
 // import React from 'react';
 // import { mount } from 'enzyme';
+import { loadToken } from 'containers/App/actions';
 import { mapDispatchToProps } from '../index';
 import { changeInput } from '../actions';
 
@@ -34,6 +35,21 @@ describe('mapDispatchToProps', () => {
       const evt = { preventDefault };
       result.handleSubmit(evt);
       expect(preventDefault).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('getToken', () => {
+    it('should be injected', () => {
+      const dispatch = jest.fn();
+      const result = mapDispatchToProps(dispatch);
+      expect(result.getToken).toBeDefined();
+    });
+
+    it('should dispatch getToken when called', () => {
+      const dispatch = jest.fn();
+      const result = mapDispatchToProps(dispatch);
+      result.getToken();
+      expect(dispatch).toHaveBeenCalledWith(loadToken());
     });
   });
 });

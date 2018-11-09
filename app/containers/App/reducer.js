@@ -15,6 +15,8 @@ import {
 
 export const initialState = fromJS({
   token: false,
+  email: false,
+  password: false,
   loading: false,
   error: false,
 });
@@ -28,13 +30,22 @@ function appReducer(state = initialState, action) {
       return state.set('token', false);
 
     case CREATE_SESSION:
-      return state.set('loading', true).set('error', false);
+      return state
+        .set('loading', true)
+        .set('error', false)
+        .set('email', action.email)
+        .set('password', action.password);
     case CREATE_SESSION_SUCCESS:
       return state
-        .set('token', action.token['Session-Token'])
-        .set('loading', false);
+        .set('loading', false)
+        .set('email', false)
+        .set('password', false);
     case CREATE_SESSION_ERROR:
-      return state.set('error', action.error).set('loading', false);
+      return state
+        .set('error', action.error)
+        .set('loading', false)
+        .set('email', false)
+        .set('password', false);
     default:
       return state;
   }

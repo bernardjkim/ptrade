@@ -18,8 +18,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 // import Typography from '@material-ui/core/Typography';
 
-import { SigninLink } from 'containers/SigninPage/index';
-
+import { SigninLink } from 'components/Links/index';
 import ChartTabs from 'components/ChartTabs';
 import SimpleLineChart from 'components/SimpleLineChart';
 import TopBar from 'components/TopBar';
