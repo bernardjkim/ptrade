@@ -37,6 +37,9 @@ export function* getSession() {
   try {
     // Call our request helper (see 'utils/request')
     const token = yield call(request, requestURL, options);
+
+    // store jwtToken into session storage
+    sessionStorage.setItem('jwtToken', token['Session-Token']);
     yield put(createSessionSuccess(token));
   } catch (err) {
     yield put(createSessionError(err));

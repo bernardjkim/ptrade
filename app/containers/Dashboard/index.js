@@ -29,6 +29,7 @@ import injectReducer from 'utils/injectReducer';
 import { formatQuote } from 'utils/quote';
 
 import { makeSelectToken } from 'containers/App/selectors';
+import { loadToken, deleteSession } from 'containers/App/actions';
 import makeSelectDashboard, {
   makeSelectSearch,
   makeSelectTimeFrame,
@@ -56,7 +57,12 @@ import CompanyName from './components/CompanyName';
 
 /* eslint-disable react/prefer-stateless-function */
 export class Dashboard extends React.PureComponent {
-  componentDidMount() {}
+  componentDidMount() {
+    // check if token is already stored in storage
+    if (!this.props.token) {
+      this.props.getToken();
+    }
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.timeFrame !== prevProps.timeFrame) {
@@ -84,6 +90,7 @@ export class Dashboard extends React.PureComponent {
 
     // handler functions
     const {
+      deleteToken,
       handleChangeSearch,
       handleChangeTimeFrame,
       handleSubmit,
@@ -100,7 +107,7 @@ export class Dashboard extends React.PureComponent {
           search={search}
           handleSubmit={handleSubmit}
           handleChange={handleChangeSearch}
-          handleSignout={() => {}}
+          handleSignout={deleteToken}
           signinLink={SigninLink}
         />
         <ContainerCharts>
@@ -166,6 +173,8 @@ Dashboard.propTypes = {
   token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 
   // dispatch functions
+  getToken: PropTypes.func.isRequired,
+  deleteToken: PropTypes.func.isRequired,
   handleChangeSearch: PropTypes.func.isRequired,
   handleChangeTimeFrame: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
@@ -187,6 +196,12 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
+    getToken: () => {
+      dispatch(loadToken());
+    },
+    deleteToken: () => {
+      dispatch(deleteSession());
+    },
     handleChangeSearch: evt =>
       dispatch(changeSearch(evt.target.value.toUpperCase())),
 

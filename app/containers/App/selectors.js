@@ -12,4 +12,16 @@ const makeSelectLocation = () =>
 const makeSelectToken = () =>
   createSelector(selectGlobal, globalState => globalState.get('token'));
 
-export { selectGlobal, makeSelectLocation, makeSelectToken };
+const makeSelectLoading = () =>
+  createSelector(selectGlobal, globalState => globalState.get('loading'));
+
+const makeSelectError = () =>
+  createSelector(selectGlobal, globalState => globalState.get('error'));
+
+export {
+  selectGlobal,
+  makeSelectLocation,
+  makeSelectToken,
+  makeSelectError,
+  makeSelectLoading,
+};

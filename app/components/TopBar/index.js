@@ -29,9 +29,7 @@ function TopBar(props) {
   return (
     <StyledAppBar position="static" color="inherit">
       <Toolbar>
-        <Typography variant="title" color="inherit">
-          PTrade
-        </Typography>
+        <Typography color="inherit">PTrade</Typography>
         <SearchBar
           search={props.search}
           handleSubmit={props.handleSubmit}
@@ -51,12 +49,12 @@ function TopBar(props) {
 }
 
 TopBar.propTypes = {
-  signinLink: PropTypes.element,
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSignout: PropTypes.func.isRequired,
+  signinLink: PropTypes.func.isRequired,
 };
 
 export default TopBar;

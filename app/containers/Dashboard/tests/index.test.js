@@ -1,34 +1,8 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+// import React from 'react';
+// import { shallow } from 'enzyme';
 
-import { Dashboard, mapDispatchToProps } from '../index';
+import { mapDispatchToProps } from '../index';
 import { changeSearch, changeTimeFrame, selectSymbol } from '../actions';
-
-describe('<Dashboard />', () => {
-  it('should render the TopBar', () => {
-    const renderedComponent = shallow(
-      <Dashboard
-        handleChangeSearch={() => {}}
-        handleSubmit={() => {}}
-        handleChangeTimeFrame={() => {}}
-      />,
-    );
-    expect(renderedComponent.find('TopBar').getElement()).toBeDefined();
-  });
-
-  it('should render the Container', () => {
-    const renderedComponent = shallow(
-      <Dashboard
-        handleChangeSearch={() => {}}
-        handleSubmit={() => {}}
-        handleChangeTimeFrame={() => {}}
-      />,
-    );
-    expect(
-      renderedComponent.find('ContainerCharts').getElement(),
-    ).toBeDefined();
-  });
-});
 
 describe('mapDispatchToProps', () => {
   describe('handleChangeSearch', () => {

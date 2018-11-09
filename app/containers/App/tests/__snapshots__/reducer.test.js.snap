@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`appReducer handles the createSession action 1`] = `
+Immutable.Map {
+  "token": false,
+  "loading": true,
+  "error": false,
+}
+`;
+
+exports[`appReducer handles the deleteSession action 1`] = `
+Immutable.Map {
+  "token": false,
+  "loading": false,
+  "error": false,
+}
+`;
+
+exports[`appReducer handles the loadToken action 1`] = `
+Immutable.Map {
+  "token": null,
+  "loading": false,
+  "error": false,
+}
+`;
+
+exports[`appReducer returns the initial state 1`] = `
+Immutable.Map {
+  "token": false,
+  "loading": false,
+  "error": false,
+}
+`;

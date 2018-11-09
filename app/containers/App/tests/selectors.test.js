@@ -1,6 +1,12 @@
 import { fromJS } from 'immutable';
 
-import { selectGlobal, makeSelectLocation } from '../selectors';
+import {
+  selectGlobal,
+  makeSelectLocation,
+  makeSelectToken,
+  makeSelectLoading,
+  makeSelectError,
+} from '../selectors';
 
 describe('makeSelectLocation', () => {
   const locationStateSelector = makeSelectLocation();
@@ -33,5 +39,44 @@ describe('makeSelectLocation', () => {
     expect(locationStateSelector(mockedState)).toEqual(
       mockedState.getIn(['router', 'location']).toJS(),
     );
+  });
+});
+
+describe('makeSelectToken', () => {
+  const searchSelector = makeSelectToken();
+  it('should select the token', () => {
+    const token = 'token';
+    const mockedState = fromJS({
+      global: {
+        token,
+      },
+    });
+    expect(searchSelector(mockedState)).toEqual(token);
+  });
+});
+
+describe('makeSelectLoading', () => {
+  const searchSelector = makeSelectLoading();
+  it('should select the loading value', () => {
+    const loading = false;
+    const mockedState = fromJS({
+      global: {
+        loading,
+      },
+    });
+    expect(searchSelector(mockedState)).toEqual(false);
+  });
+});
+
+describe('makeSelectError', () => {
+  const searchSelector = makeSelectError();
+  it('should select the error', () => {
+    const error = 404;
+    const mockedState = fromJS({
+      global: {
+        error,
+      },
+    });
+    expect(searchSelector(mockedState)).toEqual(error);
   });
 });

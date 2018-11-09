@@ -5,10 +5,39 @@
  */
 
 import {
+  LOAD_TOKEN,
   CREATE_SESSION,
   CREATE_SESSION_ERROR,
   CREATE_SESSION_SUCCESS,
+  DELETE_SESSION,
 } from './constants';
+
+/**
+ * Load current jwt token if available
+ *
+ * @return {object} An action object with a type of LOAD_TOKEN
+ *
+ */
+export function loadToken() {
+  const token = sessionStorage.getItem('jwtToken');
+  return {
+    type: LOAD_TOKEN,
+    token,
+  };
+}
+
+/**
+ * Delete the current session token
+ *
+ * @return {object} An action object with a type of DELETE_TOKEN
+ *
+ */
+export function deleteSession() {
+  sessionStorage.removeItem('jwtToken');
+  return {
+    type: DELETE_SESSION,
+  };
+}
 
 /**
  * Create session, this action starts the request saga

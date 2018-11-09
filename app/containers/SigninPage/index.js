@@ -14,7 +14,7 @@ import { Redirect, Link } from 'react-router-dom';
 
 import Typography from '@material-ui/core/Typography';
 
-import { createSession } from 'containers/App/actions';
+import { createSession, loadToken } from 'containers/App/actions';
 import { makeSelectToken } from 'containers/App/selectors';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -38,6 +38,13 @@ export const SigninLink = props => (
 
 /* eslint-disable react/prefer-stateless-function */
 export class SigninPage extends React.PureComponent {
+  componentWillMount() {
+    // check if token is already stored in storage
+    if (!this.props.token) {
+      this.props.getToken();
+    }
+  }
+
   render() {
     const {
       handleSubmit,
@@ -96,8 +103,9 @@ export class SigninPage extends React.PureComponent {
 }
 
 SigninPage.propTypes = {
-  handleSubmit: PropTypes.func,
-  handleChangeInput: PropTypes.func,
+  handleSubmit: PropTypes.func.isRequired,
+  handleChangeInput: PropTypes.func.isRequired,
+  getToken: PropTypes.func.isRequired,
   showMissing: PropTypes.bool,
   email: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   password: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
@@ -118,6 +126,9 @@ export function mapDispatchToProps(dispatch) {
     handleSubmit: evt => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(createSession());
+    },
+    getToken: () => {
+      dispatch(loadToken());
     },
     dispatch,
   };

@@ -9,7 +9,16 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-// ** CREATE SESSION **
+export const LOAD_TOKEN = 'app/App/LOAD_TOKEN';
+
+// CREATE SESSION
 export const CREATE_SESSION = 'app/App/CREATE_SESSION';
 export const CREATE_SESSION_SUCCESS = 'app/App/CREATE_SESSION_SUCCESS';
 export const CREATE_SESSION_ERROR = 'app/App/CREATE_SESSION_ERROR';
+
+// DELETE SESSION
+// TODO: is it enough to just delete the client-side token? or do i need to
+// black list token on the backend?
+export const DELETE_SESSION = 'app/App/DELETE_SESSION';
+export const DELETE_SESSION_SUCCESS = 'app/App/DELETE_SESSION_SUCCESS';
+export const DELETE_SESSION_ERROR = 'app/App/DELETE_SESSION_ERROR';

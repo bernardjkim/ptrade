@@ -6,9 +6,11 @@
 
 import { fromJS } from 'immutable';
 import {
+  LOAD_TOKEN,
   CREATE_SESSION,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
+  DELETE_SESSION,
 } from './constants';
 
 export const initialState = fromJS({
@@ -17,8 +19,14 @@ export const initialState = fromJS({
   error: false,
 });
 
-function signinPageReducer(state = initialState, action) {
+function appReducer(state = initialState, action) {
   switch (action.type) {
+    case LOAD_TOKEN:
+      return state.set('token', action.token);
+
+    case DELETE_SESSION:
+      return state.set('token', false);
+
     case CREATE_SESSION:
       return state.set('loading', true).set('error', false);
     case CREATE_SESSION_SUCCESS:
@@ -32,4 +40,4 @@ function signinPageReducer(state = initialState, action) {
   }
 }
 
-export default signinPageReducer;
+export default appReducer;
