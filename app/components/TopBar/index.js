@@ -37,7 +37,10 @@ function TopBar(props) {
         />
         <Grow />
         {props.token ? (
-          <UserMenu handleSignout={props.handleSignout} />
+          <UserMenu
+            handleSignout={props.handleSignout}
+            profileLink={props.profileLink}
+          />
         ) : (
           <Button component={props.signinLink} color="inherit">
             <Typography color="inherit">Sign in</Typography>
@@ -55,6 +58,7 @@ TopBar.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleSignout: PropTypes.func.isRequired,
   signinLink: PropTypes.func.isRequired,
+  profileLink: PropTypes.func.isRequired,
 };
 
 export default TopBar;

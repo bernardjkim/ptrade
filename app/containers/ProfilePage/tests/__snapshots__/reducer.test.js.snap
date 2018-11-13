@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`profilePageReducer handles the change time frame action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "portfolioValue": false,
+  "timeFrame": 1,
+}
+`;
+
+exports[`profilePageReducer handles the load portfolioValue action 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "portfolioValue": false,
+  "timeFrame": 0,
+}
+`;

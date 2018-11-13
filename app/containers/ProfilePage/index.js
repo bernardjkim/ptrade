@@ -1,67 +1,60 @@
 /**
  *
- * Dashboard
+ * ProfilePage
  *
- * TODO: description
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
+// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { Redirect } from 'react-router-dom';
 
-import Button from '@material-ui/core/Button';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
+// import TableHead from '@material-ui/core/TableHead';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableRow from '@material-ui/core/TableRow';
+// import TableCell from '@material-ui/core/TableCell';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import { SigninLink, ProfileLink } from 'components/Links/index';
-import ChartTabs from 'components/ChartTabs';
+// import { SigninLink } from 'components/Links/index';
+import { ProfileLink } from 'components/Links/index';
+import { makeSelectToken } from 'containers/App/selectors';
+import { loadToken, deleteSession } from 'containers/App/actions';
+
+// import TopBar from 'components/TopBar';
 import SimpleLineChart from 'components/SimpleLineChart';
-import SearchBar from 'components/SearchBar';
+import ChartTabs from 'components/ChartTabs';
 import UserMenu from 'components/UserMenu';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { formatQuote } from 'utils/quote';
 
-import { makeSelectToken } from 'containers/App/selectors';
-import { loadToken, deleteSession } from 'containers/App/actions';
-import makeSelectDashboard, {
-  makeSelectSearch,
-  makeSelectTimeFrame,
-  makeSelectChart,
-  makeSelectQuote,
+import saga from './saga';
+import reducer from './reducer';
+import makeSelectProfilePage, {
   makeSelectLoading,
   makeSelectError,
-  makeSelectSymbol,
+  makeSelectPortfolioValue,
+  makeSelectTimeFrame,
 } from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import {
-  changeSearch,
-  changeTimeFrame,
-  loadChart,
-  loadQuote,
-  selectSymbol,
-} from './actions';
+
+import { loadPortfolioValue, changeTimeFrame } from './actions';
+
 import ContainerCharts from './components/ContainerCharts';
 import ContainerLeft from './components/ContainerLeft';
-import ContainerRight from './components/ContainerRight';
-import ContainerQuote from './components/ContainerQuote';
-import StyledTable from './components/StyledTable';
-import CompanyName from './components/CompanyName';
+// import ContainerRight from './components/ContainerRight';
+// import ContainerQuote from './components/ContainerQuote';
+// import StyledTable from './components/StyledTable';
+// import CompanyName from './components/CompanyName';
 import StyledAppBar from './components/StyledAppBar';
 import Grow from './components/Grow';
 
 /* eslint-disable react/prefer-stateless-function */
-export class Dashboard extends React.PureComponent {
-  componentDidMount() {
+export class ProfilePage extends React.Component {
+  componentWillMount() {
     // check if token is already stored in storage
     if (!this.props.token) {
       this.props.getToken();
@@ -72,11 +65,6 @@ export class Dashboard extends React.PureComponent {
     if (this.props.timeFrame !== prevProps.timeFrame) {
       this.props.updateChart();
     }
-
-    if (this.props.symbol !== prevProps.symbol) {
-      this.props.updateChart();
-      this.props.updateQuote();
-    }
   }
 
   render() {
@@ -85,43 +73,25 @@ export class Dashboard extends React.PureComponent {
       loading,
       error,
       chart,
-      quote,
       timeFrame,
-      search,
       token,
       // symbol,
     } = this.props;
 
     // handler functions
-    const {
-      deleteToken,
-      handleChangeSearch,
-      handleChangeTimeFrame,
-      handleSubmit,
-    } = this.props;
+    const { deleteToken, handleChangeTimeFrame } = this.props;
+
+    if (!token && !loading) {
+      return <Redirect to="/signin" />;
+    }
 
     return (
       <div>
-        <Helmet>
-          <title>Dashboard</title>
-          <meta name="description" content="Description of Dashboard" />
-        </Helmet>
         <StyledAppBar position="static" color="inherit">
           <Toolbar>
             <Typography color="inherit">PTrade</Typography>
-            <SearchBar
-              search={search}
-              handleSubmit={handleSubmit}
-              handleChange={handleChangeSearch}
-            />
             <Grow />
-            {token ? (
-              <UserMenu handleSignout={deleteToken} profileLink={ProfileLink} />
-            ) : (
-              <Button component={SigninLink} color="inherit">
-                <Typography color="inherit">Sign in</Typography>
-              </Button>
-            )}
+            <UserMenu handleSignout={deleteToken} profileLink={ProfileLink} />
           </Toolbar>
         </StyledAppBar>
         <ContainerCharts>
@@ -132,7 +102,7 @@ export class Dashboard extends React.PureComponent {
               timeFrame={timeFrame}
             />
           </ContainerLeft>
-          <ContainerRight>
+          {/* <ContainerRight>
             {quote && (
               <CompanyName variant="title" gutterBottom>
                 {quote.companyName}
@@ -168,47 +138,38 @@ export class Dashboard extends React.PureComponent {
                 </TableBody>
               </StyledTable>
             </ContainerQuote>
-          </ContainerRight>
+          </ContainerRight> */}
         </ContainerCharts>
       </div>
     );
   }
 }
 
-Dashboard.propTypes = {
+ProfilePage.propTypes = {
   // state variables
-  search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  symbol: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   chart: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  quote: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   timeFrame: PropTypes.number,
   token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 
   // dispatch functions
   getToken: PropTypes.func.isRequired,
   deleteToken: PropTypes.func.isRequired,
-  handleChangeSearch: PropTypes.func.isRequired,
   handleChangeTimeFrame: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
   updateChart: PropTypes.func.isRequired,
-  updateQuote: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  dashboard: makeSelectDashboard(),
+  profilePage: makeSelectProfilePage(),
   token: makeSelectToken(),
   timeFrame: makeSelectTimeFrame(),
-  chart: makeSelectChart(),
-  quote: makeSelectQuote(),
-  search: makeSelectSearch(),
-  symbol: makeSelectSymbol(),
+  porfolioValue: makeSelectPortfolioValue(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
 });
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     getToken: () => {
       dispatch(loadToken());
@@ -216,24 +177,13 @@ export function mapDispatchToProps(dispatch) {
     deleteToken: () => {
       dispatch(deleteSession());
     },
-    handleChangeSearch: evt =>
-      dispatch(changeSearch(evt.target.value.toUpperCase())),
 
     handleChangeTimeFrame: (_, tf) => {
       dispatch(changeTimeFrame(tf));
     },
 
-    handleSubmit: (evt, symbol) => {
-      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(selectSymbol(symbol));
-    },
-
     updateChart: () => {
-      dispatch(loadChart());
-    },
-
-    updateQuote: () => {
-      dispatch(loadQuote());
+      dispatch(loadPortfolioValue());
     },
   };
 }
@@ -243,11 +193,11 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'dashboard', reducer });
-const withSaga = injectSaga({ key: 'dashboard', saga });
+const withReducer = injectReducer({ key: 'profilePage', reducer });
+const withSaga = injectSaga({ key: 'profilePage', saga });
 
 export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(Dashboard);
+)(ProfilePage);

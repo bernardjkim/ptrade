@@ -12,3 +12,7 @@ export const SigninLink = props => (
 export const SignupLink = props => (
   <Link style={{ textDecoration: 'none' }} to="/signup" {...props} />
 );
+
+export const ProfileLink = props => (
+  <Link style={{ textDecoration: 'none' }} to="/profile" {...props} />
+);

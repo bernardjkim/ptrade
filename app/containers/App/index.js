@@ -19,6 +19,7 @@ import Dashboard from 'containers/Dashboard/Loadable';
 import SigninPage from 'containers/SigninPage/Loadable';
 import SignupPage from 'containers/SignupPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import ProfilePage from 'containers/ProfilePage/Loadable';
 import saga from './saga';
 import reducer from './reducer';
 
@@ -32,6 +33,7 @@ export function App() {
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/signin" component={SigninPage} />
         <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/profile" component={ProfilePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

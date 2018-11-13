@@ -6,14 +6,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
-// import { ProfileLink } from 'containers/ProfilePage/ProfilePage';
 
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -57,7 +54,12 @@ class UserMenu extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+          <MenuItem
+            onClick={this.handleClose}
+            component={this.props.profileLink}
+          >
+            Profile
+          </MenuItem>
           <MenuItem onClick={this.handleClose}>My account</MenuItem>
           <MenuItem onClick={this.signout}>Sign out</MenuItem>
         </Menu>
@@ -68,6 +70,7 @@ class UserMenu extends React.Component {
 
 UserMenu.propTypes = {
   handleSignout: PropTypes.func.isRequired,
+  profileLink: PropTypes.func.isRequired,
 };
 
 export default UserMenu;

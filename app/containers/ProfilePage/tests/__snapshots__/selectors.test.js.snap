@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`makeSelectError should select the error 1`] = `404`;
+
+exports[`makeSelectLoading should select the loading 1`] = `false`;
+
+exports[`makeSelectPortfolioValue should select the error 1`] = `undefined`;
+
+exports[`makeSelectTimeFrame should select the error 1`] = `0`;
+
+exports[`selectProfilePageDomain Expect to have unit tests specified 1`] = `[Function]`;

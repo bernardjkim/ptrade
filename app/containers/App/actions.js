@@ -28,6 +28,7 @@ export function loadToken() {
 
 /**
  * Delete the current session token
+ * TODO: want to black list jwt on server-side as well?
  *
  * @return {object} An action object with a type of DELETE_TOKEN
  *
