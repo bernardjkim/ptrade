@@ -19,7 +19,9 @@ import {
  *
  */
 export function loadToken() {
-  const token = sessionStorage.getItem('jwtToken');
+  let token = sessionStorage.getItem('jwtToken');
+  if (!token) token = false;
+
   return {
     type: LOAD_TOKEN,
     token,

@@ -6,11 +6,11 @@ describe('appReducer', () => {
   let state;
   beforeEach(() => {
     state = fromJS({
+      loading: false,
+      error: false,
       token: false,
       email: false,
       password: false,
-      loading: false,
-      error: false,
     });
   });
   it('returns the initial state', () => {

@@ -15,7 +15,7 @@ import dashboard, { getChart, getQuote } from '../saga';
 
 const symbol = 'AAPL';
 
-describe('getData Saga', () => {
+describe('getChart Saga', () => {
   let getDataGenerator;
 
   // We have to test twice, once for a successful load and once for an unsuccessful one

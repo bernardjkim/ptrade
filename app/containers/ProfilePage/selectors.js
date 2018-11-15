@@ -20,9 +20,24 @@ const makeSelectError = () =>
     profileState.get('error'),
   );
 
+const makeSelectBalance = () =>
+  createSelector(selectProfilePageDomain, profileState =>
+    profileState.get('balance'),
+  );
+
+const makeSelectPositions = () =>
+  createSelector(selectProfilePageDomain, profileState =>
+    profileState.get('positions'),
+  );
+
+const makeSelectChart = () =>
+  createSelector(selectProfilePageDomain, profileState =>
+    profileState.get('chart'),
+  );
+
 const makeSelectPortfolioValue = () =>
   createSelector(selectProfilePageDomain, profileState =>
-    profileState.get('protfolioValue'),
+    profileState.get('portfolioValue'),
   );
 
 const makeSelectTimeFrame = () =>
@@ -42,6 +57,9 @@ export {
   selectProfilePageDomain,
   makeSelectLoading,
   makeSelectError,
+  makeSelectBalance,
+  makeSelectChart,
+  makeSelectPositions,
   makeSelectPortfolioValue,
   makeSelectTimeFrame,
 };

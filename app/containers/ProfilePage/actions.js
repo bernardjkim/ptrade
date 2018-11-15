@@ -6,9 +6,16 @@
 
 import {
   CHANGE_TIME_FRAME,
-  LOAD_PORTFOLIO_VALUE,
-  LOAD_PORTFOLIO_VALUE_ERROR,
-  LOAD_PORTFOLIO_VALUE_SUCCESS,
+  SET_PORTFOLIO_VALUE,
+  LOAD_BALANCE,
+  LOAD_BALANCE_ERROR,
+  LOAD_BALANCE_SUCCESS,
+  LOAD_POSITIONS,
+  LOAD_POSITIONS_ERROR,
+  LOAD_POSITIONS_SUCCESS,
+  LOAD_CHART,
+  LOAD_CHART_ERROR,
+  LOAD_CHART_SUCCESS,
 } from './constants';
 
 export function changeTimeFrame(timeFrame) {
@@ -18,22 +25,69 @@ export function changeTimeFrame(timeFrame) {
   };
 }
 
-export function loadPortfolioValue() {
+export function setPortfolioValue(total) {
   return {
-    type: LOAD_PORTFOLIO_VALUE,
+    type: SET_PORTFOLIO_VALUE,
+    value: total,
   };
 }
 
-export function portfolioValueSuccess(portfolioValue) {
+export function loadBalance() {
   return {
-    type: LOAD_PORTFOLIO_VALUE_SUCCESS,
-    portfolioValue,
+    type: LOAD_BALANCE,
   };
 }
 
-export function portfolioValueError(error) {
+export function loadBalanceSuccess(balance) {
   return {
-    type: LOAD_PORTFOLIO_VALUE_ERROR,
+    type: LOAD_BALANCE_SUCCESS,
+    balance,
+  };
+}
+
+export function loadBalanceError(error) {
+  return {
+    type: LOAD_BALANCE_ERROR,
+    error,
+  };
+}
+
+export function loadPositions() {
+  return {
+    type: LOAD_POSITIONS,
+  };
+}
+
+export function loadPositionsSuccess(positions) {
+  return {
+    type: LOAD_POSITIONS_SUCCESS,
+    positions,
+  };
+}
+
+export function loadPositionsError(error) {
+  return {
+    type: LOAD_POSITIONS_ERROR,
+    error,
+  };
+}
+
+export function loadChart() {
+  return {
+    type: LOAD_CHART,
+  };
+}
+
+export function loadChartSuccess(chart) {
+  return {
+    type: LOAD_CHART_SUCCESS,
+    chart,
+  };
+}
+
+export function loadChartError(error) {
+  return {
+    type: LOAD_CHART_ERROR,
     error,
   };
 }

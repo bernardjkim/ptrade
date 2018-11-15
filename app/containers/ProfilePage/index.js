@@ -37,16 +37,25 @@ import reducer from './reducer';
 import makeSelectProfilePage, {
   makeSelectLoading,
   makeSelectError,
-  makeSelectPortfolioValue,
+  makeSelectBalance,
+  makeSelectPositions,
   makeSelectTimeFrame,
+  makeSelectChart,
+  makeSelectPortfolioValue,
 } from './selectors';
 
-import { loadPortfolioValue, changeTimeFrame } from './actions';
+import {
+  loadBalance,
+  changeTimeFrame,
+  loadChart,
+  loadPositions,
+  setPortfolioValue,
+} from './actions';
 
 import ContainerCharts from './components/ContainerCharts';
 import ContainerLeft from './components/ContainerLeft';
-// import ContainerRight from './components/ContainerRight';
-// import ContainerQuote from './components/ContainerQuote';
+import ContainerRight from './components/ContainerRight';
+import ContainerQuote from './components/ContainerQuote';
 // import StyledTable from './components/StyledTable';
 // import CompanyName from './components/CompanyName';
 import StyledAppBar from './components/StyledAppBar';
@@ -58,12 +67,30 @@ export class ProfilePage extends React.Component {
     // check if token is already stored in storage
     if (!this.props.token) {
       this.props.getToken();
+    } else {
+      this.props.updateChart();
+      this.props.updateBalance();
+      this.props.updatePositions();
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.timeFrame !== prevProps.timeFrame) {
+    // if (this.props.timeFrame !== prevProps.timeFrame) {
+    //   this.props.updateChart();
+    // }
+    if (!this.props.token && this.props.token !== prevProps.token) {
       this.props.updateChart();
+      this.props.updateBalance();
+      this.props.updatePositions();
+    }
+
+    if (
+      this.props.balance &&
+      this.props.positions &&
+      this.props.balance !== prevProps.balance &&
+      this.props.positions !== prevProps.positions
+    ) {
+      this.props.updatePortfolioValue(this.props.balance, this.props.positions);
     }
   }
 
@@ -73,14 +100,17 @@ export class ProfilePage extends React.Component {
       loading,
       error,
       chart,
+      // balance,
+      // positions,
+      portfolioValue,
       timeFrame,
       token,
-      // symbol,
     } = this.props;
 
     // handler functions
     const { deleteToken, handleChangeTimeFrame } = this.props;
 
+    // TODO: load token does not set loading, so redirects even if token is loading
     if (!token && !loading) {
       return <Redirect to="/signin" />;
     }
@@ -102,14 +132,12 @@ export class ProfilePage extends React.Component {
               timeFrame={timeFrame}
             />
           </ContainerLeft>
-          {/* <ContainerRight>
-            {quote && (
-              <CompanyName variant="title" gutterBottom>
-                {quote.companyName}
-              </CompanyName>
-            )}
+          <ContainerRight>
             <ContainerQuote>
-              <StyledTable>
+              <Typography variant="title" gutterBottom>
+                {portfolioValue && `${portfolioValue.toFixed(2)}`}
+              </Typography>
+              {/* <StyledTable>
                 <TableHead>
                   <TableRow>
                     {quote && (
@@ -136,9 +164,9 @@ export class ProfilePage extends React.Component {
                     </TableRow>
                   ))}
                 </TableBody>
-              </StyledTable>
+              </StyledTable> */}
             </ContainerQuote>
-          </ContainerRight> */}
+          </ContainerRight>
         </ContainerCharts>
       </div>
     );
@@ -149,22 +177,31 @@ ProfilePage.propTypes = {
   // state variables
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  chart: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  timeFrame: PropTypes.number,
   token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  chart: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  balance: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  positions: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  portfolioValue: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  timeFrame: PropTypes.number,
 
   // dispatch functions
   getToken: PropTypes.func.isRequired,
   deleteToken: PropTypes.func.isRequired,
   handleChangeTimeFrame: PropTypes.func.isRequired,
   updateChart: PropTypes.func.isRequired,
+  updateBalance: PropTypes.func.isRequired,
+  updatePositions: PropTypes.func.isRequired,
+  updatePortfolioValue: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   profilePage: makeSelectProfilePage(),
   token: makeSelectToken(),
   timeFrame: makeSelectTimeFrame(),
-  porfolioValue: makeSelectPortfolioValue(),
+  balance: makeSelectBalance(),
+  positions: makeSelectPositions(),
+  chart: makeSelectChart(),
+  portfolioValue: makeSelectPortfolioValue(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
 });
@@ -183,7 +220,23 @@ function mapDispatchToProps(dispatch) {
     },
 
     updateChart: () => {
-      dispatch(loadPortfolioValue());
+      dispatch(loadChart());
+    },
+
+    updateBalance: () => {
+      dispatch(loadBalance());
+    },
+
+    updatePositions: () => {
+      dispatch(loadPositions());
+    },
+
+    updatePortfolioValue: (balance, positions) => {
+      let total = balance;
+      positions.forEach(p => {
+        total += p.shares * p.price_per_share;
+      });
+      dispatch(setPortfolioValue(total));
     },
   };
 }

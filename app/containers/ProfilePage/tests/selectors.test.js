@@ -3,14 +3,20 @@ import {
   selectProfilePageDomain,
   makeSelectError,
   makeSelectLoading,
-  makeSelectPortfolioValue,
+  makeSelectBalance,
+  makeSelectChart,
   makeSelectTimeFrame,
+  makeSelectPortfolioValue,
+  makeSelectPositions,
 } from '../selectors';
 
 const mockedState = fromJS({
   profilePage: {
     loading: false,
     error: 404,
+    balance: false,
+    positions: false,
+    chart: false,
     profileValue: false,
     timeFrame: 0,
   },
@@ -36,10 +42,24 @@ describe('makeSelectError', () => {
   });
 });
 
-describe('makeSelectPortfolioValue', () => {
-  const portfolioValueSelector = makeSelectPortfolioValue();
+describe('makeSelectBalance', () => {
+  const balanceSelector = makeSelectBalance();
   it('should select the error', () => {
-    expect(portfolioValueSelector(mockedState)).toMatchSnapshot();
+    expect(balanceSelector(mockedState)).toMatchSnapshot();
+  });
+});
+
+describe('makeSelectPositions', () => {
+  const positionsSelector = makeSelectPositions();
+  it('should select the error', () => {
+    expect(positionsSelector(mockedState)).toMatchSnapshot();
+  });
+});
+
+describe('makeSelectChart', () => {
+  const chartSelector = makeSelectChart();
+  it('should select the error', () => {
+    expect(chartSelector(mockedState)).toMatchSnapshot();
   });
 });
 
@@ -47,5 +67,12 @@ describe('makeSelectTimeFrame', () => {
   const timeFrameSelector = makeSelectTimeFrame();
   it('should select the error', () => {
     expect(timeFrameSelector(mockedState)).toMatchSnapshot();
+  });
+});
+
+describe('makeSelectPortfolioValue', () => {
+  const portfolioValueSelector = makeSelectPortfolioValue();
+  it('should select the error', () => {
+    expect(portfolioValueSelector(mockedState)).toMatchSnapshot();
   });
 });

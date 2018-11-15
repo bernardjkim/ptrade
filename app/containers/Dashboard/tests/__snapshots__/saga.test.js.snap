@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getData Saga requests the data successfully with 1d data 1`] = `
+exports[`getChart Saga requests the data successfully with 1d data 1`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -10,7 +10,7 @@ Object {
 }
 `;
 
-exports[`getData Saga requests the data successfully with 1d data 2`] = `
+exports[`getChart Saga requests the data successfully with 1d data 2`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -20,7 +20,7 @@ Object {
 }
 `;
 
-exports[`getData Saga requests the data successfully with 1m data 1`] = `
+exports[`getChart Saga requests the data successfully with 1m data 1`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -30,7 +30,7 @@ Object {
 }
 `;
 
-exports[`getData Saga requests the data successfully with 1m data 2`] = `
+exports[`getChart Saga requests the data successfully with 1m data 2`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`getData Saga should call the chartLoadingError action if the response errors 1`] = `
+exports[`getChart Saga should call the chartLoadingError action if the response errors 1`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {
@@ -50,7 +50,7 @@ Object {
 }
 `;
 
-exports[`getData Saga should call the chartLoadingError action if the response errors 2`] = `
+exports[`getChart Saga should call the chartLoadingError action if the response errors 2`] = `
 Object {
   "@@redux-saga/IO": true,
   "SELECT": Object {

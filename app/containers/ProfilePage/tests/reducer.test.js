@@ -1,6 +1,12 @@
 import { fromJS } from 'immutable';
 import profilePageReducer from '../reducer';
-import { changeTimeFrame, loadPortfolioValue } from '../actions';
+import {
+  changeTimeFrame,
+  loadBalance,
+  loadChart,
+  loadPositions,
+  setPortfolioValue,
+} from '../actions';
 
 describe('profilePageReducer', () => {
   let state;
@@ -8,6 +14,9 @@ describe('profilePageReducer', () => {
     state = fromJS({
       loading: false,
       error: false,
+      balance: false,
+      positions: false,
+      chart: false,
       portfolioValue: false,
       timeFrame: 0,
     });
@@ -20,7 +29,23 @@ describe('profilePageReducer', () => {
     expect(profilePageReducer(state, changeTimeFrame(1))).toMatchSnapshot();
   });
 
-  it('handles the load portfolioValue action', () => {
-    expect(profilePageReducer(state, loadPortfolioValue())).toMatchSnapshot();
+  it('handles the set portfolio value action', () => {
+    expect(profilePageReducer(state, setPortfolioValue(100))).toMatchSnapshot();
+  });
+
+  it('handles the load balance action', () => {
+    expect(profilePageReducer(state, loadBalance())).toMatchSnapshot();
+  });
+
+  it('handles the load positions action', () => {
+    expect(profilePageReducer(state, loadPositions())).toMatchSnapshot();
+  });
+
+  it('handles the load chart action', () => {
+    expect(profilePageReducer(state, loadChart())).toMatchSnapshot();
+  });
+
+  it('handles the load chart action', () => {
+    expect(profilePageReducer(state, loadChart())).toMatchSnapshot();
   });
 });

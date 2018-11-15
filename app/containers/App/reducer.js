@@ -14,11 +14,11 @@ import {
 } from './constants';
 
 export const initialState = fromJS({
+  loading: false,
+  error: false,
   token: false,
   email: false,
   password: false,
-  loading: false,
-  error: false,
 });
 
 function appReducer(state = initialState, action) {

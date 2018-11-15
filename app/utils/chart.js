@@ -32,3 +32,17 @@ export function parseChart(chart, oneDay) {
  * @return {array}          Data with added data points
  */
 // export function fillChart(chart, tf) {}
+
+/**
+ * Parse user chart
+ *
+ * @param  {array} chart  An array of data points
+ *
+ * @return {array}        The parsed data
+ */
+export function parseUserChart(chart) {
+  return chart.map(c => ({
+    date: parseDate(c.date, '%Y-%m-%dT%H:%M:%SZ', '%b %d %Y'),
+    value: parseFloat(c.value.toPrecision(6)),
+  }));
+}

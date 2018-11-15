@@ -2,40 +2,40 @@
 
 exports[`appReducer handles the createSession action 1`] = `
 Immutable.Map {
+  "loading": true,
+  "error": false,
   "token": false,
   "email": "email",
   "password": "password",
-  "loading": true,
-  "error": false,
 }
 `;
 
 exports[`appReducer handles the deleteSession action 1`] = `
 Immutable.Map {
+  "loading": false,
+  "error": false,
   "token": false,
   "email": false,
   "password": false,
-  "loading": false,
-  "error": false,
 }
 `;
 
 exports[`appReducer handles the loadToken action 1`] = `
 Immutable.Map {
-  "token": null,
-  "email": false,
-  "password": false,
   "loading": false,
   "error": false,
+  "token": false,
+  "email": false,
+  "password": false,
 }
 `;
 
 exports[`appReducer returns the initial state 1`] = `
 Immutable.Map {
+  "loading": false,
+  "error": false,
   "token": false,
   "email": false,
   "password": false,
-  "loading": false,
-  "error": false,
 }
 `;
