@@ -16,7 +16,6 @@ import {
   LOAD_CHART_SUCCESS,
   LOAD_CHART_ERROR,
   LOAD_CHART,
-  SET_PORTFOLIO_VALUE,
 } from './constants';
 
 export const initialState = fromJS({
@@ -25,7 +24,7 @@ export const initialState = fromJS({
   balance: false,
   positions: false,
   chart: false,
-  portfolioValue: false,
+  totalInvested: false,
   timeFrame: 0,
 });
 
@@ -33,9 +32,6 @@ function profilePageReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_TIME_FRAME:
       return state.set('timeFrame', action.timeFrame);
-
-    case SET_PORTFOLIO_VALUE:
-      return state.set('portfolioValue', action.value);
 
     case LOAD_BALANCE:
       return state.set('loading', true).set('error', false);
@@ -47,7 +43,10 @@ function profilePageReducer(state = initialState, action) {
     case LOAD_POSITIONS:
       return state.set('loading', true).set('error', false);
     case LOAD_POSITIONS_SUCCESS:
-      return state.set('loading', false).set('positions', action.positions);
+      return state
+        .set('loading', false)
+        .set('positions', action.positions)
+        .set('totalInvested', action.total);
     case LOAD_POSITIONS_ERROR:
       return state.set('loading', false).set('error', action.error);
 

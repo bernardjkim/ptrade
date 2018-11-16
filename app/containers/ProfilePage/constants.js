@@ -5,7 +5,6 @@
  */
 
 export const CHANGE_TIME_FRAME = 'app/ProfilePage/CHANGE_TIME_FRAME';
-export const SET_PORTFOLIO_VALUE = 'app/ProfilePage/SET_PORTFOLIO_VALUE';
 
 export const LOAD_BALANCE = 'app/ProfilePage/LOAD_BALANCE';
 export const LOAD_BALANCE_SUCCESS = 'app/ProfilePage/LOAD_BALANCE_SUCCCESS';

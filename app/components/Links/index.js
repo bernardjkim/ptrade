@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const dashboardLink = props => (
+export const DashboardLink = props => (
   <Link style={{ textDecoration: 'none' }} to="/dashboard" {...props} />
 );
 

@@ -6,7 +6,6 @@
 
 import {
   CHANGE_TIME_FRAME,
-  SET_PORTFOLIO_VALUE,
   LOAD_BALANCE,
   LOAD_BALANCE_ERROR,
   LOAD_BALANCE_SUCCESS,
@@ -22,13 +21,6 @@ export function changeTimeFrame(timeFrame) {
   return {
     type: CHANGE_TIME_FRAME,
     timeFrame,
-  };
-}
-
-export function setPortfolioValue(total) {
-  return {
-    type: SET_PORTFOLIO_VALUE,
-    value: total,
   };
 }
 
@@ -59,9 +51,14 @@ export function loadPositions() {
 }
 
 export function loadPositionsSuccess(positions) {
+  let total = 0;
+  positions.forEach(p => {
+    total += p.shares * p.price_per_share;
+  });
   return {
     type: LOAD_POSITIONS_SUCCESS,
     positions,
+    total,
   };
 }
 

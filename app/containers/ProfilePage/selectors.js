@@ -35,10 +35,14 @@ const makeSelectChart = () =>
     profileState.get('chart'),
   );
 
-const makeSelectPortfolioValue = () =>
+const makeSelectTotalInvested = () =>
   createSelector(selectProfilePageDomain, profileState =>
-    profileState.get('portfolioValue'),
+    profileState.get('totalInvested'),
   );
+// const makeSelectPortfolioValue = () =>
+//   createSelector(selectProfilePageDomain, profileState =>
+//     profileState.get('portfolioValue'),
+// );
 
 const makeSelectTimeFrame = () =>
   createSelector(selectProfilePageDomain, profileState =>
@@ -60,6 +64,7 @@ export {
   makeSelectBalance,
   makeSelectChart,
   makeSelectPositions,
-  makeSelectPortfolioValue,
+  makeSelectTotalInvested,
+  // makeSelectPortfolioValue,
   makeSelectTimeFrame,
 };
