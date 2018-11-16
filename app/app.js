@@ -46,7 +46,7 @@ const generateClassName = createGenerateClassName();
 const jss = create({
   ...jssPreset(),
   // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-  insertionPoint: 'jss-insertion-point',
+  insertionPoint: document.getElementById('jss-insertion-point'),
 });
 
 const render = messages => {
