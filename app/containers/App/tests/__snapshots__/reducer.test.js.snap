@@ -24,7 +24,7 @@ exports[`appReducer handles the loadToken action 1`] = `
 Immutable.Map {
   "loading": false,
   "error": false,
-  "token": false,
+  "token": "",
   "email": false,
   "password": false,
 }

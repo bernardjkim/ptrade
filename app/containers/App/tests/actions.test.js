@@ -4,7 +4,7 @@ import { LOAD_TOKEN, CREATE_SESSION, DELETE_SESSION } from '../constants';
 describe('Dashboard actions', () => {
   describe('loadToken', () => {
     it('has a type of LOAD_TOKEN', () => {
-      const token = false;
+      const token = '';
       const expected = {
         type: LOAD_TOKEN,
         token,

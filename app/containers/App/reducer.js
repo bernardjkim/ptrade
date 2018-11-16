@@ -6,11 +6,11 @@
 
 import { fromJS } from 'immutable';
 import {
-  LOAD_TOKEN,
   CREATE_SESSION,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
   DELETE_SESSION,
+  LOAD_TOKEN,
 } from './constants';
 
 export const initialState = fromJS({

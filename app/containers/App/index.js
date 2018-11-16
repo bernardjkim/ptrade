@@ -16,10 +16,11 @@ import injectSaga from 'utils/injectSaga';
 
 import Dashboard from 'containers/Dashboard/Loadable';
 // import HomePage from 'containers/HomePage/Loadable';
-import SigninPage from 'containers/SigninPage/Loadable';
-import SignupPage from 'containers/SignupPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import ProfilePage from 'containers/ProfilePage/Loadable';
+import SigninPage from 'containers/SigninPage/Loadable';
+import SignupPage from 'containers/SignupPage/Loadable';
+
 import saga from './saga';
 import reducer from './reducer';
 
@@ -31,9 +32,9 @@ export function App() {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/profile" component={ProfilePage} />
         <Route exact path="/signin" component={SigninPage} />
         <Route exact path="/signup" component={SignupPage} />
-        <Route exact path="/profile" component={ProfilePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

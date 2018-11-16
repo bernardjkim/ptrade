@@ -2,7 +2,8 @@
  *
  * Dashboard
  *
- * TODO: description
+ * Dashboard page allows the user to search for specific stock symbols and view
+ * the charts.
  */
 
 import React from 'react';
@@ -32,6 +33,7 @@ import { formatQuote } from 'utils/quote';
 
 import { makeSelectToken } from 'containers/App/selectors';
 import { loadToken, deleteSession } from 'containers/App/actions';
+
 import makeSelectDashboard, {
   makeSelectSearch,
   makeSelectTimeFrame,
@@ -69,10 +71,12 @@ export class Dashboard extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    // update chart if time frame changes
     if (this.props.timeFrame !== prevProps.timeFrame) {
       this.props.updateChart();
     }
 
+    // update chart if selected symbol changes
     if (this.props.symbol !== prevProps.symbol) {
       this.props.updateChart();
       this.props.updateQuote();
@@ -179,12 +183,12 @@ Dashboard.propTypes = {
   // state variables
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   symbol: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   chart: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   quote: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   timeFrame: PropTypes.number,
   token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  loading: PropTypes.bool,
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 
   // dispatch functions
   getToken: PropTypes.func.isRequired,
@@ -216,22 +220,19 @@ export function mapDispatchToProps(dispatch) {
     deleteToken: () => {
       dispatch(deleteSession());
     },
-    handleChangeSearch: evt =>
-      dispatch(changeSearch(evt.target.value.toUpperCase())),
-
+    handleChangeSearch: evt => {
+      dispatch(changeSearch(evt.target.value.toUpperCase()));
+    },
     handleChangeTimeFrame: (_, tf) => {
       dispatch(changeTimeFrame(tf));
     },
-
     handleSubmit: (evt, symbol) => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(selectSymbol(symbol));
     },
-
     updateChart: () => {
       dispatch(loadChart());
     },
-
     updateQuote: () => {
       dispatch(loadQuote());
     },

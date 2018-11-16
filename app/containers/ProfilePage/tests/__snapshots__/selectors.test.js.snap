@@ -8,8 +8,6 @@ exports[`makeSelectError should select the error 1`] = `404`;
 
 exports[`makeSelectLoading should select the loading 1`] = `false`;
 
-exports[`makeSelectPortfolioValue should select the error 1`] = `undefined`;
-
 exports[`makeSelectPositions should select the error 1`] = `false`;
 
 exports[`makeSelectTimeFrame should select the error 1`] = `0`;

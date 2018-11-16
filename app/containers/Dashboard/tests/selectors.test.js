@@ -72,9 +72,9 @@ describe('makeSelectChart', () => {
   });
 });
 
-describe('makeSelectStockQuote', () => {
+describe('makeSelectQuote', () => {
   const quoteSelector = makeSelectQuote();
-  it('should select the stock quote', () => {
+  it('should select the quote', () => {
     const quote = fromJS({ quote: {} });
     const mockedState = fromJS({
       dashboard: {
@@ -87,7 +87,7 @@ describe('makeSelectStockQuote', () => {
 
 describe('makeSelectLoading', () => {
   const loadingSelector = makeSelectLoading();
-  it('should select the loading', () => {
+  it('should select the loading state', () => {
     const loading = false;
     const mockedState = fromJS({
       dashboard: {

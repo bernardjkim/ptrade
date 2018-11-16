@@ -10,7 +10,25 @@ Object {
 }
 `;
 
-exports[`createUser Saga created user successfully 2`] = `undefined`;
+exports[`createUser Saga created user successfully 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users",
+      Object {
+        "body": "first=username&last=username&email=test%40email.com&password=password",
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        "method": "POST",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
 
 exports[`createUser Saga should call the createUserError action if the response errors 1`] = `
 Object {
@@ -22,4 +40,22 @@ Object {
 }
 `;
 
-exports[`createUser Saga should call the createUserError action if the response errors 2`] = `undefined`;
+exports[`createUser Saga should call the createUserError action if the response errors 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users",
+      Object {
+        "body": "first=username&last=username&email=test%40email.com&password=password",
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        "method": "POST",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;

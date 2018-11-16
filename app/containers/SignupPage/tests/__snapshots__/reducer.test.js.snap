@@ -30,6 +30,16 @@ Immutable.Map {
 }
 `;
 
+exports[`signupPageReducer handles the create user action 1`] = `
+Immutable.Map {
+  "username": false,
+  "email": false,
+  "password": false,
+  "loading": true,
+  "error": false,
+}
+`;
+
 exports[`signupPageReducer returns the initial state 1`] = `
 Immutable.Map {
   "username": false,

@@ -12,9 +12,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
-
 /* eslint-disable react/prefer-stateless-function */
 class UserMenu extends React.Component {
   state = {

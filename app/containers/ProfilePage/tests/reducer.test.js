@@ -5,7 +5,6 @@ import {
   loadBalance,
   loadChart,
   loadPositions,
-  setPortfolioValue,
 } from '../actions';
 
 describe('profilePageReducer', () => {
@@ -16,8 +15,8 @@ describe('profilePageReducer', () => {
       error: false,
       balance: false,
       positions: false,
+      totalInvested: false,
       chart: false,
-      portfolioValue: false,
       timeFrame: 0,
     });
   });
@@ -27,10 +26,6 @@ describe('profilePageReducer', () => {
 
   it('handles the change time frame action', () => {
     expect(profilePageReducer(state, changeTimeFrame(1))).toMatchSnapshot();
-  });
-
-  it('handles the set portfolio value action', () => {
-    expect(profilePageReducer(state, setPortfolioValue(100))).toMatchSnapshot();
   });
 
   it('handles the load balance action', () => {

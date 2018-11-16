@@ -5,22 +5,22 @@
  */
 
 import {
-  LOAD_TOKEN,
   CREATE_SESSION,
   CREATE_SESSION_ERROR,
   CREATE_SESSION_SUCCESS,
   DELETE_SESSION,
+  LOAD_TOKEN,
 } from './constants';
 
 /**
- * Load current jwt token if available
+ * Load current jwt token if available, o.w. set token = ''.
  *
  * @return {object} An action object with a type of LOAD_TOKEN
  *
  */
 export function loadToken() {
-  const token = sessionStorage.getItem('jwtToken');
-  // if (!token) token = false;
+  let token = sessionStorage.getItem('jwtToken');
+  if (!token) token = '';
 
   return {
     type: LOAD_TOKEN,

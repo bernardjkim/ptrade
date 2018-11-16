@@ -3,7 +3,6 @@ import {
   loadBalanceError,
   loadBalanceSuccess,
   changeTimeFrame,
-  setPortfolioValue,
   loadPositions,
   loadPositionsSuccess,
   loadPositionsError,
@@ -16,7 +15,6 @@ import {
   LOAD_BALANCE,
   LOAD_BALANCE_ERROR,
   LOAD_BALANCE_SUCCESS,
-  SET_PORTFOLIO_VALUE,
   LOAD_POSITIONS,
   LOAD_POSITIONS_SUCCESS,
   LOAD_POSITIONS_ERROR,
@@ -32,17 +30,6 @@ describe('ProfilePage actions', () => {
         type: CHANGE_TIME_FRAME,
       };
       expect(changeTimeFrame()).toEqual(expected);
-    });
-  });
-
-  describe('Set portfolio value', () => {
-    it('has a type of SET_PORTFOLIO_VALUE', () => {
-      const value = 100;
-      const expected = {
-        type: SET_PORTFOLIO_VALUE,
-        value,
-      };
-      expect(setPortfolioValue(value)).toEqual(expected);
     });
   });
 
@@ -89,9 +76,11 @@ describe('ProfilePage actions', () => {
   describe('Loaded positions successfully', () => {
     it('has a type of LOAD_POSITIONS_SUCCESS', () => {
       const positions = [];
+      const total = 0;
       const expected = {
         type: LOAD_POSITIONS_SUCCESS,
         positions,
+        total,
       };
       expect(loadPositionsSuccess(positions)).toEqual(expected);
     });

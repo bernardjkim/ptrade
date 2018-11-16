@@ -6,8 +6,8 @@ Immutable.Map {
   "error": false,
   "balance": false,
   "positions": false,
+  "totalInvested": false,
   "chart": false,
-  "portfolioValue": false,
   "timeFrame": 1,
 }
 `;
@@ -18,8 +18,8 @@ Immutable.Map {
   "error": false,
   "balance": false,
   "positions": false,
+  "totalInvested": false,
   "chart": false,
-  "portfolioValue": false,
   "timeFrame": 0,
 }
 `;
@@ -30,8 +30,8 @@ Immutable.Map {
   "error": false,
   "balance": false,
   "positions": false,
+  "totalInvested": false,
   "chart": false,
-  "portfolioValue": false,
   "timeFrame": 0,
 }
 `;
@@ -42,8 +42,8 @@ Immutable.Map {
   "error": false,
   "balance": false,
   "positions": false,
+  "totalInvested": false,
   "chart": false,
-  "portfolioValue": false,
   "timeFrame": 0,
 }
 `;
@@ -54,20 +54,8 @@ Immutable.Map {
   "error": false,
   "balance": false,
   "positions": false,
+  "totalInvested": false,
   "chart": false,
-  "portfolioValue": false,
-  "timeFrame": 0,
-}
-`;
-
-exports[`profilePageReducer handles the set portfolio value action 1`] = `
-Immutable.Map {
-  "loading": false,
-  "error": false,
-  "balance": false,
-  "positions": false,
-  "chart": false,
-  "portfolioValue": 100,
   "timeFrame": 0,
 }
 `;
@@ -79,7 +67,7 @@ Immutable.Map {
   "balance": false,
   "positions": false,
   "chart": false,
-  "portfolioValue": false,
+  "totalInvested": false,
   "timeFrame": 0,
 }
 `;

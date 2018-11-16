@@ -210,19 +210,15 @@ function mapDispatchToProps(dispatch) {
     deleteToken: () => {
       dispatch(deleteSession());
     },
-
     handleChangeTimeFrame: (_, tf) => {
       dispatch(changeTimeFrame(tf));
     },
-
     updateChart: () => {
       dispatch(loadChart());
     },
-
     updateBalance: () => {
       dispatch(loadBalance());
     },
-
     updatePositions: () => {
       dispatch(loadPositions());
     },

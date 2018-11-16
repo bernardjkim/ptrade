@@ -23,8 +23,7 @@ describe('createSession Saga', () => {
     expect(selectDescriptor).toMatchSnapshot();
 
     createSessionGenerator.next(email);
-    createSessionGenerator.next(password);
-    const callDescriptor = createSessionGenerator.value;
+    const callDescriptor = createSessionGenerator.next(password).value;
     expect(callDescriptor).toMatchSnapshot();
   });
 
@@ -42,7 +41,7 @@ describe('createSession Saga', () => {
 });
 
 describe('Saga', () => {
-  it('should start task to watch for SigninPage actions', () => {
+  it('should start task to watch for global actions', () => {
     const takeLatestDescriptor = appSaga().next().value;
     expect(takeLatestDescriptor).toEqual(
       takeLatest(CREATE_SESSION, getSession),

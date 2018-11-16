@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Redirect } from 'react-router-dom';
@@ -19,14 +18,13 @@ import { createSession, loadToken } from 'containers/App/actions';
 import { makeSelectToken } from 'containers/App/selectors';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+
 import makeSelectSigninPage, {
   makeSelectEmail,
   makeSelectPassword,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-// import messages from './messages';
-
 import StyledContainer from './components/StyledContainer';
 import StyledForm from './components/StyledForm';
 import StyledPaper from './components/StyledPaper';
@@ -126,7 +124,6 @@ export function mapDispatchToProps(dispatch) {
     handleChangeInput: (field, value) => {
       dispatch(changeInput(field, value));
     },
-
     handleSubmit: (evt, email, password) => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(createSession(email, password));

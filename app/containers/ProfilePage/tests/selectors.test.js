@@ -6,7 +6,6 @@ import {
   makeSelectBalance,
   makeSelectChart,
   makeSelectTimeFrame,
-  makeSelectPortfolioValue,
   makeSelectPositions,
 } from '../selectors';
 
@@ -17,7 +16,7 @@ const mockedState = fromJS({
     balance: false,
     positions: false,
     chart: false,
-    profileValue: false,
+    totalInvested: false,
     timeFrame: 0,
   },
 });
@@ -67,12 +66,5 @@ describe('makeSelectTimeFrame', () => {
   const timeFrameSelector = makeSelectTimeFrame();
   it('should select the error', () => {
     expect(timeFrameSelector(mockedState)).toMatchSnapshot();
-  });
-});
-
-describe('makeSelectPortfolioValue', () => {
-  const portfolioValueSelector = makeSelectPortfolioValue();
-  it('should select the error', () => {
-    expect(portfolioValueSelector(mockedState)).toMatchSnapshot();
   });
 });

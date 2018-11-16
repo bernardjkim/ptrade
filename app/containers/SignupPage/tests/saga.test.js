@@ -27,8 +27,7 @@ describe('createUser Saga', () => {
 
     createUserGenerator.next(username);
     createUserGenerator.next(email);
-    createUserGenerator.next(password);
-    const callDescriptor = createUserGenerator.value;
+    const callDescriptor = createUserGenerator.next(password).value;
     expect(callDescriptor).toMatchSnapshot();
   });
 

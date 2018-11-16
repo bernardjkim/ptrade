@@ -18,11 +18,11 @@ import {
 } from './constants';
 
 export const initialState = fromJS({
+  loading: false,
+  error: false,
   search: false,
   symbol: false,
   timeFrame: 0,
-  loading: false,
-  error: false,
   chart: false,
   quote: false,
 });

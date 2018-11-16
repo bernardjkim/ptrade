@@ -1,6 +1,3 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
-
 import { mapDispatchToProps } from '../index';
 import { changeSearch, changeTimeFrame, selectSymbol } from '../actions';
 

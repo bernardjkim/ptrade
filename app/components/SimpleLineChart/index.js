@@ -2,26 +2,19 @@
  *
  * SimpleLineChart
  *
- * TODO: description
+ * A line chart generated using recharts lib.
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
 
 import CartesianGrid from 'recharts/lib/cartesian/CartesianGrid';
-// import Legend from 'recharts/lib/component/Legend';
 import Line from 'recharts/lib/cartesian/Line';
 import LineChart from 'recharts/lib/chart/LineChart';
 import ResponsiveContainer from 'recharts/lib/component/ResponsiveContainer';
 import Tooltip from 'recharts/lib/component/Tooltip';
 import XAxis from 'recharts/lib/cartesian/XAxis';
 import YAxis from 'recharts/lib/cartesian/YAxis';
-
-// import messages from './messages';
-
-const formatter = value => `$${value}`;
 
 function SimpleLineChart({ data }) {
   return (
@@ -30,7 +23,7 @@ function SimpleLineChart({ data }) {
       <LineChart data={data || []}>
         <XAxis dataKey="date" />
         <YAxis
-          tickFormatter={formatter}
+          tickFormatter={value => `$${value}`}
           type="number"
           width={70}
           domain={['dataMin', 'dataMax']}

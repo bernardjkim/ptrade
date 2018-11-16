@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 import signupPageReducer from '../reducer';
-import { changeInput } from '../actions';
+import { changeInput, createUser } from '../actions';
 
 describe('signupPageReducer', () => {
   let state;
@@ -33,5 +33,9 @@ describe('signupPageReducer', () => {
     expect(
       signupPageReducer(state, changeInput('password', 'password')),
     ).toMatchSnapshot();
+  });
+
+  it('handles the create user action', () => {
+    expect(signupPageReducer(state, createUser())).toMatchSnapshot();
   });
 });

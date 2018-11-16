@@ -14,7 +14,13 @@ import Wrapper from './Wrapper';
 /* eslint-disable react/prefer-stateless-function */
 class ChartTabs extends React.Component {
   render() {
-    const { changeTimeFrame, timeFrame } = this.props;
+    // variables
+    const { timeFrame } = this.props;
+
+    // functions
+    const { changeTimeFrame } = this.props;
+
+    // list of time frames
     const labels = ['1d', '1m', '6m', '1y', '5y'];
     return (
       <Wrapper>
@@ -29,8 +35,11 @@ class ChartTabs extends React.Component {
 }
 
 ChartTabs.propTypes = {
-  changeTimeFrame: PropTypes.func,
+  // variables
   timeFrame: PropTypes.number,
+
+  // functions
+  changeTimeFrame: PropTypes.func,
 };
 
 export default ChartTabs;

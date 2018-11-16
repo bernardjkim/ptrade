@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Redirect } from 'react-router-dom';
@@ -19,17 +18,16 @@ import { loadToken } from 'containers/App/actions';
 import { SigninLink } from 'components/Links/index';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectSignupPage from './selectors';
+
 import reducer from './reducer';
 import saga from './saga';
-// import messages from './messages';
-
+import { changeInput, createUser } from './actions';
+import makeSelectSignupPage from './selectors';
 import StyledContainer from './components/StyledContainer';
 import StyledForm from './components/StyledForm';
 import StyledPaper from './components/StyledPaper';
 import StyledTextField from './components/StyledTextField';
 import StyledButton from './components/StyledButton';
-import { changeInput, createUser } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class SignupPage extends React.PureComponent {
@@ -125,7 +123,6 @@ export function mapDispatchToProps(dispatch) {
     handleChangeInput: (field, value) => {
       dispatch(changeInput(field, value));
     },
-
     handleSubmit: evt => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(createUser());

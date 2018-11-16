@@ -9,9 +9,6 @@ import PropTypes from 'prop-types';
 
 import SearchIcon from '@material-ui/icons/Search';
 
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
-
 import SearchDiv from './SearchDiv';
 import SearchIconDiv from './SearchIconDiv';
 import StyledInput from './StyledInput';
@@ -35,7 +32,10 @@ function SearchBar(props) {
 }
 
 SearchBar.propTypes = {
+  // variables
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+
+  // functions
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
 };

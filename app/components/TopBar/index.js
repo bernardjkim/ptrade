@@ -14,9 +14,6 @@ import Button from '@material-ui/core/Button';
 
 // import { SigninLink } from 'containers/SigninPage/index';
 import SearchBar from 'components/SearchBar';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
-
 import UserMenu from 'components/UserMenu';
 import StyledAppBar from './StyledAppBar';
 

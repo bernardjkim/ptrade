@@ -37,8 +37,8 @@ export function* getSession() {
 
     // store jwtToken into session storage
     sessionStorage.setItem('jwtToken', token['Session-Token']);
+
     yield put(createSessionSuccess());
-    // Load token into state
     yield put(loadToken());
   } catch (err) {
     yield put(createSessionError(err));
