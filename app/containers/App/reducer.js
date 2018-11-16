@@ -27,7 +27,7 @@ function appReducer(state = initialState, action) {
       return state.set('token', action.token);
 
     case DELETE_SESSION:
-      return state.set('token', false);
+      return state.set('token', '');
 
     case CREATE_SESSION:
       return state
