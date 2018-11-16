@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`profilePageReducer handles the change time frame action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 1,
+}
+`;
+
+exports[`profilePageReducer handles the load balance action 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 0,
+}
+`;
+
+exports[`profilePageReducer handles the load chart action 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 0,
+}
+`;
+
+exports[`profilePageReducer handles the load chart action 2`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 0,
+}
+`;
+
+exports[`profilePageReducer handles the load positions action 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 0,
+}
+`;
+
+exports[`profilePageReducer returns the initial state 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "chart": false,
+  "totalInvested": false,
+  "timeFrame": 0,
+}
+`;

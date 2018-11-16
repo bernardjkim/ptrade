@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getBalance Saga requests the balance successfully 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getBalance Saga requests the balance successfully 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/balance",
+      Object {
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "GET",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`getBalance Saga should call the loadBalanceError action if the response errors 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getBalance Saga should call the loadBalanceError action if the response errors 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/balance",
+      Object {
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "GET",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`getChart Saga requests the chart successfully 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getChart Saga requests the chart successfully 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/charts",
+      Object {
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "GET",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`getChart Saga should call the loadChartError action if the response errors 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getChart Saga should call the loadChartError action if the response errors 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/charts",
+      Object {
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "GET",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`getPositions Saga requests the chart successfully 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getPositions Saga requests the chart successfully 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/positions",
+      Object {
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "GET",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`getPositions Saga should call the loadPositionsError action if the response errors 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`getPositions Saga should call the loadPositionsError action if the response errors 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/positions",
+      Object {
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "GET",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;

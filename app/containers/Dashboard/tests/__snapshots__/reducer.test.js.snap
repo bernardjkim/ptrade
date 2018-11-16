@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboardReducer handles the changeSearch action 1`] = `
+Immutable.Map {
+  "search": "AAPL",
+  "symbol": false,
+  "loading": false,
+  "error": false,
+  "chart": false,
+  "quote": false,
+}
+`;
+
+exports[`dashboardReducer handles the changeTimeFrame action 1`] = `
+Immutable.Map {
+  "search": false,
+  "symbol": false,
+  "loading": false,
+  "error": false,
+  "chart": false,
+  "quote": false,
+  "timeFrame": 1,
+}
+`;
+
+exports[`dashboardReducer handles the selectSymbol action 1`] = `
+Immutable.Map {
+  "search": false,
+  "symbol": "AAPL",
+  "loading": false,
+  "error": false,
+  "chart": false,
+  "quote": false,
+}
+`;
+
+exports[`dashboardReducer returns the initial state 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+}
+`;
+
+exports[`dashboardReducer should handle the loadChart action correctly 1`] = `
+Immutable.Map {
+  "search": false,
+  "symbol": false,
+  "loading": true,
+  "error": false,
+  "chart": false,
+  "quote": false,
+}
+`;
+
+exports[`dashboardReducer should handle the loadQuote action correctly 1`] = `
+Immutable.Map {
+  "search": false,
+  "symbol": false,
+  "loading": true,
+  "error": false,
+  "chart": false,
+  "quote": false,
+}
+`;

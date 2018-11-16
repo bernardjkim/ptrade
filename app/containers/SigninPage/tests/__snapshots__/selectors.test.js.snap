@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`selectSigninPageDomain should select the SigninPage state 1`] = `
+Immutable.Map {
+  "email": "test@email.com",
+  "password": "password",
+  "loading": false,
+  "error": 404,
+}
+`;

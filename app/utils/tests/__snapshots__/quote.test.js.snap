@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formatQuote should format and return the quote correctly 1`] = `
+Array [
+  Object {
+    "name": "OPEN",
+    "value": "$20.59",
+  },
+  Object {
+    "name": "CLOSE",
+    "value": "$20.23",
+  },
+  Object {
+    "name": "HIGH",
+    "value": "$21.06",
+  },
+  Object {
+    "name": "LOW",
+    "value": "$19.47",
+  },
+  Object {
+    "name": "52 WK HIGH",
+    "value": "$34.14",
+  },
+  Object {
+    "name": "52 WK LOW",
+    "value": "$9.04",
+  },
+  Object {
+    "name": "CHANGE",
+    "value": "$0.01",
+  },
+  Object {
+    "name": "CHANGE %",
+    "value": "%0.00049",
+  },
+  Object {
+    "name": "AVG VOL",
+    "value": "116.2 M",
+  },
+  Object {
+    "name": "MKT CAP",
+    "value": "20218 M",
+  },
+]
+`;
