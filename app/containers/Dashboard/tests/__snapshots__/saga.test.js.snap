@@ -105,3 +105,65 @@ Object {
   },
 }
 `;
+
+exports[`new trade Saga request new trade order successfully 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`new trade Saga request new trade order successfully 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/trades",
+      Object {
+        "body": "symbol=AAPL&shares=5",
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "POST",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;
+
+exports[`new trade Saga should call the chartLoadingError action if the response errors 1`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [],
+    "selector": [Function],
+  },
+}
+`;
+
+exports[`new trade Saga should call the chartLoadingError action if the response errors 2`] = `
+Object {
+  "@@redux-saga/IO": true,
+  "CALL": Object {
+    "args": Array [
+      "https://ptrade-api-staging.herokuapp.com/v1/users/1/trades",
+      Object {
+        "body": "symbol=AAPL&shares=5",
+        "headers": Object {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Session-Token": "token",
+        },
+        "method": "POST",
+      },
+    ],
+    "context": null,
+    "fn": [Function],
+  },
+}
+`;

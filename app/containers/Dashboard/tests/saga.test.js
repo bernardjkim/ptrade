@@ -4,29 +4,34 @@
 
 /* eslint-disable redux-saga/yield-effects */
 import { all, put, takeLatest } from 'redux-saga/effects';
-import { LOAD_CHART, LOAD_QUOTE } from '../constants';
+import { LOAD_CHART, LOAD_QUOTE, REQUEST_TRADE } from '../constants';
 import {
   chartLoaded,
   chartLoadingError,
   quoteLoaded,
   quoteLoadingError,
+  requestTradeSuccess,
+  requestTradeError,
 } from '../actions';
-import dashboard, { getChart, getQuote } from '../saga';
+import dashboard, { getChart, getQuote, requestTrade } from '../saga';
 
+const token = 'token';
+const id = 1;
 const symbol = 'AAPL';
+const shares = 5;
 
 describe('getChart Saga', () => {
-  let getDataGenerator;
+  let getChartGenerator;
 
   // We have to test twice, once for a successful load and once for an unsuccessful one
   // so we do all the stuff that happens beforehand automatically in the beforeEach
   beforeEach(() => {
-    getDataGenerator = getChart();
+    getChartGenerator = getChart();
 
-    const selectDescriptor = getDataGenerator.next().value;
+    const selectDescriptor = getChartGenerator.next().value;
     expect(selectDescriptor).toMatchSnapshot();
 
-    const callDescriptor = getDataGenerator.next(symbol).value;
+    const callDescriptor = getChartGenerator.next(symbol).value;
     expect(callDescriptor).toMatchSnapshot();
   });
 
@@ -41,8 +46,8 @@ describe('getChart Saga', () => {
       { minute: '09:35', marketAverage: 101 },
     ];
 
-    getDataGenerator.next(timeFrame);
-    const putDescriptor = getDataGenerator.next(data).value;
+    getChartGenerator.next(timeFrame);
+    const putDescriptor = getChartGenerator.next(data).value;
     expect(putDescriptor).toEqual(put(chartLoaded(response, symbol)));
   });
 
@@ -57,8 +62,8 @@ describe('getChart Saga', () => {
       { date: '2018-10-02', close: 101 },
     ];
 
-    getDataGenerator.next(timeFrame);
-    const putDescriptor = getDataGenerator.next(data).value;
+    getChartGenerator.next(timeFrame);
+    const putDescriptor = getChartGenerator.next(data).value;
     expect(putDescriptor).toEqual(put(chartLoaded(response)));
   });
 
@@ -66,48 +71,82 @@ describe('getChart Saga', () => {
     const timeFrame = 0;
     const response = new Error('Some error');
 
-    getDataGenerator.next(timeFrame);
-    const putDescriptor = getDataGenerator.throw(response).value;
+    getChartGenerator.next(timeFrame);
+    const putDescriptor = getChartGenerator.throw(response).value;
     expect(putDescriptor).toEqual(put(chartLoadingError(response)));
   });
 });
 
 describe('getQuote Saga', () => {
-  let getDataGenerator;
+  let getQuoteGenerator;
 
   // We have to test twice, once for a successful load and once for an unsuccessful one
   // so we do all the stuff that happens beforehand automatically in the beforeEach
   beforeEach(() => {
-    getDataGenerator = getQuote();
+    getQuoteGenerator = getQuote();
 
-    const selectDescriptor = getDataGenerator.next().value;
+    const selectDescriptor = getQuoteGenerator.next().value;
     expect(selectDescriptor).toMatchSnapshot();
 
-    const callDescriptor = getDataGenerator.next(symbol).value;
+    const callDescriptor = getQuoteGenerator.next(symbol).value;
     expect(callDescriptor).toMatchSnapshot();
   });
 
   it('requests the quote successfully', () => {
     const response = { quote: {} };
     const data = { quote: {} };
-    const putDescriptor = getDataGenerator.next(data).value;
+    const putDescriptor = getQuoteGenerator.next(data).value;
     expect(putDescriptor).toEqual(put(quoteLoaded(response)));
   });
 
   it('should call the chartLoadingError action if the response errors', () => {
     const response = new Error('Some error');
-    const putDescriptor = getDataGenerator.throw(response).value;
+    const putDescriptor = getQuoteGenerator.throw(response).value;
     expect(putDescriptor).toEqual(put(quoteLoadingError(response)));
+  });
+});
+
+describe('new trade Saga', () => {
+  let newTradeGenerator;
+
+  // We have to test twice, once for a successful load and once for an unsuccessful one
+  // so we do all the stuff that happens beforehand automatically in the beforeEach
+  beforeEach(() => {
+    newTradeGenerator = requestTrade();
+
+    const selectDescriptor = newTradeGenerator.next().value;
+    expect(selectDescriptor).toMatchSnapshot();
+
+    newTradeGenerator.next(token);
+    newTradeGenerator.next(id);
+    newTradeGenerator.next(symbol);
+    const callDescriptor = newTradeGenerator.next(shares).value;
+    expect(callDescriptor).toMatchSnapshot();
+  });
+
+  it('request new trade order successfully', () => {
+    const putDescriptor = newTradeGenerator.next().value;
+    expect(putDescriptor).toEqual(put(requestTradeSuccess()));
+  });
+
+  it('should call the chartLoadingError action if the response errors', () => {
+    const response = new Error('Some error');
+    const putDescriptor = newTradeGenerator.throw(response).value;
+    expect(putDescriptor).toEqual(put(requestTradeError(response)));
   });
 });
 
 describe('Saga', () => {
   const dashboardSaga = dashboard();
 
-  it('should start task to watch for LOAD_CHART/LOAD_QUOTE action', () => {
+  it('should start task to watch for api request actions', () => {
     const takeLatestDescriptor = dashboardSaga.next().value;
     expect(takeLatestDescriptor).toEqual(
-      all([takeLatest(LOAD_CHART, getChart), takeLatest(LOAD_QUOTE, getQuote)]),
+      all([
+        takeLatest(LOAD_CHART, getChart),
+        takeLatest(LOAD_QUOTE, getQuote),
+        takeLatest(REQUEST_TRADE, requestTrade),
+      ]),
     );
   });
 });

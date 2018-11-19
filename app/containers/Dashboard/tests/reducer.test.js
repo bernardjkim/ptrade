@@ -6,18 +6,22 @@ import {
   selectSymbol,
   loadChart,
   loadQuote,
+  changeTradeQuantity,
+  requestTrade,
 } from '../actions';
 
 describe('dashboardReducer', () => {
   let state;
   beforeEach(() => {
     state = fromJS({
-      search: false,
-      symbol: false,
       loading: false,
       error: false,
+      search: false,
+      symbol: false,
+      timeFrame: 0,
       chart: false,
       quote: false,
+      quantity: 0,
     });
   });
   it('returns the initial state', () => {
@@ -36,11 +40,19 @@ describe('dashboardReducer', () => {
     expect(dashboardReducer(state, changeTimeFrame(1))).toMatchSnapshot();
   });
 
+  it('handles the changeQuantity action', () => {
+    expect(dashboardReducer(state, changeTradeQuantity(5))).toMatchSnapshot();
+  });
+
   it('should handle the loadChart action correctly', () => {
     expect(dashboardReducer(state, loadChart())).toMatchSnapshot();
   });
 
   it('should handle the loadQuote action correctly', () => {
     expect(dashboardReducer(state, loadQuote())).toMatchSnapshot();
+  });
+
+  it('should handle the requestTrade action', () => {
+    expect(dashboardReducer(state, requestTrade())).toMatchSnapshot();
   });
 });

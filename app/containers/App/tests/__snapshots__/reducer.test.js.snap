@@ -14,7 +14,7 @@ exports[`appReducer handles the deleteSession action 1`] = `
 Immutable.Map {
   "loading": false,
   "error": false,
-  "token": false,
+  "token": "",
   "email": false,
   "password": false,
 }

@@ -9,5 +9,6 @@ Immutable.Map {
   "timeFrame": 0,
   "chart": false,
   "quote": false,
+  "quantity": 0,
 }
 `;

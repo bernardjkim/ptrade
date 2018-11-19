@@ -7,6 +7,7 @@
 import {
   CHANGE_SEARCH,
   CHANGE_TIME_FRAME,
+  CHANGE_QUANTITY,
   SELECT_SYMBOL,
   LOAD_CHART,
   LOAD_CHART_SUCCESS,
@@ -14,6 +15,9 @@ import {
   LOAD_QUOTE,
   LOAD_QUOTE_SUCCESS,
   LOAD_QUOTE_ERROR,
+  REQUEST_TRADE,
+  REQUEST_TRADE_ERROR,
+  REQUEST_TRADE_SUCCESS,
 } from './constants';
 
 /**
@@ -55,6 +59,20 @@ export function changeTimeFrame(tf) {
   return {
     type: CHANGE_TIME_FRAME,
     tf,
+  };
+}
+
+/**
+ * Change the trade quantity
+ *
+ * @param  {number} quantity  The desired quantity to be traded
+ *
+ * @return {object}           An action object with a type of CHANGE_QUANTITY
+ */
+export function changeTradeQuantity(quantity) {
+  return {
+    type: CHANGE_QUANTITY,
+    quantity,
   };
 }
 
@@ -132,6 +150,42 @@ export function quoteLoaded(quote) {
 export function quoteLoadingError(error) {
   return {
     type: LOAD_QUOTE_ERROR,
+    error,
+  };
+}
+
+/**
+ * Request trade, this action starts the request saga
+ *
+ * @return {object} An action object with a type of REQUEST_TRADE
+ */
+export function requestTrade() {
+  return {
+    type: REQUEST_TRADE,
+  };
+}
+
+/**
+ * Dispatched when an acknowledgement has been received by the request saga
+ *
+ * @return {object} An action object with a type of REQUEST_TRADE_SUCCESS
+ */
+export function requestTradeSuccess() {
+  return {
+    type: REQUEST_TRADE_SUCCESS,
+  };
+}
+
+/**
+ * Dispatched when an error has been received in response by the request saga
+ *
+ * @param  {object} error The error
+ *
+ * @return {object}       An action object with a type of REQUEST_TRADE_ERROR
+ */
+export function requestTradeError(error) {
+  return {
+    type: REQUEST_TRADE_ERROR,
     error,
   };
 }

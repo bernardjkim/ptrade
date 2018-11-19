@@ -1,15 +1,25 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { getChartURL, getQuoteURL } from 'api/iex';
+import { urlNewTrade } from 'api/api';
 import request from 'utils/request';
 import { parseChart } from 'utils/chart';
-import { LOAD_CHART, LOAD_QUOTE } from './constants';
+import { getIdFromToken } from 'utils/jwt';
+import { makeSelectToken } from 'containers/App/selectors';
+import qs from 'qs';
+import { LOAD_CHART, LOAD_QUOTE, REQUEST_TRADE } from './constants';
 import {
   chartLoaded,
   chartLoadingError,
   quoteLoaded,
   quoteLoadingError,
+  requestTradeSuccess,
+  requestTradeError,
 } from './actions';
-import { makeSelectSymbol, makeSelectTimeFrame } from './selectors';
+import {
+  makeSelectSymbol,
+  makeSelectTimeFrame,
+  makeSelectQuantity,
+} from './selectors';
 
 /**
  * stock chart request/response handler
@@ -60,6 +70,42 @@ export function* getQuote() {
 }
 
 /**
+ * trade request/response handler
+ */
+export function* requestTrade() {
+  const token = yield select(makeSelectToken());
+  if (!token) return;
+
+  const id = yield getIdFromToken(token);
+  if (!id) return;
+
+  const requestURL = urlNewTrade(id);
+  if (requestURL === '') return;
+
+  const symbol = yield select(makeSelectSymbol());
+  if (!symbol) return;
+
+  const shares = yield select(makeSelectQuantity());
+  if (shares === 0) return;
+
+  // set request method/header/body
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Session-Token': token,
+    },
+    body: qs.stringify({ symbol, shares }),
+  };
+
+  try {
+    yield call(request, requestURL, options);
+    yield put(requestTradeSuccess());
+  } catch (err) {
+    yield put(requestTradeError(err));
+  }
+}
+/**
  * Root saga manages watcher lifecycle
  */
 export default function* dashboardSaga() {
@@ -69,5 +115,6 @@ export default function* dashboardSaga() {
   yield all([
     takeLatest(LOAD_CHART, getChart),
     takeLatest(LOAD_QUOTE, getQuote),
+    takeLatest(REQUEST_TRADE, requestTrade),
   ]);
 }

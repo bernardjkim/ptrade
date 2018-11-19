@@ -21,6 +21,9 @@ const makeSelectTimeFrame = () =>
     homeState.get('timeFrame'),
   );
 
+const makeSelectQuantity = () =>
+  createSelector(selectDashboardDomain, homeState => homeState.get('quantity'));
+
 const makeSelectChart = () =>
   createSelector(selectDashboardDomain, homeState => homeState.get('chart'));
 
@@ -46,6 +49,7 @@ export {
   makeSelectSearch,
   makeSelectSymbol,
   makeSelectTimeFrame,
+  makeSelectQuantity,
   makeSelectLoading,
   makeSelectError,
   makeSelectChart,

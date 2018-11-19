@@ -4,6 +4,8 @@ import {
   selectSymbol,
   loadChart,
   loadQuote,
+  changeTradeQuantity,
+  requestTrade,
 } from '../actions';
 import {
   CHANGE_SEARCH,
@@ -11,6 +13,8 @@ import {
   SELECT_SYMBOL,
   LOAD_CHART,
   LOAD_QUOTE,
+  CHANGE_QUANTITY,
+  REQUEST_TRADE,
 } from '../constants';
 
 describe('Dashboard actions', () => {
@@ -40,6 +44,16 @@ describe('Dashboard actions', () => {
       expect(changeTimeFrame()).toEqual(expected);
     });
   });
+
+  describe('changeQuantity', () => {
+    it('has a type of CHANGE_QUANTITY', () => {
+      const expected = {
+        type: CHANGE_QUANTITY,
+      };
+      expect(changeTradeQuantity()).toEqual(expected);
+    });
+  });
+
   describe('loadChart', () => {
     it('should return the correct type', () => {
       const expectedResult = {
@@ -57,6 +71,15 @@ describe('Dashboard actions', () => {
       };
 
       expect(loadQuote()).toEqual(expectedResult);
+    });
+  });
+
+  describe('requestTrade', () => {
+    it('has type of REQUEST_TRADE', () => {
+      const expectedResult = {
+        type: REQUEST_TRADE,
+      };
+      expect(requestTrade()).toEqual(expectedResult);
     });
   });
 });

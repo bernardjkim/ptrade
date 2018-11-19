@@ -36,3 +36,13 @@ export function urlGetPositions(id) {
 export function urlGetChart(id) {
   return `${process.env.API_URL}/users/${id}/charts`;
 }
+
+/**
+ *
+ * @param  {integer} id User id
+ *
+ * @return {string}     URL endpoint to create new trade order
+ */
+export function urlNewTrade(id) {
+  return `${process.env.API_URL}/users/${id}/trades`;
+}

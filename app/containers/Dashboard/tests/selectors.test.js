@@ -8,6 +8,7 @@ import {
   makeSelectQuote,
   makeSelectLoading,
   makeSelectError,
+  makeSelectQuantity,
 } from '../selectors';
 
 describe('selectDashboardDomain', () => {
@@ -56,6 +57,19 @@ describe('makeSelectTimeFrame', () => {
       },
     });
     expect(timeFrameSelector(mockedState)).toEqual(timeFrame);
+  });
+});
+
+describe('makeSelectQuantity', () => {
+  const quantitySelector = makeSelectQuantity();
+  it('should select the quantity', () => {
+    const quantity = 5;
+    const mockedState = fromJS({
+      dashboard: {
+        quantity,
+      },
+    });
+    expect(quantitySelector(mockedState)).toEqual(quantity);
   });
 });
 
