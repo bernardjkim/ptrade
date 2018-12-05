@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`selectDashboardDomain should select the dashboard state 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;

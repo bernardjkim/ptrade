@@ -1,8 +1,11 @@
 {
   "name": "ptrade",
-  "scripts": {
-  },
+  "scripts": {},
   "env": {
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "necessary so Heroku can compile the NPM modules in devDeps",
+      "value": false
+    },
     "NODE_PATH": {
       "description": "src path",
       "value": "src"
@@ -16,11 +19,8 @@
       "value": "https://api.iextrading.com/1.0/stock"
     }
   },
-  "formation": {
-  },
-  "addons": [
-
-  ],
+  "formation": {},
+  "addons": [],
   "buildpacks": [
     {
       "url": "heroku/nodejs"

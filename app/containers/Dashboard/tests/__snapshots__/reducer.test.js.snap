@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboardReducer handles the changeQuantity action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 5,
+}
+`;
+
+exports[`dashboardReducer handles the changeSearch action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": "AAPL",
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
+
+exports[`dashboardReducer handles the changeTimeFrame action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 1,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
+
+exports[`dashboardReducer handles the selectSymbol action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": false,
+  "symbol": "AAPL",
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
+
+exports[`dashboardReducer returns the initial state 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
+
+exports[`dashboardReducer should handle the loadChart action correctly 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
+
+exports[`dashboardReducer should handle the loadQuote action correctly 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
+
+exports[`dashboardReducer should handle the requestTrade action 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "search": false,
+  "symbol": false,
+  "timeFrame": 0,
+  "chart": false,
+  "quote": false,
+  "quantity": 0,
+}
+`;
