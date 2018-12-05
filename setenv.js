@@ -1,6 +1,8 @@
 const env = process.env.NODE_ENV;
 if (env === 'production') {
-  console.log(`API_URL=https://ptrade-api.herokuapp.com/v1`);
+  // TODO: change to production server when set up
+  // console.log(`API_URL=https://ptrade-api.herokuapp.com/v1`);
+  console.log(`API_URL=https://ptrade-api-staging.herokuapp.com/v1`);
 } else {
   console.log(`API_URL=https://ptrade-api-staging.herokuapp.com/v1`);
 }
