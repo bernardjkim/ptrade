@@ -64,6 +64,9 @@ import CompanyName from './components/CompanyName';
 import StyledAppBar from './components/StyledAppBar';
 import Grow from './components/Grow';
 import ContainerButton from './components/ContainerButton';
+import ContainerInput from './components/ContainerInput';
+import InputQuantity from './components/InputQuantity';
+import StyledInput from './components/StyledInput';
 
 /* eslint-disable react/prefer-stateless-function */
 export class Dashboard extends React.PureComponent {
@@ -87,6 +90,21 @@ export class Dashboard extends React.PureComponent {
     }
   }
 
+  onSubmitTrade = evt => {
+    evt.preventDefault();
+    this.modalBuy.handleClose();
+    this.modalSell.handleClose();
+    this.props.submitTrade();
+  };
+
+  setRefBuy = ref => {
+    this.modalBuy = ref;
+  };
+
+  setRefSell = ref => {
+    this.modalSell = ref;
+  };
+
   render() {
     // state variables
     const {
@@ -106,7 +124,7 @@ export class Dashboard extends React.PureComponent {
       handleChangeSearch,
       handleChangeTimeFrame,
       handleSubmit,
-      submitTrade,
+      // submitTrade,
       changeBuyQty,
       changeSellQty,
     } = this.props;
@@ -117,6 +135,7 @@ export class Dashboard extends React.PureComponent {
           <title>Dashboard</title>
           <meta name="description" content="Description of Dashboard" />
         </Helmet>
+
         <StyledAppBar position="static" color="inherit">
           <Toolbar>
             <Typography color="inherit">PTrade</Typography>
@@ -135,6 +154,7 @@ export class Dashboard extends React.PureComponent {
             )}
           </Toolbar>
         </StyledAppBar>
+
         <ContainerCharts>
           <ContainerLeft>
             <SimpleLineChart loading={loading} error={error} data={chart} />
@@ -181,21 +201,59 @@ export class Dashboard extends React.PureComponent {
               {quote && (
                 <ContainerButton>
                   <ButtonModal
+                    onRef={this.setRefBuy}
                     title="Buy"
                     disabled={!token}
-                    symbol={quote.symbol ? quote.symbol : 'N/A'}
-                    pps={quote.latestPrice ? quote.latestPrice : 0}
-                    handleSubmit={submitTrade}
-                    handleChange={changeBuyQty}
-                  />
+                  >
+                    <Typography variant="title" id="modal-title">
+                      Buy {quote.symbol}
+                      <br />
+                      {quote.latestPrice} per share
+                    </Typography>
+                    <br />
+
+                    <ContainerInput>
+                      <Typography>Quantity</Typography>
+                      <InputQuantity>
+                        <form onSubmit={this.onSubmitTrade}>
+                          <StyledInput
+                            autoFocus
+                            onChange={changeBuyQty}
+                            placeholder="0"
+                            disableUnderline
+                            type="number"
+                          />
+                        </form>
+                      </InputQuantity>
+                    </ContainerInput>
+                  </ButtonModal>
                   <ButtonModal
+                    onRef={this.setRefSell}
                     title="Sell"
                     disabled={!token}
-                    symbol={quote.symbol ? quote.symbol : 'N/A'}
-                    pps={quote.latestPrice ? quote.latestPrice : 0}
-                    handleSubmit={submitTrade}
-                    handleChange={changeSellQty}
-                  />
+                  >
+                    <Typography variant="title" id="modal-title">
+                      Sell {quote.symbol}
+                      <br />
+                      {quote.latestPrice} per share
+                    </Typography>
+                    <br />
+
+                    <ContainerInput>
+                      <Typography>Quantity</Typography>
+                      <InputQuantity>
+                        <form onSubmit={this.onSubmitTrade}>
+                          <StyledInput
+                            autoFocus
+                            onChange={changeSellQty}
+                            placeholder="0"
+                            disableUnderline
+                            type="number"
+                          />
+                        </form>
+                      </InputQuantity>
+                    </ContainerInput>
+                  </ButtonModal>
                 </ContainerButton>
               )}
             </ContainerQuote>
