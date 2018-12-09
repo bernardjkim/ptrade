@@ -46,3 +46,13 @@ export function urlGetChart(id) {
 export function urlNewTrade(id) {
   return `${process.env.API_URL}/users/${id}/trades`;
 }
+
+/**
+ *
+ * @param  {integer} id User id
+ *
+ * @return {string}     URL endpoint to create new trasnfer order
+ */
+export function urlNewTransfer(id) {
+  return `${process.env.API_URL}/users/${id}/transfers`;
+}

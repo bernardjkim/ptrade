@@ -25,6 +25,7 @@ import { loadToken, deleteSession } from 'containers/App/actions';
 import SimpleLineChart from 'components/SimpleLineChart';
 import ChartTabs from 'components/ChartTabs';
 import UserMenu from 'components/UserMenu';
+import ButtonModal from 'components/ButtonModal';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -42,19 +43,25 @@ import makeSelectProfilePage, {
 } from './selectors';
 
 import {
-  loadBalance,
   changeTimeFrame,
+  changeTransferAmount,
+  loadBalance,
   loadChart,
   loadPositions,
+  requestTransfer,
 } from './actions';
 
+import ContainerButton from './components/ContainerButton';
 import ContainerCharts from './components/ContainerCharts';
+import ContainerInput from './components/ContainerInput';
 import ContainerLeft from './components/ContainerLeft';
 import ContainerRight from './components/ContainerRight';
 import ContainerQuote from './components/ContainerQuote';
-import StyledTable from './components/StyledTable';
-import StyledAppBar from './components/StyledAppBar';
 import Grow from './components/Grow';
+import InputQuantity from './components/InputQuantity';
+import StyledAppBar from './components/StyledAppBar';
+import StyledInput from './components/StyledInput';
+import StyledTable from './components/StyledTable';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ProfilePage extends React.Component {
@@ -82,6 +89,21 @@ export class ProfilePage extends React.Component {
     }
   }
 
+  onSubmitTransfer = evt => {
+    evt.preventDefault();
+    this.modalDeposit.handleClose();
+    this.modalWithdraw.handleClose();
+    this.props.submitTransfer();
+  };
+
+  setRefDeposit = ref => {
+    this.modalDeposit = ref;
+  };
+
+  setRefWithdraw = ref => {
+    this.modalWithdraw = ref;
+  };
+
   render() {
     // state variables
     const {
@@ -96,7 +118,12 @@ export class ProfilePage extends React.Component {
     } = this.props;
 
     // handler functions
-    const { deleteToken, handleChangeTimeFrame } = this.props;
+    const {
+      deleteToken,
+      handleChangeTimeFrame,
+      changeDeposit,
+      changeWithdraw,
+    } = this.props;
 
     // token will be an empty string only after failing to load token
     if (token === '') {
@@ -162,6 +189,58 @@ export class ProfilePage extends React.Component {
                     ))}
                 </TableBody>
               </StyledTable>
+              <ContainerButton>
+                <ButtonModal onRef={this.setRefDeposit} title="Deposit">
+                  <Typography variant="title" id="modal-title">
+                    Deposit
+                    <br />
+                    Current balance: {balance ? `$${balance.toFixed(2)}` : ''}
+                  </Typography>
+                  <br />
+
+                  <ContainerInput>
+                    <Typography>Amount:</Typography>
+                    <InputQuantity>
+                      <form onSubmit={this.onSubmitTransfer}>
+                        <StyledInput
+                          autoFocus
+                          onChange={changeDeposit}
+                          placeholder="0"
+                          disableUnderline
+                          type="number"
+                        />
+                      </form>
+                    </InputQuantity>
+                  </ContainerInput>
+                </ButtonModal>
+                <ButtonModal
+                  onRef={this.setRefWithdraw}
+                  title="withdraw"
+                  disabled={!token}
+                >
+                  <Typography variant="title" id="modal-title">
+                    Withdraw
+                    <br />
+                    Current balance: {balance ? `$${balance.toFixed(2)}` : ''}
+                  </Typography>
+                  <br />
+
+                  <ContainerInput>
+                    <Typography>Withdraw</Typography>
+                    <InputQuantity>
+                      <form onSubmit={this.onSubmitTransfer}>
+                        <StyledInput
+                          autoFocus
+                          onChange={changeWithdraw}
+                          placeholder="0"
+                          disableUnderline
+                          type="number"
+                        />
+                      </form>
+                    </InputQuantity>
+                  </ContainerInput>
+                </ButtonModal>
+              </ContainerButton>
             </ContainerQuote>
           </ContainerRight>
         </ContainerCharts>
@@ -188,6 +267,9 @@ ProfilePage.propTypes = {
   updateChart: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   updatePositions: PropTypes.func.isRequired,
+  changeDeposit: PropTypes.func.isRequired,
+  changeWithdraw: PropTypes.func.isRequired,
+  submitTransfer: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -221,6 +303,15 @@ function mapDispatchToProps(dispatch) {
     },
     updatePositions: () => {
       dispatch(loadPositions());
+    },
+    changeDeposit: evt => {
+      dispatch(changeTransferAmount(evt.target.value));
+    },
+    changeWithdraw: evt => {
+      dispatch(changeTransferAmount(-evt.target.value));
+    },
+    submitTransfer: () => {
+      dispatch(requestTransfer());
     },
   };
 }

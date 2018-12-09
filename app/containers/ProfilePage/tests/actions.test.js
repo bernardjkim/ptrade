@@ -3,15 +3,20 @@ import {
   loadBalanceError,
   loadBalanceSuccess,
   changeTimeFrame,
+  changeTransferAmount,
   loadPositions,
   loadPositionsSuccess,
   loadPositionsError,
   loadChart,
   loadChartSuccess,
   loadChartError,
+  requestTransfer,
+  requestTransferError,
+  requestTransferSuccess,
 } from '../actions';
 import {
   CHANGE_TIME_FRAME,
+  CHANGE_TRANSFER_AMOUNT,
   LOAD_BALANCE,
   LOAD_BALANCE_ERROR,
   LOAD_BALANCE_SUCCESS,
@@ -21,6 +26,9 @@ import {
   LOAD_CHART,
   LOAD_CHART_SUCCESS,
   LOAD_CHART_ERROR,
+  REQUEST_TRANSFER,
+  REQUEST_TRANSFER_ERROR,
+  REQUEST_TRANSFER_SUCCESS,
 } from '../constants';
 
 describe('ProfilePage actions', () => {
@@ -30,6 +38,15 @@ describe('ProfilePage actions', () => {
         type: CHANGE_TIME_FRAME,
       };
       expect(changeTimeFrame()).toEqual(expected);
+    });
+  });
+
+  describe('Change transfer amount', () => {
+    it('has a type of CHANGE_TRANSFER_AMOUNT', () => {
+      const expected = {
+        type: CHANGE_TRANSFER_AMOUNT,
+      };
+      expect(changeTransferAmount()).toEqual(expected);
     });
   });
 
@@ -125,6 +142,35 @@ describe('ProfilePage actions', () => {
         error,
       };
       expect(loadChartError(error)).toEqual(expected);
+    });
+  });
+
+  describe('Request transfer', () => {
+    it('has type of REQUEST_TRANSFER', () => {
+      const expected = {
+        type: REQUEST_TRANSFER,
+      };
+      expect(requestTransfer()).toEqual(expected);
+    });
+  });
+
+  describe('Request transfer success', () => {
+    it('has type of REQUEST_TRANSFER_SUCCESS', () => {
+      const expected = {
+        type: REQUEST_TRANSFER_SUCCESS,
+      };
+      expect(requestTransferSuccess()).toEqual(expected);
+    });
+  });
+
+  describe('Request transfer error', () => {
+    it('has type of REQUEST_TRANSFER_ERROR', () => {
+      const error = 400;
+      const expected = {
+        type: REQUEST_TRANSFER_ERROR,
+        error,
+      };
+      expect(requestTransferError(error)).toEqual(expected);
     });
   });
 });

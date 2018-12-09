@@ -6,6 +6,7 @@
 
 import {
   CHANGE_TIME_FRAME,
+  CHANGE_TRANSFER_AMOUNT,
   LOAD_BALANCE,
   LOAD_BALANCE_ERROR,
   LOAD_BALANCE_SUCCESS,
@@ -15,12 +16,22 @@ import {
   LOAD_CHART,
   LOAD_CHART_ERROR,
   LOAD_CHART_SUCCESS,
+  REQUEST_TRANSFER,
+  REQUEST_TRANSFER_ERROR,
+  REQUEST_TRANSFER_SUCCESS,
 } from './constants';
 
 export function changeTimeFrame(timeFrame) {
   return {
     type: CHANGE_TIME_FRAME,
     timeFrame,
+  };
+}
+
+export function changeTransferAmount(amount) {
+  return {
+    type: CHANGE_TRANSFER_AMOUNT,
+    amount,
   };
 }
 
@@ -85,6 +96,25 @@ export function loadChartSuccess(chart) {
 export function loadChartError(error) {
   return {
     type: LOAD_CHART_ERROR,
+    error,
+  };
+}
+
+export function requestTransfer() {
+  return {
+    type: REQUEST_TRANSFER,
+  };
+}
+
+export function requestTransferSuccess() {
+  return {
+    type: REQUEST_TRANSFER_SUCCESS,
+  };
+}
+
+export function requestTransferError(error) {
+  return {
+    type: REQUEST_TRANSFER_ERROR,
     error,
   };
 }
