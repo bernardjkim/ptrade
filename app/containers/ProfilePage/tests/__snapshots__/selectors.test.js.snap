@@ -1,15 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`makeSelectBalance should select the error 1`] = `false`;
+exports[`makeSelectBalance should select the balance 1`] = `false`;
 
-exports[`makeSelectChart should select the error 1`] = `false`;
+exports[`makeSelectChart should select the chart 1`] = `false`;
 
 exports[`makeSelectError should select the error 1`] = `404`;
 
 exports[`makeSelectLoading should select the loading 1`] = `false`;
 
-exports[`makeSelectPositions should select the error 1`] = `false`;
+exports[`makeSelectPositions should select the positions 1`] = `false`;
 
-exports[`makeSelectTimeFrame should select the error 1`] = `0`;
+exports[`makeSelectTimeFrame should select the time frame 1`] = `0`;
+
+exports[`makeSelectTransferAmount should select the transfer amount 1`] = `0`;
 
 exports[`selectProfilePageDomain Expect to have unit tests specified 1`] = `[Function]`;

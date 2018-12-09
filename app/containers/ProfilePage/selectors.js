@@ -45,6 +45,11 @@ const makeSelectTimeFrame = () =>
     profileState.get('timeFrame'),
   );
 
+const makeSelectTransferAmount = () =>
+  createSelector(selectProfilePageDomain, profileState =>
+    profileState.get('transferAmount'),
+  );
+
 /**
  * Default selector used by ProfilePage
  */
@@ -62,4 +67,5 @@ export {
   makeSelectPositions,
   makeSelectTotalInvested,
   makeSelectTimeFrame,
+  makeSelectTransferAmount,
 };

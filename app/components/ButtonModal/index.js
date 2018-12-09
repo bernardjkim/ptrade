@@ -42,7 +42,7 @@ class ButtonModal extends React.Component {
           onClick={this.handleOpen}
           size="large"
           variant="contained"
-          disabled={disabled}
+          disabled={disabled || false}
         >
           {title}
         </StyledButton>
@@ -60,7 +60,7 @@ class ButtonModal extends React.Component {
 }
 
 ButtonModal.propTypes = {
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   children: PropTypes.array.isRequired,
 

@@ -4,8 +4,18 @@
 
 /* eslint-disable redux-saga/yield-effects */
 import { all, takeLatest, put } from 'redux-saga/effects';
-import profilePageSaga, { getBalance, getPositions, getChart } from '../saga';
-import { LOAD_BALANCE, LOAD_POSITIONS, LOAD_CHART } from '../constants';
+import profilePageSaga, {
+  getBalance,
+  getPositions,
+  getChart,
+  getTransferRequest,
+} from '../saga';
+import {
+  LOAD_BALANCE,
+  LOAD_POSITIONS,
+  LOAD_CHART,
+  REQUEST_TRANSFER,
+} from '../constants';
 import {
   loadBalanceSuccess,
   loadBalanceError,
@@ -13,6 +23,8 @@ import {
   loadPositionsError,
   loadChartSuccess,
   loadChartError,
+  // requestTransferSuccess,
+  // requestTransferError,
 } from '../actions';
 
 const generator = profilePageSaga();
@@ -121,6 +133,7 @@ describe('profilePageSaga Saga', () => {
         takeLatest(LOAD_BALANCE, getBalance),
         takeLatest(LOAD_POSITIONS, getPositions),
         takeLatest(LOAD_CHART, getChart),
+        takeLatest(REQUEST_TRANSFER, getTransferRequest),
       ]),
     );
   });

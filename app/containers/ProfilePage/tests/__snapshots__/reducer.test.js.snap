@@ -9,6 +9,20 @@ Immutable.Map {
   "totalInvested": false,
   "chart": false,
   "timeFrame": 1,
+  "transferAmount": 0,
+}
+`;
+
+exports[`profilePageReducer handles the change time transfer amount action 1`] = `
+Immutable.Map {
+  "loading": false,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 0,
+  "transferAmount": 100,
 }
 `;
 
@@ -21,6 +35,7 @@ Immutable.Map {
   "totalInvested": false,
   "chart": false,
   "timeFrame": 0,
+  "transferAmount": 0,
 }
 `;
 
@@ -33,18 +48,7 @@ Immutable.Map {
   "totalInvested": false,
   "chart": false,
   "timeFrame": 0,
-}
-`;
-
-exports[`profilePageReducer handles the load chart action 2`] = `
-Immutable.Map {
-  "loading": true,
-  "error": false,
-  "balance": false,
-  "positions": false,
-  "totalInvested": false,
-  "chart": false,
-  "timeFrame": 0,
+  "transferAmount": 0,
 }
 `;
 
@@ -57,6 +61,20 @@ Immutable.Map {
   "totalInvested": false,
   "chart": false,
   "timeFrame": 0,
+  "transferAmount": 0,
+}
+`;
+
+exports[`profilePageReducer handles the request transfer action 1`] = `
+Immutable.Map {
+  "loading": true,
+  "error": false,
+  "balance": false,
+  "positions": false,
+  "totalInvested": false,
+  "chart": false,
+  "timeFrame": 0,
+  "transferAmount": 0,
 }
 `;
 
@@ -69,5 +87,6 @@ Immutable.Map {
   "chart": false,
   "totalInvested": false,
   "timeFrame": 0,
+  "transferAmount": 0,
 }
 `;

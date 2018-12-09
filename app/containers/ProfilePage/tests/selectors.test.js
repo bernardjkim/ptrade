@@ -7,6 +7,7 @@ import {
   makeSelectChart,
   makeSelectTimeFrame,
   makeSelectPositions,
+  makeSelectTransferAmount,
 } from '../selectors';
 
 const mockedState = fromJS({
@@ -18,6 +19,7 @@ const mockedState = fromJS({
     chart: false,
     totalInvested: false,
     timeFrame: 0,
+    transferAmount: 0,
   },
 });
 
@@ -43,28 +45,35 @@ describe('makeSelectError', () => {
 
 describe('makeSelectBalance', () => {
   const balanceSelector = makeSelectBalance();
-  it('should select the error', () => {
+  it('should select the balance', () => {
     expect(balanceSelector(mockedState)).toMatchSnapshot();
   });
 });
 
 describe('makeSelectPositions', () => {
   const positionsSelector = makeSelectPositions();
-  it('should select the error', () => {
+  it('should select the positions', () => {
     expect(positionsSelector(mockedState)).toMatchSnapshot();
   });
 });
 
 describe('makeSelectChart', () => {
   const chartSelector = makeSelectChart();
-  it('should select the error', () => {
+  it('should select the chart', () => {
     expect(chartSelector(mockedState)).toMatchSnapshot();
   });
 });
 
 describe('makeSelectTimeFrame', () => {
   const timeFrameSelector = makeSelectTimeFrame();
-  it('should select the error', () => {
+  it('should select the time frame', () => {
     expect(timeFrameSelector(mockedState)).toMatchSnapshot();
+  });
+});
+
+describe('makeSelectTransferAmount', () => {
+  const transferAmountSelector = makeSelectTransferAmount();
+  it('should select the transfer amount', () => {
+    expect(transferAmountSelector(mockedState)).toMatchSnapshot();
   });
 });
